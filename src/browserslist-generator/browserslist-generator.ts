@@ -2,6 +2,19 @@
 import {getSupport} from "caniuse-api";
 
 /**
+ * These browsers should be skipped when deciding which browsers to take into account
+ * when generating a browserslist
+ * @type {Set<string>}
+ */
+const SKIP_BROWSERS: Set<string> = new Set([
+	// caniuse.com has some issues with reporting android browsers
+	"android",
+	"and_chr",
+	"and_qq",
+	"and_uc"
+]);
+
+/**
  * Generates a Browserslist based on browser support for the given features
  * @param {string[]} features
  * @returns {string}
@@ -12,7 +25,9 @@ export function browsersWithSupportForFeatures (...features: string[]): string[]
 
 	for (const feature of features) {
 		const support = getSupport(feature);
-		Object.entries(support).forEach(([browser, stats]) => {
+		Object.entries(support)
+			.filter(([browser]) => !SKIP_BROWSERS.has(browser))
+			.forEach(([browser, stats]) => {
 			const version = (<{y: number}>stats).y;
 
 			if (version != null) {

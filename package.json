@@ -10,7 +10,7 @@
 		"url": "https://github.com/wessberg/browserslist-generator/issues"
 	},
 	"scripts": {
-		"test": "NODE_ENV=TEST echo \"Skipping testing...\"",
+		"test": "NODE_ENV=TEST ava",
 		"changelog:generate": "conventional-changelog --outfile CHANGELOG.md --release-count 0",
 		"readme:badges": "node node_modules/@wessberg/ts-config/readme/badge/helper/add-badges.js",
 		"readme:refresh": "npm run changelog:generate && npm run readme:badges",
