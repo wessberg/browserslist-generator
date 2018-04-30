@@ -1,3 +1,12 @@
+<a name="0.0.6"></a>
+## <small>0.0.6 (2018-04-30)</small>
+
+* 0.0.6 ([0af214f](https://github.com/wessberg/browserslist-generator/commit/0af214f))
+* Added changelog ([1442788](https://github.com/wessberg/browserslist-generator/commit/1442788))
+* Fixed a few issues ([dcf5a88](https://github.com/wessberg/browserslist-generator/commit/dcf5a88))
+
+
+
 <a name="0.0.5"></a>
 ## <small>0.0.5 (2018-04-30)</small>
 
