@@ -1,5 +1,7 @@
 // @ts-ignore
 import {getSupport} from "caniuse-api";
+// @ts-ignore
+import {matchesUA} from "browserslist-useragent";
 
 /**
  * These browsers should be skipped when deciding which browsers to take into account
@@ -13,6 +15,16 @@ const SKIP_BROWSERS: Set<string> = new Set([
 	"and_qq",
 	"and_uc"
 ]);
+
+/**
+ * A function that will match a browserslist on the given user agent
+ * @param {string} userAgent
+ * @param {string[]} browserslist
+ * @returns {boolean}
+ */
+export function matchBrowserslistOnUserAgent (userAgent: string, browserslist: string[]): boolean {
+	return matchesUA(userAgent, {browsers: browserslist});
+}
 
 /**
  * Generates a Browserslist based on browser support for the given features
