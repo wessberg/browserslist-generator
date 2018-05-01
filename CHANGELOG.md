@@ -1,3 +1,12 @@
+<a name="0.0.7"></a>
+## <small>0.0.7 (2018-05-01)</small>
+
+* 0.0.7 ([69b2c46](https://github.com/wessberg/browserslist-generator/commit/69b2c46))
+* Added support for matching a browserslist query on a user agent ([69db5c0](https://github.com/wessberg/browserslist-generator/commit/69db5c0))
+* Bumped version ([fb05ae7](https://github.com/wessberg/browserslist-generator/commit/fb05ae7))
+
+
+
 <a name="0.0.6"></a>
 ## <small>0.0.6 (2018-04-30)</small>
 
