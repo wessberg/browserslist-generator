@@ -58,6 +58,7 @@
 		"typescript": "^2.8.1"
 	},
 	"dependencies": {
+		"browserslist": "^3.2.6",
 		"browserslist-useragent": "^1.1.0",
 		"caniuse-api": "^2.0.0",
 		"tslib": "^1.9.0"

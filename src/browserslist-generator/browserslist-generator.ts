@@ -2,6 +2,8 @@
 import {matchesUA} from "browserslist-useragent";
 // @ts-ignore
 import {getSupport} from "caniuse-api";
+// @ts-ignore
+import * as Browserslist from "browserslist";
 import {ComparisonOperator} from "./comparison-operator";
 
 /**
@@ -33,18 +35,54 @@ export function matchBrowserslistOnUserAgent (userAgent: string, browserslist: s
 }
 
 /**
+ * Returns the input query, but extended with the given options
+ * @param {string[]} query
+ * @param {string|string[]} extendWith
+ * @returns {string[]}
+ */
+function extendQueryWith (query: string[], extendWith: string|string[]): string[] {
+	const normalizedExtendWith = Array.isArray(extendWith) ? extendWith : [extendWith];
+	return [...new Set([
+		...query,
+		...normalizedExtendWith
+	])];
+}
+
+/**
+ * Returns the input query, but extended with 'unreleased versions'
+ * @param {string[]} query
+ * @returns {string[]}
+ */
+function extendQueryWithUnreleasedVersions (query: string[]): string[] {
+	return extendQueryWith(query, "unreleased versions");
+}
+
+/**
  * Generates a Browserslist based on browser support for the given features
  * @param {string[]} features
  * @returns {string}
  */
 export function browsersWithSupportForFeatures (...features: string[]): string[] {
 	const baseQuery = browsersWithSupportForFeaturesCommon(">=", ...features);
+	return extendQueryWithUnreleasedVersions(baseQuery);
+}
 
-	return [...new Set([
-		...baseQuery,
-		// Make sure to also include unreleased versions
-		"unreleased versions"
-	])];
+/**
+ * Returns true if the given browserslist support all of the given features
+ * @param {string[]} browserslist
+ * @param {string} features
+ * @returns {boolean}
+ */
+export function browserslistSupportsFeatures (browserslist: string[], ...features: string[]): boolean {
+	// First, generate an ideal browserslist that would target the given features exactly
+	const normalizedIdealBrowserslist: string[] = Browserslist(browsersWithSupportForFeatures(...features));
+
+	// Now, normalize the input browserslist
+	const normalizedInputBrowserslist: string[] = Browserslist(extendQueryWithUnreleasedVersions(browserslist));
+
+	// Now, compare the two and see if they align. If they do, the input browserslist *does* support all of the given features.
+	// They align if all members of the input browserslist are included in the ideal browserslist
+	return normalizedInputBrowserslist.every(option => normalizedIdealBrowserslist.includes(option));
 }
 
 /**
