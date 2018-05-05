@@ -37,11 +37,12 @@
 		"publish:patch": "npm version patch && npm run commit:readme && git push --no-verify && npm publish"
 	},
 	"keywords": [
-		"util",
-		"array",
-		"flatten",
-		"unique",
-		"sortByKey"
+		"browserslist",
+		"caniuse",
+		"generate",
+		"support",
+		"babel-preset-env",
+		"util"
 	],
 	"author": {
 		"name": "Frederik Wessberg",
