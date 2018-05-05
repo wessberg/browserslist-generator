@@ -15,6 +15,17 @@ export declare type CaniuseLiteStatsNormalized = {
 	[Key in CaniuseLiteBrowser]: {[key: string]: CaniuseSupportKind};
 };
 
+export interface ICaniuseLiteAgents {
+
+}
+
+export interface ICaniuseLiteAgent {
+	usage_global: {[key: string]: number};
+	prefix: string;
+	browser: string;
+	release_date: {[key: string]: number};
+}
+
 export interface ICaniuseLiteFeature {
 	title: string;
 	status: string;

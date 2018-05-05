@@ -1,5 +1,5 @@
 import test from "ava";
-import {browsersWithSupportForFeatures, matchBrowserslistOnUserAgent} from "../../src/browserslist-generator/browserslist-generator";
+import {browsersWithoutSupportForFeatures, browsersWithSupportForFeatures, matchBrowserslistOnUserAgent} from "../../src/browserslist-generator/browserslist-generator";
 
 test("browsersWithSupportForFeatures() => Will skip 'Android' in the generated browserslist", t => {
 	t.true(!browsersWithSupportForFeatures(
@@ -15,6 +15,14 @@ test("browsersWithSupportForFeatures() => Won't include Samsung 6.2 for es6-modu
 		"shadowdomv1",
 		"custom-elementsv1"
 	).some(part => part.toLowerCase().includes("samsung")));
+});
+
+test.only("browsersWithoutSupportForFeatures() => Will include all browsers that simply has no support for the given features at all", t => {
+	t.true(browsersWithoutSupportForFeatures(
+		"es6-module",
+		"shadowdomv1",
+		"custom-elementsv1"
+	).some(part => part.includes("ie")));
 });
 
 test("matchBrowserslistOnUserAgent() => Will not match Firefox > 54 for a Firefox v54 user agent", t => {

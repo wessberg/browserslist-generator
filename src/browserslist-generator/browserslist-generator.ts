@@ -3,7 +3,7 @@ import * as Browserslist from "browserslist";
 // @ts-ignore
 import {matchesUA} from "browserslist-useragent";
 // @ts-ignore
-import {features as caniuseFeatures, feature as caniuseFeature} from "caniuse-lite";
+import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
 import {ComparisonOperator} from "./comparison-operator";
 import {CaniuseLiteBrowser, CaniuseLiteStats, CaniuseLiteStatsNormalized, CaniuseSupportKind, ICaniuseLiteFeature, ICaniuseLiteFeatureNormalized} from "./i-caniuse-lite";
 
@@ -14,7 +14,7 @@ import {CaniuseLiteBrowser, CaniuseLiteStats, CaniuseLiteStatsNormalized, Canius
  * when generating a browserslist
  * @type {Set<string>}
  */
-const SKIP_BROWSERS_PAYLOAD: CaniuseLiteBrowser[] =  [
+const SKIP_BROWSERS_PAYLOAD: CaniuseLiteBrowser[] = [
 	// caniuse.com has some issues with reporting android browsers
 	"android",
 	"and_chr",
@@ -157,6 +157,37 @@ function getCaniuseLiteFeatureNormalized (feature: ICaniuseLiteFeature): ICanius
 }
 
 /**
+ * Gets the latest (stable) version of the given browser
+ * @param {CaniuseLiteBrowser} browser
+ * @returns {string}
+ */
+function getLatestVersionOfBrowser (browser: CaniuseLiteBrowser): string {
+	const queryResultsMapped: Map<CaniuseLiteBrowser, string[]> = new Map();
+
+	// Generate the Browserslist query
+	const queryResult: string[] = Browserslist([`>= 0%`, `unreleased versions`]);
+
+	// First, organize the different versions of the browsers inside the Map
+	queryResult.forEach(part => {
+		const [currentBrowser, version] = <[CaniuseLiteBrowser, string]> part.split(" ");
+		let versions = queryResultsMapped.get(currentBrowser);
+
+		if (versions == null) {
+			versions = [];
+			queryResultsMapped.set(currentBrowser, versions);
+		}
+
+		const versionMatch = version.match(NORMALIZE_BROWSER_VERSION_REGEXP);
+		const normalizedVersion = versionMatch == null ? version : versionMatch[1];
+
+		versions.push(normalizedVersion);
+	});
+	return queryResultsMapped.get(browser)!
+		.sort(compareVersions)
+		.slice(-1)[0];
+}
+
+/**
  * Gets the support from caniuse for the given feature
  * @param {string} feature
  * @returns {ICaniuseLiteFeatureNormalized}
@@ -194,7 +225,7 @@ function compareVersions (a: string, b: string): number {
  * @param {object} stats
  * @returns {string | undefined}
  */
-function getFirstVersionWithSupportKind (kind: CaniuseSupportKind, stats: {[key: string]: CaniuseSupportKind}): string|undefined {
+function getFirstVersionWithSupportKind (kind: CaniuseSupportKind, stats: { [key: string]: CaniuseSupportKind }): string | undefined {
 	// Sort all keys of the object
 	const sortedKeys = Object.keys(stats).sort(compareVersions);
 
@@ -222,8 +253,8 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 		// A map between browser names and their required versions
 		const browserMap: Map<CaniuseLiteBrowser, string> = new Map();
 		Object.entries(support)
-			.filter(([browser]: [CaniuseLiteBrowser, {[key: string]: CaniuseSupportKind}]) => !SKIP_BROWSERS.has(browser))
-			.forEach(([browser, stats]: [CaniuseLiteBrowser, {[key: string]: CaniuseSupportKind}]) => {
+			.filter(([browser]: [CaniuseLiteBrowser, { [key: string]: CaniuseSupportKind }]) => !SKIP_BROWSERS.has(browser))
+			.forEach(([browser, stats]: [CaniuseLiteBrowser, { [key: string]: CaniuseSupportKind }]) => {
 				const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
 				const partialSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.PARTIAL_SUPPORT, stats);
 
@@ -246,6 +277,15 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 						}
 					}
 				}
+
+				// Apply additional checks depending on the comparison operator
+				switch (comparisonOperator) {
+					case "<":
+					case "<=":
+						// Add all browsers with no support whatsoever, or those that require prefixing or flags
+						browserMap.set(browser, getLatestVersionOfBrowser(browser));
+				}
+
 			});
 		browserMaps.push(browserMap);
 	}
