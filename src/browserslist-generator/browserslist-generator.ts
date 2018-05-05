@@ -2,6 +2,7 @@
 import {matchesUA} from "browserslist-useragent";
 // @ts-ignore
 import {getSupport} from "caniuse-api";
+import {ComparisonOperator} from "./comparison-operator";
 
 /**
  * These browsers should be skipped when deciding which browsers to take into account
@@ -37,6 +38,31 @@ export function matchBrowserslistOnUserAgent (userAgent: string, browserslist: s
  * @returns {string}
  */
 export function browsersWithSupportForFeatures (...features: string[]): string[] {
+	const baseQuery = browsersWithSupportForFeaturesCommon(">=", ...features);
+
+	return [...new Set([
+		...baseQuery,
+		// Make sure to also include unreleased versions
+		"unreleased versions"
+	])];
+}
+
+/**
+ * Generates a Browserslist based on browsers that *doesn't* support the given features
+ * @param {string[]} features
+ * @returns {string}
+ */
+export function browsersWithoutSupportForFeatures (...features: string[]): string[] {
+	return browsersWithSupportForFeaturesCommon("<", ...features);
+}
+
+/**
+ * Common logic for the functions that generate browserslists based on feature support
+ * @param {ComparisonOperator} comparisonOperator
+ * @param {string} features
+ * @returns {string[]}
+ */
+function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOperator, ...features: string[]): string[] {
 	// A map between browser names and their required versions
 	const browserMap: Map<string, number> = new Map();
 
@@ -58,9 +84,8 @@ export function browsersWithSupportForFeatures (...features: string[]): string[]
 			});
 	}
 	// Finally, generate a string array of the browsers
-	return [...new Set([
-		...Array.from(browserMap.entries()).map(([browser, version]) => `${browser} >= ${version}`),
-		// Make sure to also include unreleased versions
-		"unreleased versions"
-	])];
+	return Array.from(
+		browserMap.entries())
+		.map(([browser, version]) => `${browser} ${comparisonOperator} ${version}`
+		);
 }
