@@ -1,7 +1,7 @@
 // @ts-ignore
-import {getSupport} from "caniuse-api";
-// @ts-ignore
 import {matchesUA} from "browserslist-useragent";
+// @ts-ignore
+import {getSupport} from "caniuse-api";
 
 /**
  * These browsers should be skipped when deciding which browsers to take into account
@@ -23,7 +23,12 @@ const SKIP_BROWSERS: Set<string> = new Set([
  * @returns {boolean}
  */
 export function matchBrowserslistOnUserAgent (userAgent: string, browserslist: string[]): boolean {
-	return matchesUA(userAgent, {browsers: browserslist});
+	return matchesUA(userAgent, {
+		browsers: browserslist,
+		_allowHigherVersions: true,
+		ignoreMinor: true,
+		ignorePatch: true
+	});
 }
 
 /**
@@ -40,19 +45,22 @@ export function browsersWithSupportForFeatures (...features: string[]): string[]
 		Object.entries(support)
 			.filter(([browser]) => !SKIP_BROWSERS.has(browser))
 			.forEach(([browser, stats]) => {
-			const version = (<{y: number}>stats).y;
+				const version = (<{ y: number }>stats).y;
 
-			if (version != null) {
-				// Get the existing version, if any
-				const existingVersion = browserMap.get(browser);
-				// If there is no existing version, or if the required version is greater than the existing one, update it
-				if (existingVersion == null || version > existingVersion) {
-					browserMap.set(browser, version);
+				if (version != null) {
+					// Get the existing version, if any
+					const existingVersion = browserMap.get(browser);
+					// If there is no existing version, or if the required version is greater than the existing one, update it
+					if (existingVersion == null || version > existingVersion) {
+						browserMap.set(browser, version);
+					}
 				}
-			}
-		});
+			});
 	}
 	// Finally, generate a string array of the browsers
-	return Array.from(browserMap.entries())
-		.map(([browser, version]) => `${browser} >= ${version}`);
+	return [...new Set([
+		...Array.from(browserMap.entries()).map(([browser, version]) => `${browser} >= ${version}`),
+		// Make sure to also include unreleased versions
+		"unreleased versions"
+	])];
 }
