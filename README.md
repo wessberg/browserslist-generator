@@ -12,8 +12,27 @@
 
 ## Description
 
-A library that helps with generating a [browserslist](https://github.com/browserslist/browserslist) automatically.
+A library that makes it easier to work with [browserslists](https://github.com/browserslist/browserslist).
 For example, a browserslist can be generated that targets only browsers that support specific required features.
+Or, a browserslist can be generated that target only browsers that *doesn't* support specific features.
+
+## Features
+
+### `matchBrowserslistOnUserAgent (userAgent: string, browserslist: string[]): boolean`
+
+Will check if the given user agent string matches the given browserslist and return true if so.
+
+### `browsersWithSupportForFeatures (...features: string[]): string[]`
+
+Takes any amount of [caniuse](https://caniuse.com/) features and generates a browserslist that targets all browsers that support these features
+
+### `browsersWithoutSupportForFeatures (...features: string[]): string[]`
+
+Takes any amount of [caniuse](https://caniuse.com/) features and generates a browserslist that targets all browsers that *doesn't* support these features
+
+### `browserslistSupportsFeatures (browserslist: string[], ...features: string[]): boolean`
+
+Returns true if the given [browserslist](https://github.com/browserslist/browserslist) supports all of the given features
 
 ## Installation
 
