@@ -1,3 +1,12 @@
+<a name="0.0.9"></a>
+## <small>0.0.9 (2018-05-05)</small>
+
+* 0.0.9 ([8bb7932](https://github.com/wessberg/browserslist-generator/commit/8bb7932))
+* Added a function that generating a browserslist based on browsers that - doesn't - support specific  ([fc8c47c](https://github.com/wessberg/browserslist-generator/commit/fc8c47c))
+* Bumped version ([b80ae05](https://github.com/wessberg/browserslist-generator/commit/b80ae05))
+
+
+
 <a name="0.0.8"></a>
 ## <small>0.0.8 (2018-05-05)</small>
 
