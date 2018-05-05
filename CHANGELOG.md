@@ -1,3 +1,12 @@
+<a name="0.0.8"></a>
+## <small>0.0.8 (2018-05-05)</small>
+
+* 0.0.8 ([d806aca](https://github.com/wessberg/browserslist-generator/commit/d806aca))
+* Bumped version ([031d80d](https://github.com/wessberg/browserslist-generator/commit/031d80d))
+* Fixed a few bugs ([adc38e5](https://github.com/wessberg/browserslist-generator/commit/adc38e5))
+
+
+
 <a name="0.0.7"></a>
 ## <small>0.0.7 (2018-05-01)</small>
 
