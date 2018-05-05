@@ -1,1 +1,1 @@
-export declare type ComparisonOperator = "<"|"<="|"="|">"|">="|"!="|"not";
+export declare type ComparisonOperator = "<"|"<="|">"|">=";
