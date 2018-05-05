@@ -157,11 +157,11 @@ function getCaniuseLiteFeatureNormalized (feature: ICaniuseLiteFeature): ICanius
 }
 
 /**
- * Gets the latest (stable) version of the given browser
+ * Gets all versions of the given browser, sorted
  * @param {CaniuseLiteBrowser} browser
  * @returns {string}
  */
-function getLatestVersionOfBrowser (browser: CaniuseLiteBrowser): string {
+function getSortedBrowserVersions (browser: CaniuseLiteBrowser): string[] {
 	const queryResultsMapped: Map<CaniuseLiteBrowser, string[]> = new Map();
 
 	// Generate the Browserslist query
@@ -183,8 +183,45 @@ function getLatestVersionOfBrowser (browser: CaniuseLiteBrowser): string {
 		versions.push(normalizedVersion);
 	});
 	return queryResultsMapped.get(browser)!
-		.sort(compareVersions)
-		.slice(-1)[0];
+		.sort(compareVersions);
+}
+
+/**
+ * Gets the latest (stable) version of the given browser
+ * @param {CaniuseLiteBrowser} browser
+ * @returns {string}
+ */
+function getLatestVersionOfBrowser (browser: CaniuseLiteBrowser): string {
+	const versions = getSortedBrowserVersions(browser);
+	return versions[versions.length - 1];
+}
+
+/**
+ * Gets the previous version of the given browser from the given version
+ * @param {CaniuseLiteBrowser} browser
+ * @param {string} version
+ * @returns {string | undefined}
+ */
+function getPreviousVersionOfBrowser (browser: CaniuseLiteBrowser, version: string): string|undefined {
+	const versions = getSortedBrowserVersions(browser);
+	const indexOfVersion = versions.indexOf(version);
+	// If the version isn't included, or if it is the first version of it, return undefined
+	if (indexOfVersion <= 0) return undefined;
+	return versions[indexOfVersion - 1];
+}
+
+/**
+ * Gets the previous version of the given browser from the given version
+ * @param {CaniuseLiteBrowser} browser
+ * @param {string} version
+ * @returns {string | undefined}
+ */
+function getNextVersionOfBrowser (browser: CaniuseLiteBrowser, version: string): string|undefined {
+	const versions = getSortedBrowserVersions(browser);
+	const indexOfVersion = versions.indexOf(version);
+	// If the version isn't included, or if it is the first version of it, return undefined
+	if (indexOfVersion <= 0) return undefined;
+	return versions[indexOfVersion + 1];
 }
 
 /**
@@ -257,9 +294,10 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 			.forEach(([browser, stats]: [CaniuseLiteBrowser, { [key: string]: CaniuseSupportKind }]) => {
 				const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
 				const partialSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.PARTIAL_SUPPORT, stats);
+				let versionToSet: string|undefined;
 
 				if (fullSupportVersion != null) {
-					browserMap.set(browser, fullSupportVersion);
+					versionToSet = fullSupportVersion;
 				}
 
 				// Otherwise, check if partial support exists and should be allowed
@@ -272,21 +310,28 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 						if (partialSupportMatch.includes(browser)) {
 							// If no full supported version exists or if the partial supported version has a lower version number than the full supported one, use that one instead
 							if (fullSupportVersion == null || compareVersions(partialSupportVersion, fullSupportVersion) < 0) {
-								browserMap.set(browser, partialSupportVersion);
+								versionToSet = partialSupportVersion;
 							}
 						}
 					}
 				}
 
-				// Apply additional checks depending on the comparison operator
-				switch (comparisonOperator) {
-					case "<":
-					case "<=":
-						// Add all browsers with no support whatsoever, or those that require prefixing or flags
-						browserMap.set(browser, getLatestVersionOfBrowser(browser));
+				if (versionToSet == null) {
+					// Apply additional checks depending on the comparison operator
+					switch (comparisonOperator) {
+						case "<":
+						case "<=":
+							// Add all browsers with no support whatsoever, or those that require prefixing or flags
+							versionToSet = getLatestVersionOfBrowser(browser);
+					}
+				}
+
+				if (versionToSet != null) {
+					browserMap.set(browser, versionToSet);
 				}
 
 			});
+
 		browserMaps.push(browserMap);
 	}
 
@@ -308,23 +353,7 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 			// Take the existing entry from the combined map
 			const existingVersion = combinedBrowserMap.get(browser);
 			// The browser should be set in the map if it has no entry already
-			let shouldSet = existingVersion == null;
-
-			// If it *has* an entry, also check if the version should be updated, depending on the comparison operator
-			if (existingVersion != null) {
-				const comparableVersion = isNaN(parseFloat(version)) ? version : parseFloat(version);
-				const comparableExistingVersion = isNaN(parseFloat(existingVersion)) ? version : parseFloat(existingVersion);
-				switch (comparisonOperator) {
-					case ">=":
-					case ">":
-						shouldSet = comparableVersion >= comparableExistingVersion;
-						break;
-					case "<=":
-					case "<":
-						shouldSet = comparableVersion <= comparableExistingVersion;
-						break;
-				}
-			}
+			const shouldSet = existingVersion == null || compareVersions(version, existingVersion) >= 0;
 
 			if (shouldSet) {
 				// Set the version in the map
@@ -335,8 +364,30 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 	}
 
 	// Finally, generate a string array of the browsers
-	return Array.from(
-		combinedBrowserMap.entries())
-		.map(([browser, version]) => `${browser} ${comparisonOperator} ${version}`
-		);
+	return [].concat.apply([], Array.from(
+		combinedBrowserMap.entries()
+	)
+		.map(([browser, version]) => {
+				// The version is not a number, so we can't do comparisons on it.
+				if (isNaN(parseFloat(version))) {
+					switch (comparisonOperator) {
+						case "<":
+						case "<=":
+							const previousVersion = getPreviousVersionOfBrowser(browser, version);
+							return [
+								`not ${browser} ${version}`,
+								...(previousVersion == null ? [] : [`${browser} ${comparisonOperator} ${previousVersion}`])
+							];
+						case ">":
+						case ">=":
+							const nextVersion = getNextVersionOfBrowser(browser, version);
+							return [
+								`${browser} ${version}`,
+								...(nextVersion == null ? [] : [`${browser} ${comparisonOperator} ${nextVersion}`])
+							];
+					}
+				}
+				return [`${browser} ${comparisonOperator} ${version}`];
+			}
+		));
 }
