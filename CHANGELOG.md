@@ -1,3 +1,12 @@
+<a name="0.0.10"></a>
+## <small>0.0.10 (2018-05-05)</small>
+
+* 0.0.10 ([7803078](https://github.com/wessberg/browserslist-generator/commit/7803078))
+* Added a 'browserslistSupportsFeatures' function that returns true if the given browserslist support  ([1c13395](https://github.com/wessberg/browserslist-generator/commit/1c13395))
+* Bumped version ([2c381fe](https://github.com/wessberg/browserslist-generator/commit/2c381fe))
+
+
+
 <a name="0.0.9"></a>
 ## <small>0.0.9 (2018-05-05)</small>
 
