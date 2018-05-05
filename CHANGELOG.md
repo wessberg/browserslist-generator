@@ -1,3 +1,13 @@
+<a name="0.0.17"></a>
+## <small>0.0.17 (2018-05-05)</small>
+
+* 0.0.17 ([5e6dc24](https://github.com/wessberg/browserslist-generator/commit/5e6dc24))
+* Bumped version ([0178a19](https://github.com/wessberg/browserslist-generator/commit/0178a19))
+* Reffinements and testing ([0f6be0f](https://github.com/wessberg/browserslist-generator/commit/0f6be0f))
+* Removed dependency on external library and rewrote logic for matching a useragent on a browserslist ([18ae325](https://github.com/wessberg/browserslist-generator/commit/18ae325))
+
+
+
 <a name="0.0.16"></a>
 ## <small>0.0.16 (2018-05-05)</small>
 
