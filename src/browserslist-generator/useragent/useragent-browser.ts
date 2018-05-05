@@ -30,6 +30,7 @@ export declare type UseragentBrowser =
 	| "Iceweasel"
 	| "IE"
 	| "IE Mobile"
+	| "IEMobile"
 	| "Iron"
 	| "Jasmine"
 	| "K-Meleon"
@@ -45,6 +46,9 @@ export declare type UseragentBrowser =
 	| "MIUI Browser"
 	| "Safari"
 	| "Mobile Safari"
+	| "MobileSafari"
+	| "SafariMobile"
+	| "Safari Mobile"
 	| "Mosaic"
 	| "Mozilla"
 	| "Netfront"
@@ -69,4 +73,5 @@ export declare type UseragentBrowser =
 	| "UCBrowser"
 	| "Vivaldi"
 	| "w3m"
+	| "WebKit"
 	| "Yandex";

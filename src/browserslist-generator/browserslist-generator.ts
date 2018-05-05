@@ -2,29 +2,16 @@
 import * as Browserslist from "browserslist";
 // @ts-ignore
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
+import {coerce} from "semver";
+import {UAParser} from "ua-parser-js";
 import {getLatestVersionOfBrowser, getNextVersionOfBrowser, getPreviousVersionOfBrowser} from "./browser-version";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
 import {CaniuseBrowser, CaniuseLiteStats, CaniuseLiteStatsNormalized, CaniuseSupportKind, ICaniuseLiteFeature, ICaniuseLiteFeatureNormalized} from "./i-caniuse-lite";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
-import {UAParser} from "ua-parser-js";
 import {IUseragentBrowser, IUseragentDevice, IUseragentOS} from "./useragent/useragent-typed";
 
 // tslint:disable:no-magic-numbers
-
-/**
- * These browsers should be skipped when deciding which browsers to take into account
- * when generating a browserslist
- * @type {Set<string>}
- */
-const SKIP_BROWSERS_PAYLOAD: CaniuseBrowser[] = [
-	// caniuse.com has some issues with reporting android browsers
-	"android",
-	"and_chr",
-	"and_qq",
-	"and_uc"
-];
-const SKIP_BROWSERS: Set<CaniuseBrowser> = new Set(SKIP_BROWSERS_PAYLOAD);
 
 /**
  * A Map between features and browsers that has partial support for them but should be allowed anyway
@@ -181,11 +168,10 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 		// A map between browser names and their required versions
 		const browserMap: Map<CaniuseBrowser, string> = new Map();
 		Object.entries(support)
-			.filter(([browser]: [CaniuseBrowser, { [key: string]: CaniuseSupportKind }]) => !SKIP_BROWSERS.has(browser))
 			.forEach(([browser, stats]: [CaniuseBrowser, { [key: string]: CaniuseSupportKind }]) => {
 				const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
 				const partialSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.PARTIAL_SUPPORT, stats);
-				let versionToSet: string|undefined;
+				let versionToSet: string | undefined;
 
 				if (fullSupportVersion != null) {
 					versionToSet = fullSupportVersion;
@@ -310,10 +296,29 @@ function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAPar
 			return "android";
 		}
 
+		case "WebKit":
+			// This will be the case if we're in an iOS Safari WebView
+			if (device.type === "mobile" || device.type === "tablet" || device.type === "smarttv" || device.type === "wearable" || device.type === "embedded") {
+				return "ios_saf";
+			}
+			// Otherwise, fall back to Safari
+			return "safari";
+
 		case "Baidu":
 			return "baidu";
 
 		case "Chrome":
+			// Check if the OS is Android, in which case this is actually Chrome for Android
+			if (os.name === "Android") {
+				return "and_chr";
+			}
+
+			// If the OS is iOS, it is actually Safari that drives the WebView
+			else if (os.name === "iOS") {
+				return "ios_saf";
+			}
+
+			// Otherwise, fall back to chrome
 			return "chrome";
 
 		case "Edge":
@@ -338,12 +343,16 @@ function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAPar
 			return "ie";
 
 		case "IE Mobile":
+		case "IEMobile":
 			return "ie_mob";
 
 		case "Safari":
 			return "safari";
 
 		case "Mobile Safari":
+		case "MobileSafari":
+		case "Safari Mobile":
+		case "SafariMobile":
 			return "ios_saf";
 
 		case "Opera":
@@ -370,30 +379,113 @@ function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAPar
  * Normalizes the version of the browser such that it plays well with Caniuse
  * @param {CaniuseBrowser} browser
  * @param {string} version
+ * @param {IUseragentBrowser} useragentBrowser
+ * @param {IUseragentOS} useragentOS
  * @returns {string}
  */
-function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version: string): string {
+function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version: string, useragentBrowser: IUseragentBrowser, useragentOS: IUseragentOS): string {
+	const coerced = coerce(version);
+
+	// Always use 'all' with Opera Mini
+	if (browser === "op_mini") {
+		return "all";
+	}
+
+	if (browser === "safari") {
+		// Check if there is a newer version of the browser
+		const nextBrowserVersion = getNextVersionOfBrowser(browser, version);
+
+		// If there isn't we're in the Technology Preview
+		if (nextBrowserVersion == null) {
+			return "TP";
+		}
+	}
+
+	// Make sure that we have a proper Semver version to work with
+	if (coerced == null) throw new TypeError(`Could not detect the version of: '${version}' for browser: ${browser}`);
+
+	// Unpack the semver version
+	const {major, minor, patch} = coerced;
+
+	// Generates a Semver version
+	const buildSemverVersion = (majorVersion: number, minorVersion?: number, patchVersion?: number): string => {
+		return `${majorVersion}${minorVersion == null || minorVersion === 0 ? "" : `.${minorVersion}`}${patchVersion == null || patchVersion === 0 ? "" : `.${patchVersion}`}`;
+	};
+
 	switch (browser) {
-		case "op_mini":
-			// Always use 'all' with Opera Mini
-			return "all";
 
-		case "safari": {
-			// Check if there is a newer version of the browser
-			const nextBrowserVersion = getNextVersionOfBrowser(browser, version);
+		case "chrome":
+		case "ie":
+		case "ie_mob":
+		case "edge":
+		case "bb":
+		case "and_chr":
+		case "and_ff":
+			// Always use the major version of these browser
+			return buildSemverVersion(major);
 
-			// If there isn't we're in the Technology Preview
-			if (nextBrowserVersion == null) {
-				return "TP";
+		case "opera":
+		case "op_mob":
+			// Opera may have minor versions before it went to Chromium. After that, always use major versions
+			if (major === 10 || major === 11 || major === 12) {
+				return buildSemverVersion(major, minor);
 			}
 
-			// Otherwise, return the current version
-			return version;
+			// For anything else, only use the major version
+			return buildSemverVersion(major);
+
+		case "ios_saf": {
+			// For browsers that report as iOS safari, they may actually be other browsers using Safari's WebView.
+			// We want them to report as iOS safari since they will support the same browsers, but we have to apply
+			// some tricks in order to get the version number
+
+			// If it is in fact mobile Safari, just use the reported version
+			if (useragentBrowser.name === "Safari" || useragentBrowser.name === "Mobile Safari") {
+				// iOS may have minor releases, but never patch releases, according to caniuse
+				return buildSemverVersion(major, minor);
+			}
+
+			// Otherwise, try to get the assumed Safari version from the OS version
+			else {
+				if (useragentOS.version == null) throw new ReferenceError(`Could not detect OS version of iOS for ${useragentBrowser.name} on iOS`);
+				// Decide the Semver version
+				const osSemver = coerce(useragentOS.version)!;
+
+				// Use only the main version
+				return `${osSemver.major}`;
+			}
 		}
 
+		case "safari":
+		case "firefox": {
+			// These may have minor releases, but never patch releases, according to caniuse
+			return buildSemverVersion(major, minor);
+		}
+
+		case "android":
+			// Up to version 4.4.4, these could include patch releases. After that, only use major versions
+			if (major < 4) {
+				return buildSemverVersion(major, minor);
+			}
+
+			else if (major === 4) {
+				return buildSemverVersion(major, minor, patch);
+			}
+
+			else {
+				return buildSemverVersion(major);
+			}
+
+		case "and_uc":
+		case "samsung":
+		case "and_qq":
+		case "baidu":
+			// These may always contain minor versions
+			return buildSemverVersion(major, minor);
+
 		default:
-			// For anything else, just use that version
-			return version;
+			// For anything else, just use the major version
+			return buildSemverVersion(major);
 	}
 }
 
@@ -405,16 +497,26 @@ function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version:
  */
 export function matchBrowserslistOnUserAgent (useragent: string, browserslist: string[]): boolean {
 	const parser = new UAParser(useragent);
-	const version = parser.getBrowser().version;
+	const browser = <IUseragentBrowser> parser.getBrowser();
+	const os = <IUseragentOS> parser.getOS();
+	const version = browser.version;
 
 	// Prepare a CaniuseBrowser name from the useragent string
 	const browserName = getCaniuseBrowserForUseragentBrowser(parser);
 
 	// If the browser name or version couldn't be determined, return false immediately
-	if (browserName == null || version == null) return false;
+	if (browserName == null || version == null) {
+		console.log(`No caniuse browser and/or version could be determined for:`);
+		console.log("os:", parser.getOS());
+		console.log("browser:", parser.getBrowser());
+		console.log("device:", parser.getDevice());
+		console.log("cpu:", parser.getCPU());
+		console.log("browser:", parser.getEngine());
+		return false;
+	}
 
 	// Prepare a version from the useragent that plays well with caniuse
-	const browserVersion = getCaniuseVersionForUseragentVersion(browserName, version);
+	const browserVersion = getCaniuseVersionForUseragentVersion(browserName, version, browser, os);
 
 	// Prepare a browserslist from the useragent itself
 	const useragentBrowserslist: string[] = Browserslist([`${browserName} ${browserVersion}`]);

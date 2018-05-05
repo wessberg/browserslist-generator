@@ -1,5 +1,7 @@
 import test from "ava";
 import {browsersWithoutSupportForFeatures, browsersWithSupportForFeatures, matchBrowserslistOnUserAgent} from "../../src/browserslist-generator/browserslist-generator";
+// @ts-ignore
+import {chrome, safari, firefox, ie, edge} from "useragent-generator";
 
 test("browsersWithSupportForFeatures() => Will skip 'Android' in the generated browserslist", t => {
 	t.true(!browsersWithSupportForFeatures(
@@ -26,16 +28,81 @@ test("browsersWithoutSupportForFeatures() => Will include all browsers that simp
 });
 
 test("matchBrowserslistOnUserAgent() => Will not match Firefox > 54 for a Firefox v54 user agent", t => {
-	t.false(matchBrowserslistOnUserAgent("Mozilla/5.0 (Windows NT 10.0; rv:54.0) Gecko/20100101 Firefox/54.0", ["Firefox > 54"]));
+	t.false(matchBrowserslistOnUserAgent(firefox("54"), ["Firefox > 54"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Firefox >= 54 for a Firefox v54 user agent", t => {
-	t.true(matchBrowserslistOnUserAgent("Mozilla/5.0 (Windows NT 10.0; rv:54.0) Gecko/20100101 Firefox/54.0", ["Firefox >= 54"]));
+	t.true(matchBrowserslistOnUserAgent(firefox("54"), ["Firefox >= 54"]));
 });
+
+test("matchBrowserslistOnUserAgent() => Will match Chrome 68 for a Chrome v68 user agent", t => {
+	t.true(matchBrowserslistOnUserAgent(chrome("68"), ["Chrome >= 68", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match Android Chrome for a Chrome v18 user agent", t => {
+	t.true(matchBrowserslistOnUserAgent(chrome.androidPhone("18"), ["and_chr >= 18", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match iOS Chrome but treat it as iOS safari", t => {
+	t.true(matchBrowserslistOnUserAgent(chrome.iOS("10.3"), ["ios_saf >= 10", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match Safari v11", t => {
+	t.true(matchBrowserslistOnUserAgent(safari("11"), ["safari 11", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match Safari TP", t => {
+	t.true(matchBrowserslistOnUserAgent(safari("11.2"), ["safari TP", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match iOS Safari v11", t => {
+	t.true(matchBrowserslistOnUserAgent(safari.iOS("11"), ["ios_saf 11", "unreleased versions"]));
+});
+
+test.only("matchBrowserslistOnUserAgent() => Will match iOS Safari in a WebView v11", t => {
+	t.true(matchBrowserslistOnUserAgent(safari.iOSWebview("11"), ["ios_saf 11", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match iOS Firefox but treat it as iOS Safari", t => {
+	t.true(matchBrowserslistOnUserAgent(firefox.iOS("8.3"), ["ios_saf >= 8", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match chrome as an Android WebView (as android)", t => {
+	t.true(matchBrowserslistOnUserAgent(chrome.androidWebview("4.4.4"), ["android >= 4", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Phone (as and_chr)", t => {
+	t.true(matchBrowserslistOnUserAgent(chrome.androidPhone("66"), ["and_chr >= 66", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Tablet (as and_chr)", t => {
+	t.true(matchBrowserslistOnUserAgent(chrome.androidTablet("66"), ["and_chr >= 66", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Chromecast (as chrome)", t => {
+	t.true(matchBrowserslistOnUserAgent(chrome.chromecast("66"), ["chrome >= 66", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match Android Firefox (as and_ff)", t => {
+	t.true(matchBrowserslistOnUserAgent(firefox.androidPhone("57"), ["and_ff >= 57", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match Internet Explorer", t => {
+	t.true(matchBrowserslistOnUserAgent(ie("9"), ["ie 9", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match Internet Explorer Mobile", t => {
+	t.true(matchBrowserslistOnUserAgent(ie.windowsPhone("10"), ["ie_mob 10", "unreleased versions"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match Microsoft Edge", t => {
+	t.true(matchBrowserslistOnUserAgent(edge("16"), ["edge >= 16", "unreleased versions"]));
+});
+
 
 // @ts-ignore
 import * as Browserslist from "browserslist";
-const features = ["input-color"];
+const features = ["es6-module", "shadowdomv1", "custom-elementsv1"];
 const supportResult = browsersWithSupportForFeatures(...features);
 const noSupportResult = browsersWithoutSupportForFeatures(...features);
 console.log("RAW SUPPORT:", supportResult);
