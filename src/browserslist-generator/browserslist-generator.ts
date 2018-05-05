@@ -1,11 +1,14 @@
 // @ts-ignore
 import * as Browserslist from "browserslist";
 // @ts-ignore
-import {matchesUA} from "browserslist-useragent";
-// @ts-ignore
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
+import {getLatestVersionOfBrowser, getNextVersionOfBrowser, getPreviousVersionOfBrowser} from "./browser-version";
+import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
-import {CaniuseLiteBrowser, CaniuseLiteStats, CaniuseLiteStatsNormalized, CaniuseSupportKind, ICaniuseLiteFeature, ICaniuseLiteFeatureNormalized} from "./i-caniuse-lite";
+import {CaniuseBrowser, CaniuseLiteStats, CaniuseLiteStatsNormalized, CaniuseSupportKind, ICaniuseLiteFeature, ICaniuseLiteFeatureNormalized} from "./i-caniuse-lite";
+import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
+import {UAParser} from "ua-parser-js";
+import {IUseragentBrowser, IUseragentDevice, IUseragentOS} from "./useragent/useragent-typed";
 
 // tslint:disable:no-magic-numbers
 
@@ -14,50 +17,29 @@ import {CaniuseLiteBrowser, CaniuseLiteStats, CaniuseLiteStatsNormalized, Canius
  * when generating a browserslist
  * @type {Set<string>}
  */
-const SKIP_BROWSERS_PAYLOAD: CaniuseLiteBrowser[] = [
+const SKIP_BROWSERS_PAYLOAD: CaniuseBrowser[] = [
 	// caniuse.com has some issues with reporting android browsers
 	"android",
 	"and_chr",
 	"and_qq",
 	"and_uc"
 ];
-const SKIP_BROWSERS: Set<CaniuseLiteBrowser> = new Set(SKIP_BROWSERS_PAYLOAD);
-
-/**
- * A Regular Expression that captures the part of a browser version that should be kept
- * @type {RegExp}
- */
-const NORMALIZE_BROWSER_VERSION_REGEXP = /(?![\d.,]+-)-*(.*)/;
+const SKIP_BROWSERS: Set<CaniuseBrowser> = new Set(SKIP_BROWSERS_PAYLOAD);
 
 /**
  * A Map between features and browsers that has partial support for them but should be allowed anyway
  * @type {Map<string, string[]>}
  */
-const PARTIAL_SUPPORT_ALLOWANCES: Map<string, CaniuseLiteBrowser[]> = new Map([
+const PARTIAL_SUPPORT_ALLOWANCES: Map<string, CaniuseBrowser[]> = new Map([
 	[
 		"shadowdomv1",
-		<CaniuseLiteBrowser[]>["chrome", "safari", "ios_saf"]
+		<CaniuseBrowser[]>["chrome", "safari", "ios_saf"]
 	],
 	[
 		"custom-elementsv1",
-		<CaniuseLiteBrowser[]>["chrome", "safari", "ios_saf"]
+		<CaniuseBrowser[]>["chrome", "safari", "ios_saf"]
 	]
 ]);
-
-/**
- * A function that will match a browserslist on the given user agent
- * @param {string} userAgent
- * @param {string[]} browserslist
- * @returns {boolean}
- */
-export function matchBrowserslistOnUserAgent (userAgent: string, browserslist: string[]): boolean {
-	return matchesUA(userAgent, {
-		browsers: browserslist,
-		_allowHigherVersions: true,
-		ignoreMinor: true,
-		ignorePatch: true
-	});
-}
 
 /**
  * Returns the input query, but extended with the given options
@@ -157,103 +139,12 @@ function getCaniuseLiteFeatureNormalized (feature: ICaniuseLiteFeature): ICanius
 }
 
 /**
- * Gets all versions of the given browser, sorted
- * @param {CaniuseLiteBrowser} browser
- * @returns {string}
- */
-function getSortedBrowserVersions (browser: CaniuseLiteBrowser): string[] {
-	const queryResultsMapped: Map<CaniuseLiteBrowser, string[]> = new Map();
-
-	// Generate the Browserslist query
-	const queryResult: string[] = Browserslist([`>= 0%`, `unreleased versions`]);
-
-	// First, organize the different versions of the browsers inside the Map
-	queryResult.forEach(part => {
-		const [currentBrowser, version] = <[CaniuseLiteBrowser, string]> part.split(" ");
-		let versions = queryResultsMapped.get(currentBrowser);
-
-		if (versions == null) {
-			versions = [];
-			queryResultsMapped.set(currentBrowser, versions);
-		}
-
-		const versionMatch = version.match(NORMALIZE_BROWSER_VERSION_REGEXP);
-		const normalizedVersion = versionMatch == null ? version : versionMatch[1];
-
-		versions.push(normalizedVersion);
-	});
-	return queryResultsMapped.get(browser)!
-		.sort(compareVersions);
-}
-
-/**
- * Gets the latest (stable) version of the given browser
- * @param {CaniuseLiteBrowser} browser
- * @returns {string}
- */
-function getLatestVersionOfBrowser (browser: CaniuseLiteBrowser): string {
-	const versions = getSortedBrowserVersions(browser);
-	return versions[versions.length - 1];
-}
-
-/**
- * Gets the previous version of the given browser from the given version
- * @param {CaniuseLiteBrowser} browser
- * @param {string} version
- * @returns {string | undefined}
- */
-function getPreviousVersionOfBrowser (browser: CaniuseLiteBrowser, version: string): string|undefined {
-	const versions = getSortedBrowserVersions(browser);
-	const indexOfVersion = versions.indexOf(version);
-	// If the version isn't included, or if it is the first version of it, return undefined
-	if (indexOfVersion <= 0) return undefined;
-	return versions[indexOfVersion - 1];
-}
-
-/**
- * Gets the previous version of the given browser from the given version
- * @param {CaniuseLiteBrowser} browser
- * @param {string} version
- * @returns {string | undefined}
- */
-function getNextVersionOfBrowser (browser: CaniuseLiteBrowser, version: string): string|undefined {
-	const versions = getSortedBrowserVersions(browser);
-	const indexOfVersion = versions.indexOf(version);
-	// If the version isn't included, or if it is the first version of it, return undefined
-	if (indexOfVersion <= 0) return undefined;
-	return versions[indexOfVersion + 1];
-}
-
-/**
  * Gets the support from caniuse for the given feature
  * @param {string} feature
  * @returns {ICaniuseLiteFeatureNormalized}
  */
 function getSupport (feature: string): CaniuseLiteStatsNormalized {
 	return getCaniuseLiteFeatureNormalized(<ICaniuseLiteFeature> caniuseFeature(caniuseFeatures[feature])).stats;
-}
-
-/**
- * Compares two versions, a and b
- * @param {string} a
- * @param {string} b
- * @returns {number}
- */
-function compareVersions (a: string, b: string): number {
-	const normalizedA = isNaN(parseFloat(a)) ? a : parseFloat(a);
-	const normalizedB = isNaN(parseFloat(b)) ? b : parseFloat(b);
-
-	if (typeof normalizedA === "string" && typeof normalizedB !== "string") {
-		return 1;
-	}
-
-	if (typeof normalizedB === "string" && typeof normalizedA !== "string") {
-		return -1;
-	}
-
-	if (normalizedA < normalizedB) return -1;
-	if (normalizedA > normalizedB) return 1;
-	return 0;
 }
 
 /**
@@ -283,15 +174,15 @@ function getFirstVersionWithSupportKind (kind: CaniuseSupportKind, stats: { [key
  */
 function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOperator, ...features: string[]): string[] {
 	// All of the generated browser maps
-	const browserMaps: Map<CaniuseLiteBrowser, string>[] = [];
+	const browserMaps: Map<CaniuseBrowser, string>[] = [];
 
 	for (const feature of features) {
 		const support = getSupport(feature);
 		// A map between browser names and their required versions
-		const browserMap: Map<CaniuseLiteBrowser, string> = new Map();
+		const browserMap: Map<CaniuseBrowser, string> = new Map();
 		Object.entries(support)
-			.filter(([browser]: [CaniuseLiteBrowser, { [key: string]: CaniuseSupportKind }]) => !SKIP_BROWSERS.has(browser))
-			.forEach(([browser, stats]: [CaniuseLiteBrowser, { [key: string]: CaniuseSupportKind }]) => {
+			.filter(([browser]: [CaniuseBrowser, { [key: string]: CaniuseSupportKind }]) => !SKIP_BROWSERS.has(browser))
+			.forEach(([browser, stats]: [CaniuseBrowser, { [key: string]: CaniuseSupportKind }]) => {
 				const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
 				const partialSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.PARTIAL_SUPPORT, stats);
 				let versionToSet: string|undefined;
@@ -346,7 +237,7 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 	}
 
 	// Now, prepare a combined browser map
-	const combinedBrowserMap: Map<CaniuseLiteBrowser, string> = new Map();
+	const combinedBrowserMap: Map<CaniuseBrowser, string> = new Map();
 
 	for (const browserMap of browserMaps) {
 		for (const [browser, version] of browserMap.entries()) {
@@ -390,4 +281,147 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 				return [`${browser} ${comparisonOperator} ${version}`];
 			}
 		));
+}
+
+/**
+ * Gets the matching CaniuseBrowser for the given UseragentBrowser. Not all are supported, so it may return undefined
+ * @param {UAParser} parser
+ * @returns {CaniuseBrowser}
+ */
+function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAParser>): CaniuseBrowser | undefined {
+	const browser = <IUseragentBrowser> parser.getBrowser();
+	const device = <IUseragentDevice> parser.getDevice();
+	const os = <IUseragentOS> parser.getOS();
+
+	// First, if it is a Blackberry device, it will always be the 'bb' browser
+	if (device.vendor === "BlackBerry" || os.name === "BlackBerry") {
+		return "bb";
+	}
+
+	switch (browser.name) {
+
+		case "Android Browser": {
+			// If the vendor is Samsung, the default browser is Samsung Internet
+			if (device.vendor === "Samsung") {
+				return "samsung";
+			}
+
+			// Default to the stock android browser
+			return "android";
+		}
+
+		case "Baidu":
+			return "baidu";
+
+		case "Chrome":
+			return "chrome";
+
+		case "Edge":
+			return "edge";
+
+		case "Firefox":
+
+			// Check if the OS is Android, in which case this is actually Firefox for Android
+			if (os.name === "Android") {
+				return "and_ff";
+			}
+
+			// If the OS is iOS, it is actually Safari that drives the WebView
+			else if (os.name === "iOS") {
+				return "ios_saf";
+			}
+
+			// Default to Firefox
+			return "firefox";
+
+		case "IE":
+			return "ie";
+
+		case "IE Mobile":
+			return "ie_mob";
+
+		case "Safari":
+			return "safari";
+
+		case "Mobile Safari":
+			return "ios_saf";
+
+		case "Opera":
+			return "opera";
+
+		case "Opera Mini":
+			return "op_mini";
+
+		case "Opera Mobi":
+			return "op_mob";
+
+		case "QQBrowser":
+			return "and_qq";
+
+		case "UCBrowser":
+			return "and_uc";
+
+		default:
+			return undefined;
+	}
+}
+
+/**
+ * Normalizes the version of the browser such that it plays well with Caniuse
+ * @param {CaniuseBrowser} browser
+ * @param {string} version
+ * @returns {string}
+ */
+function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version: string): string {
+	switch (browser) {
+		case "op_mini":
+			// Always use 'all' with Opera Mini
+			return "all";
+
+		case "safari": {
+			// Check if there is a newer version of the browser
+			const nextBrowserVersion = getNextVersionOfBrowser(browser, version);
+
+			// If there isn't we're in the Technology Preview
+			if (nextBrowserVersion == null) {
+				return "TP";
+			}
+
+			// Otherwise, return the current version
+			return version;
+		}
+
+		default:
+			// For anything else, just use that version
+			return version;
+	}
+}
+
+/**
+ * Generates a browserslist from the provided useragent string
+ * @param {string} useragent
+ * @param {string[]} browserslist
+ * @returns {string[]}
+ */
+export function matchBrowserslistOnUserAgent (useragent: string, browserslist: string[]): boolean {
+	const parser = new UAParser(useragent);
+	const version = parser.getBrowser().version;
+
+	// Prepare a CaniuseBrowser name from the useragent string
+	const browserName = getCaniuseBrowserForUseragentBrowser(parser);
+
+	// If the browser name or version couldn't be determined, return false immediately
+	if (browserName == null || version == null) return false;
+
+	// Prepare a version from the useragent that plays well with caniuse
+	const browserVersion = getCaniuseVersionForUseragentVersion(browserName, version);
+
+	// Prepare a browserslist from the useragent itself
+	const useragentBrowserslist: string[] = Browserslist([`${browserName} ${browserVersion}`]);
+
+	// Pipe the input browserslist through Browserslist to normalize it
+	const normalizedInputBrowserslist: string[] = Browserslist(browserslist);
+
+	// Now, compare the two, and if the normalized input browserslist includes every option from the user agent, it is matched
+	return useragentBrowserslist.every(option => normalizedInputBrowserslist.includes(option));
 }

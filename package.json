@@ -59,10 +59,11 @@
 		"typescript": "^2.8.1"
 	},
 	"dependencies": {
+		"@types/ua-parser-js": "^0.7.32",
 		"browserslist": "^3.2.6",
-		"browserslist-useragent": "^1.1.0",
 		"caniuse-lite": "^1.0.30000833",
-		"tslib": "^1.9.0"
+		"tslib": "^1.9.0",
+		"ua-parser-js": "^0.7.18"
 	},
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/es2015/index.js",

@@ -1,4 +1,4 @@
-export declare type CaniuseLiteBrowser = "and_chr"|"and_ff"|"and_qq"|"and_uc"|"android"|"baidu"|"bb"|"chrome"|"edge"|"firefox"|"ie"|"ie_mob"|"ios_saf"|"op_mini"|"op_mob"|"opera"|"safari"|"samsung";
+export declare type CaniuseBrowser = "and_chr"|"and_ff"|"and_qq"|"and_uc"|"android"|"baidu"|"bb"|"chrome"|"edge"|"firefox"|"ie"|"ie_mob"|"ios_saf"|"op_mini"|"op_mob"|"opera"|"safari"|"samsung";
 
 export enum CaniuseSupportKind {
 	AVAILABLE = "AVAILABLE",
@@ -8,11 +8,11 @@ export enum CaniuseSupportKind {
 }
 
 export declare type CaniuseLiteStats = {
-	[Key in CaniuseLiteBrowser]: {[key: string]: string};
+	[Key in CaniuseBrowser]: {[key: string]: string};
 };
 
 export declare type CaniuseLiteStatsNormalized = {
-	[Key in CaniuseLiteBrowser]: {[key: string]: CaniuseSupportKind};
+	[Key in CaniuseBrowser]: {[key: string]: CaniuseSupportKind};
 };
 
 export interface ICaniuseLiteAgents {
