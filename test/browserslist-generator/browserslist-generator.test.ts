@@ -1,5 +1,5 @@
 import test from "ava";
-import {browsersWithoutSupportForFeatures, browsersWithSupportForFeatures, matchBrowserslistOnUserAgent} from "../../src/browserslist-generator/browserslist-generator";
+import {browserslistSupportsFeatures, browsersWithoutSupportForFeatures, browsersWithSupportForFeatures, matchBrowserslistOnUserAgent} from "../../src/browserslist-generator/browserslist-generator";
 // @ts-ignore
 import {chrome, safari, firefox, ie, edge} from "useragent-generator";
 
@@ -59,7 +59,7 @@ test("matchBrowserslistOnUserAgent() => Will match iOS Safari v11", t => {
 	t.true(matchBrowserslistOnUserAgent(safari.iOS("11"), ["ios_saf 11", "unreleased versions"]));
 });
 
-test.only("matchBrowserslistOnUserAgent() => Will match iOS Safari in a WebView v11", t => {
+test("matchBrowserslistOnUserAgent() => Will match iOS Safari in a WebView v11", t => {
 	t.true(matchBrowserslistOnUserAgent(safari.iOSWebview("11"), ["ios_saf 11", "unreleased versions"]));
 });
 
@@ -99,13 +99,26 @@ test("matchBrowserslistOnUserAgent() => Will match Microsoft Edge", t => {
 	t.true(matchBrowserslistOnUserAgent(edge("16"), ["edge >= 16", "unreleased versions"]));
 });
 
+test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that doesn't support the given features", t => {
+	t.false(matchBrowserslistOnUserAgent(firefox("61"), browsersWithSupportForFeatures( "es6-module", "shadowdomv1", "custom-elementsv1")));
+});
 
-// @ts-ignore
-import * as Browserslist from "browserslist";
-const features = ["es6-module", "shadowdomv1", "custom-elementsv1"];
-const supportResult = browsersWithSupportForFeatures(...features);
-const noSupportResult = browsersWithoutSupportForFeatures(...features);
-console.log("RAW SUPPORT:", supportResult);
-console.log("GENERATED SUPPORT:", JSON.stringify(Browserslist(supportResult), null, " "));
-console.log("RAW NO SUPPORT:", noSupportResult);
-console.log("GENERATED NO SUPPORT:", JSON.stringify(Browserslist(noSupportResult), null, " "));
+test("browserslistSupportsFeatures() => Will correctly determine if a browserslist support the given set of features #1", t => {
+	const browserslist = browsersWithSupportForFeatures( "es6-module", "shadowdomv1", "custom-elementsv1" );
+	t.true(browserslistSupportsFeatures(browserslist, "es6-module", "shadowdomv1", "custom-elementsv1"));
+});
+
+test("browserslistSupportsFeatures() => Will correctly determine if a browserslist support the given set of features #2", t => {
+	const browserslist = browsersWithoutSupportForFeatures( "es6-module", "shadowdomv1", "custom-elementsv1" );
+	t.false(browserslistSupportsFeatures(browserslist, "es6-module", "shadowdomv1", "custom-elementsv1"));
+});
+
+test("browserslistSupportsFeatures() => Will correctly determine if a browserslist support the given set of features #3", t => {
+	const browserslist = browsersWithSupportForFeatures( "es6-module", "shadowdomv1", "custom-elementsv1" );
+	t.true(browserslistSupportsFeatures(browserslist, "es6-module"));
+});
+
+test("browserslistSupportsFeatures() => Will correctly determine if a browserslist support the given set of features #4", t => {
+	const browserslist = browsersWithSupportForFeatures( "es6-module" );
+	t.false(browserslistSupportsFeatures(browserslist, "es6-module", "shadowdomv1", "custom-elementsv1"));
+});

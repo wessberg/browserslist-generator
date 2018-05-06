@@ -7,6 +7,7 @@ import {UAParser} from "ua-parser-js";
 import {getLatestVersionOfBrowser, getNextVersionOfBrowser, getPreviousVersionOfBrowser} from "./browser-version";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
+import {IBrowsersWithSupportForFeaturesCommonResult} from "./i-browsers-with-support-for-features-common-result";
 import {CaniuseBrowser, CaniuseLiteStats, CaniuseLiteStatsNormalized, CaniuseSupportKind, ICaniuseLiteFeature, ICaniuseLiteFeatureNormalized} from "./i-caniuse-lite";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
 import {IUseragentBrowser, IUseragentDevice, IUseragentOS} from "./useragent/useragent-typed";
@@ -45,10 +46,11 @@ function extendQueryWith (query: string[], extendWith: string | string[]): strin
 /**
  * Returns the input query, but extended with 'unreleased versions'
  * @param {string[]} query
+ * @param {Iterable<CaniuseBrowser>} browsers
  * @returns {string[]}
  */
-function extendQueryWithUnreleasedVersions (query: string[]): string[] {
-	return extendQueryWith(query, "unreleased versions");
+function extendQueryWithUnreleasedVersions (query: string[], browsers: Iterable<CaniuseBrowser>): string[] {
+	return extendQueryWith(query, Array.from(browsers).map(browser => `unreleased ${browser} versions`));
 }
 
 /**
@@ -57,8 +59,8 @@ function extendQueryWithUnreleasedVersions (query: string[]): string[] {
  * @returns {string}
  */
 export function browsersWithSupportForFeatures (...features: string[]): string[] {
-	const baseQuery = browsersWithSupportForFeaturesCommon(">=", ...features);
-	return extendQueryWithUnreleasedVersions(baseQuery);
+	const {query, browsers} = browsersWithSupportForFeaturesCommon(">=", ...features);
+	return extendQueryWithUnreleasedVersions(query, browsers);
 }
 
 /**
@@ -72,7 +74,7 @@ export function browserslistSupportsFeatures (browserslist: string[], ...feature
 	const normalizedIdealBrowserslist: string[] = Browserslist(browsersWithSupportForFeatures(...features));
 
 	// Now, normalize the input browserslist
-	const normalizedInputBrowserslist: string[] = Browserslist(extendQueryWithUnreleasedVersions(browserslist));
+	const normalizedInputBrowserslist: string[] = Browserslist(browserslist);
 
 	// Now, compare the two and see if they align. If they do, the input browserslist *does* support all of the given features.
 	// They align if all members of the input browserslist are included in the ideal browserslist
@@ -85,7 +87,7 @@ export function browserslistSupportsFeatures (browserslist: string[], ...feature
  * @returns {string}
  */
 export function browsersWithoutSupportForFeatures (...features: string[]): string[] {
-	return browsersWithSupportForFeaturesCommon("<", ...features);
+	return browsersWithSupportForFeaturesCommon("<", ...features).query;
 }
 
 /**
@@ -157,9 +159,9 @@ function getFirstVersionWithSupportKind (kind: CaniuseSupportKind, stats: { [key
  * Common logic for the functions that generate browserslists based on feature support
  * @param {ComparisonOperator} comparisonOperator
  * @param {string} features
- * @returns {string[]}
+ * @returns {IBrowsersWithSupportForFeaturesCommonResult}
  */
-function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOperator, ...features: string[]): string[] {
+function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOperator, ...features: string[]): IBrowsersWithSupportForFeaturesCommonResult {
 	// All of the generated browser maps
 	const browserMaps: Map<CaniuseBrowser, string>[] = [];
 
@@ -241,32 +243,35 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 	}
 
 	// Finally, generate a string array of the browsers
-	return [].concat.apply([], Array.from(
-		combinedBrowserMap.entries()
-	)
-		.map(([browser, version]) => {
-				// The version is not a number, so we can't do comparisons on it.
-				if (isNaN(parseFloat(version))) {
-					switch (comparisonOperator) {
-						case "<":
-						case "<=":
-							const previousVersion = getPreviousVersionOfBrowser(browser, version);
-							return [
-								`not ${browser} ${version}`,
-								...(previousVersion == null ? [] : [`${browser} ${comparisonOperator} ${previousVersion}`])
-							];
-						case ">":
-						case ">=":
-							const nextVersion = getNextVersionOfBrowser(browser, version);
-							return [
-								`${browser} ${version}`,
-								...(nextVersion == null ? [] : [`${browser} ${comparisonOperator} ${nextVersion}`])
-							];
+	return {
+		query: [].concat.apply([], Array.from(
+			combinedBrowserMap.entries()
+		)
+			.map(([browser, version]) => {
+					// The version is not a number, so we can't do comparisons on it.
+					if (isNaN(parseFloat(version))) {
+						switch (comparisonOperator) {
+							case "<":
+							case "<=":
+								const previousVersion = getPreviousVersionOfBrowser(browser, version);
+								return [
+									`not ${browser} ${version}`,
+									...(previousVersion == null ? [] : [`${browser} ${comparisonOperator} ${previousVersion}`])
+								];
+							case ">":
+							case ">=":
+								const nextVersion = getNextVersionOfBrowser(browser, version);
+								return [
+									`${browser} ${version}`,
+									...(nextVersion == null ? [] : [`${browser} ${comparisonOperator} ${nextVersion}`])
+								];
+						}
 					}
+					return [`${browser} ${comparisonOperator} ${version}`];
 				}
-				return [`${browser} ${comparisonOperator} ${version}`];
-			}
-		));
+			)),
+		browsers: new Set(combinedBrowserMap.keys())
+	};
 }
 
 /**
