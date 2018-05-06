@@ -4,7 +4,7 @@ import * as Browserslist from "browserslist";
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
 import {coerce} from "semver";
 import {UAParser} from "ua-parser-js";
-import {getLatestVersionOfBrowser, getNextVersionOfBrowser, getPreviousVersionOfBrowser} from "./browser-version";
+import {getNextVersionOfBrowser, getPreviousVersionOfBrowser} from "./browser-version";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
 import {IBrowsersWithSupportForFeaturesCommonResult} from "./i-browsers-with-support-for-features-common-result";
@@ -156,6 +156,18 @@ function getFirstVersionWithSupportKind (kind: CaniuseSupportKind, stats: { [key
 }
 
 /**
+ * Sorts the given browserslist. Ensures that 'not' expressions come last
+ * @param {string} a
+ * @param {string} b
+ * @returns {number}
+ */
+function sortBrowserslist (a: string, b: string): number {
+	if (a.startsWith("not") && !b.startsWith("not")) return 1;
+	if (!a.startsWith("not") && b.startsWith("not")) return -1;
+	return 0;
+}
+
+/**
  * Common logic for the functions that generate browserslists based on feature support
  * @param {ComparisonOperator} comparisonOperator
  * @param {string} features
@@ -201,7 +213,7 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 						case "<":
 						case "<=":
 							// Add all browsers with no support whatsoever, or those that require prefixing or flags
-							versionToSet = getLatestVersionOfBrowser(browser);
+							versionToSet = "-1";
 					}
 				}
 
@@ -232,7 +244,7 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 			// Take the existing entry from the combined map
 			const existingVersion = combinedBrowserMap.get(browser);
 			// The browser should be set in the map if it has no entry already
-			const shouldSet = existingVersion == null || compareVersions(version, existingVersion) >= 0;
+			const shouldSet = existingVersion !== "-1" && (existingVersion == null || version === "-1" || compareVersions(version, existingVersion) >= 0);
 
 			if (shouldSet) {
 				// Set the version in the map
@@ -243,33 +255,38 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 	}
 
 	// Finally, generate a string array of the browsers
-	return {
-		query: [].concat.apply([], Array.from(
-			combinedBrowserMap.entries()
-		)
-			.map(([browser, version]) => {
-					// The version is not a number, so we can't do comparisons on it.
-					if (isNaN(parseFloat(version))) {
-						switch (comparisonOperator) {
-							case "<":
-							case "<=":
-								const previousVersion = getPreviousVersionOfBrowser(browser, version);
-								return [
-									`not ${browser} ${version}`,
-									...(previousVersion == null ? [] : [`${browser} ${comparisonOperator} ${previousVersion}`])
-								];
-							case ">":
-							case ">=":
-								const nextVersion = getNextVersionOfBrowser(browser, version);
-								return [
-									`${browser} ${version}`,
-									...(nextVersion == null ? [] : [`${browser} ${comparisonOperator} ${nextVersion}`])
-								];
-						}
+	// Make sure that 'not' expressions come last
+	const query = [].concat.apply([], Array.from(
+		combinedBrowserMap.entries()
+	)
+		.map(([browser, version]) => {
+				// The version is not a number, so we can't do comparisons on it.
+				if (isNaN(parseFloat(version))) {
+					switch (comparisonOperator) {
+						case "<":
+						case "<=":
+							const previousVersion = getPreviousVersionOfBrowser(browser, version);
+							return [
+								`not ${browser} ${version}`,
+								...(previousVersion == null ? [] : [`${browser} ${comparisonOperator} ${previousVersion}`])
+							];
+						case ">":
+						case ">=":
+							const nextVersion = getNextVersionOfBrowser(browser, version);
+							return [
+								`${browser} ${version}`,
+								...(nextVersion == null ? [] : [`${browser} ${comparisonOperator} ${nextVersion}`])
+							];
 					}
-					return [`${browser} ${comparisonOperator} ${version}`];
 				}
-			)),
+				return parseInt(version) === -1
+					? [`${comparisonOperator === ">" || comparisonOperator === ">=" ? "not " : ""}${browser}${browser === "op_mini" ? " all" : " > 0"}`]
+					: [`${browser} ${comparisonOperator} ${version}`];
+			}
+		))
+		.sort(sortBrowserslist);
+	return {
+		query,
 		browsers: new Set(combinedBrowserMap.keys())
 	};
 }
