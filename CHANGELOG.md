@@ -1,3 +1,12 @@
+<a name="0.0.20"></a>
+## <small>0.0.20 (2018-05-06)</small>
+
+* 0.0.20 ([4e44851](https://github.com/wessberg/browserslist-generator/commit/4e44851))
+* Bumped version ([b80ab99](https://github.com/wessberg/browserslist-generator/commit/b80ab99))
+* Fixed a bug ([213a490](https://github.com/wessberg/browserslist-generator/commit/213a490))
+
+
+
 <a name="0.0.19"></a>
 ## <small>0.0.19 (2018-05-06)</small>
 
