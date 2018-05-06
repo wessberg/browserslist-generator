@@ -280,7 +280,10 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 					}
 				}
 				return parseInt(version) === -1
-					? [`${comparisonOperator === ">" || comparisonOperator === ">=" ? "not " : ""}${browser}${browser === "op_mini" ? " all" : " > 0"}`]
+					? [
+						`${comparisonOperator === ">" || comparisonOperator === ">=" ? "not " : ""}${browser} ${browser === "op_mini" ? "all" : "> 0"}`,
+						`${comparisonOperator === ">" || comparisonOperator === ">=" ? "not " : ""}unreleased ${browser} versions`
+					]
 					: [`${browser} ${comparisonOperator} ${version}`];
 			}
 		))

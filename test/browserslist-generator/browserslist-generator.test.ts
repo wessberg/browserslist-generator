@@ -103,6 +103,10 @@ test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that d
 	t.false(matchBrowserslistOnUserAgent(firefox("61"), browsersWithSupportForFeatures( "es6-module", "shadowdomv1", "custom-elementsv1")));
 });
 
+test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that doesn't support the given features", t => {
+	t.true(matchBrowserslistOnUserAgent(firefox("61"), browsersWithoutSupportForFeatures( "es6-module", "shadowdomv1", "custom-elementsv1")));
+});
+
 test("browserslistSupportsFeatures() => Will correctly determine if a browserslist support the given set of features #1", t => {
 	const browserslist = browsersWithSupportForFeatures( "es6-module", "shadowdomv1", "custom-elementsv1" );
 	t.true(browserslistSupportsFeatures(browserslist, "es6-module", "shadowdomv1", "custom-elementsv1"));
