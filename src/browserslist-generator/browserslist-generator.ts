@@ -60,7 +60,7 @@ function extendQueryWithUnreleasedVersions (query: string[], browsers: Iterable<
  */
 export function browsersWithSupportForFeatures (...features: string[]): string[] {
 	const {query, browsers} = browsersWithSupportForFeaturesCommon(">=", ...features);
-	return extendQueryWithUnreleasedVersions(query, browsers);
+	return Browserslist(extendQueryWithUnreleasedVersions(query, browsers));
 }
 
 /**
@@ -87,7 +87,7 @@ export function browserslistSupportsFeatures (browserslist: string[], ...feature
  * @returns {string}
  */
 export function browsersWithoutSupportForFeatures (...features: string[]): string[] {
-	return browsersWithSupportForFeaturesCommon("<", ...features).query;
+	return Browserslist(browsersWithSupportForFeaturesCommon("<", ...features).query);
 }
 
 /**
