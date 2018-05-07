@@ -1,3 +1,12 @@
+<a name="0.0.23"></a>
+## <small>0.0.23 (2018-05-07)</small>
+
+* 0.0.23 ([a04682a](https://github.com/wessberg/browserslist-generator/commit/a04682a))
+* Bumped version ([11aba67](https://github.com/wessberg/browserslist-generator/commit/11aba67))
+* Removed an unwanted console.log ([3f5323a](https://github.com/wessberg/browserslist-generator/commit/3f5323a))
+
+
+
 <a name="0.0.22"></a>
 ## <small>0.0.22 (2018-05-07)</small>
 
