@@ -34,6 +34,10 @@ Returns true if the given [browserslist](https://github.com/browserslist/browser
 
 Will check if the given user agent string matches the given browserslist and return true if so.
 
+#### `userAgentSupportsFeatures (useragent: string, ...features: string[]): boolean`
+
+Checks if the given user agent string supports all of the given [caniuse](https://caniuse.com/) features.
+
 ## Installation
 
 `npm install @wessberg/browserslist-generator`

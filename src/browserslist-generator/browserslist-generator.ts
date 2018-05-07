@@ -656,10 +656,9 @@ function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version:
 /**
  * Generates a browserslist from the provided useragent string
  * @param {string} useragent
- * @param {string[]} browserslist
  * @returns {string[]}
  */
-export function matchBrowserslistOnUserAgent (useragent: string, browserslist: string[]): boolean {
+function generateBrowserslistFromUseragent (useragent: string): string[] {
 	const parser = new UAParser(useragent);
 	const browser = <IUseragentBrowser> parser.getBrowser();
 	const os = <IUseragentOS> parser.getOS();
@@ -676,18 +675,47 @@ export function matchBrowserslistOnUserAgent (useragent: string, browserslist: s
 		console.log("device:", parser.getDevice());
 		console.log("cpu:", parser.getCPU());
 		console.log("browser:", parser.getEngine());
-		return false;
+		return [];
 	}
 
 	// Prepare a version from the useragent that plays well with caniuse
 	const browserVersion = getCaniuseVersionForUseragentVersion(browserName, version, browser, os);
 
 	// Prepare a browserslist from the useragent itself
-	const useragentBrowserslist: string[] = Browserslist([`${browserName} ${browserVersion}`]);
+	return Browserslist([`${browserName} ${browserVersion}`]);
+}
+
+/**
+ * Generates a browserslist from the provided useragent string and checks if it matches
+ * the given browserslist
+ * @param {string} useragent
+ * @param {string[]} browserslist
+ * @returns {string[]}
+ */
+export function matchBrowserslistOnUserAgent (useragent: string, browserslist: string[]): boolean {
+	const useragentBrowserslist = generateBrowserslistFromUseragent(useragent);
 
 	// Pipe the input browserslist through Browserslist to normalize it
 	const normalizedInputBrowserslist: string[] = Browserslist(browserslist);
 
 	// Now, compare the two, and if the normalized input browserslist includes every option from the user agent, it is matched
 	return useragentBrowserslist.every(option => normalizedInputBrowserslist.includes(option));
+}
+
+/**
+ * Generates a browserslist from the provided useragent string
+ * @param {string} useragent
+ * @param {string[]} features
+ * @returns {string[]}
+ */
+export function userAgentSupportsFeatures (useragent: string, ...features: string[]): boolean {
+
+	// Prepare a browserslist from the useragent itself
+	const useragentBrowserslist = generateBrowserslistFromUseragent(useragent);
+
+	// Prepare a browserslist for browsers that support the given features
+	const supportedBrowserslist = browsersWithSupportForFeatures(...features);
+
+	// Now, compare the two, and if the browserslist with supported browsers includes every option from the user agent, the user agent supports all of the given features
+	return useragentBrowserslist.every(option => supportedBrowserslist.includes(option));
 }
