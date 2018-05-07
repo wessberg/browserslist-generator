@@ -1,3 +1,13 @@
+<a name="0.0.22"></a>
+## <small>0.0.22 (2018-05-07)</small>
+
+* 0.0.22 ([c62d2a7](https://github.com/wessberg/browserslist-generator/commit/c62d2a7))
+* BBug fixes ([72156dd](https://github.com/wessberg/browserslist-generator/commit/72156dd))
+* Bumped version ([70e686c](https://github.com/wessberg/browserslist-generator/commit/70e686c))
+* Improvements ([83c42e1](https://github.com/wessberg/browserslist-generator/commit/83c42e1))
+
+
+
 <a name="0.0.21"></a>
 ## <small>0.0.21 (2018-05-07)</small>
 
