@@ -1,3 +1,12 @@
+<a name="0.0.21"></a>
+## <small>0.0.21 (2018-05-07)</small>
+
+* 0.0.21 ([e344488](https://github.com/wessberg/browserslist-generator/commit/e344488))
+* Bumped version ([ec3e712](https://github.com/wessberg/browserslist-generator/commit/ec3e712))
+* Made sure to normalize the browserslists returned by 'browsersWithSupportForFeatures' and 'browsersW ([cd6809a](https://github.com/wessberg/browserslist-generator/commit/cd6809a))
+
+
+
 <a name="0.0.20"></a>
 ## <small>0.0.20 (2018-05-06)</small>
 
