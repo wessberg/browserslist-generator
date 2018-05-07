@@ -1,3 +1,12 @@
+<a name="0.0.24"></a>
+## <small>0.0.24 (2018-05-07)</small>
+
+* 0.0.24 ([7d2af3f](https://github.com/wessberg/browserslist-generator/commit/7d2af3f))
+* Added a nnew helper: 'userAgentSupportsFeatures' ([4cb7d8b](https://github.com/wessberg/browserslist-generator/commit/4cb7d8b))
+* Bumped version ([9f32fec](https://github.com/wessberg/browserslist-generator/commit/9f32fec))
+
+
+
 <a name="0.0.23"></a>
 ## <small>0.0.23 (2018-05-07)</small>
 
