@@ -691,4 +691,3 @@ export function matchBrowserslistOnUserAgent (useragent: string, browserslist: s
 	// Now, compare the two, and if the normalized input browserslist includes every option from the user agent, it is matched
 	return useragentBrowserslist.every(option => normalizedInputBrowserslist.includes(option));
 }
-console.log(browsersWithoutSupportForFeatures("es6-class"));
