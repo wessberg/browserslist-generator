@@ -2,13 +2,13 @@
 import * as Browserslist from "browserslist";
 // @ts-ignore
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
-import {coerce} from "semver";
+import {coerce, gt} from "semver";
 import {UAParser} from "ua-parser-js";
 import {getNextVersionOfBrowser, getPreviousVersionOfBrowser} from "./browser-version";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
 import {IBrowsersWithSupportForFeaturesCommonResult} from "./i-browsers-with-support-for-features-common-result";
-import {CaniuseBrowser, CaniuseLiteStats, CaniuseLiteStatsNormalized, CaniuseSupportKind, ICaniuseLiteFeature, ICaniuseLiteFeatureNormalized} from "./i-caniuse-lite";
+import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, ICaniuseBrowserCorrection, ICaniuseFeature, ICaniuseFeatureNormalized} from "./i-caniuse";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
 import {IUseragentBrowser, IUseragentDevice, IUseragentOS} from "./useragent/useragent-typed";
 
@@ -28,6 +28,65 @@ const PARTIAL_SUPPORT_ALLOWANCES: Map<string, CaniuseBrowser[]> = new Map([
 		<CaniuseBrowser[]>["chrome", "safari", "ios_saf"]
 	]
 ]);
+
+/**
+ * These browsers will be ignored all-together since they only report the latest
+ * version from Caniuse and is considered unreliable because of it
+ * @type {Set<string>}
+ */
+const IGNORED_BROWSERS_INPUT: CaniuseBrowser[] = [
+	"and_chr",
+	"and_ff",
+	"and_uc",
+	"and_qq",
+	"baidu"
+];
+const IGNORED_BROWSERS: Set<CaniuseBrowser> = new Set(IGNORED_BROWSERS_INPUT);
+
+/**
+ * Not all Caniuse data is entirely correct. For some features, the data on https://kangax.github.io/compat-table/es6/
+ * is more correct. When a Browserslist is generated based on support for specific features, it is really important
+ * that it is correct, especially if the browserslist will be used as an input to tools such as @babel/preset-env.
+ * This table provides some corrections to the Caniuse data that makes it align better with actual availability
+ * @type {[string, ICaniuseBrowserCorrection][]}
+ */
+const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrection][] = [
+	[
+		"es6-class",
+		{
+			edge: [
+				{
+					// Caniuse reports that Microsoft Edge has been supporting classes since v12, but it was prefixed until v13
+					kind: CaniuseSupportKind.PREFIXED,
+					version: "12"
+				}
+			],
+			ios_saf: [
+				{
+					// Caniuse reports that iOS Safari has been supporting classes since v9, but the implementation was only partial
+					kind: CaniuseSupportKind.PARTIAL_SUPPORT,
+					version: "9"
+				},
+				{
+					// Caniuse reports that iOS Safari has been supporting classes since v9, but the implementation was only partial
+					kind: CaniuseSupportKind.PARTIAL_SUPPORT,
+					version: "9.2"
+				},
+				{
+					// Caniuse reports that iOS Safari has been supporting classes since v9, but the implementation was only partial
+					kind: CaniuseSupportKind.PARTIAL_SUPPORT,
+					version: "9.3"
+				}
+			]
+		}
+	]
+];
+
+/**
+ * A Map between caniuse features and corrections to apply (see above)
+ * @type {Map<string, ICaniuseBrowserCorrection>}
+ */
+const FEATURE_TO_BROWSER_DATA_CORRECTIONS_MAP: Map<string, ICaniuseBrowserCorrection> = new Map(FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT);
 
 /**
  * Returns the input query, but extended with the given options
@@ -91,12 +150,31 @@ export function browsersWithoutSupportForFeatures (...features: string[]): strin
 }
 
 /**
- * Normalizes the given ICaniuseLiteFeature
- * @param {ICaniuseLiteFeature} feature
- * @returns {ICaniuseLiteFeatureNormalized}
+ * Returns true if the given browser should be ignored. The data reported from Caniuse is a bit lacking.
+ * For example, only the latest version of and_ff, and_qq, and_uc and baidu is reported, and since
+ * android went to use Chromium for the WebView, it has only reported the latest Chromium version
+ * @param {CaniuseBrowser} browser
+ * @param {string} version
+ * @returns {boolean}
  */
-function getCaniuseLiteFeatureNormalized (feature: ICaniuseLiteFeature): ICaniuseLiteFeatureNormalized {
-	Object.keys(feature.stats).forEach((browser: keyof CaniuseLiteStats) => {
+function shouldIgnoreBrowser (browser: CaniuseBrowser, version: string): boolean {
+	return (
+		(browser === "android" && gt(coerce(version)!.toString(), "4.4.4")) ||
+		IGNORED_BROWSERS.has(browser)
+	);
+}
+
+/**
+ * Normalizes the given ICaniuseLiteFeature
+ * @param {ICaniuseFeature} feature
+ * @param {string} featureName
+ * @returns {ICaniuseFeatureNormalized}
+ */
+function getCaniuseLiteFeatureNormalized (feature: ICaniuseFeature, featureName: string): ICaniuseFeatureNormalized {
+	// Check if a correction exists for this browser
+	const featureCorrectionMatch = FEATURE_TO_BROWSER_DATA_CORRECTIONS_MAP.get(featureName);
+
+	Object.keys(feature.stats).forEach((browser: keyof CaniuseStats) => {
 		const browserDict = feature.stats[browser];
 		Object.entries(browserDict).forEach(([version, support]: [string, string]) => {
 			const versionMatch = version.match(NORMALIZE_BROWSER_VERSION_REGEXP);
@@ -122,18 +200,46 @@ function getCaniuseLiteFeatureNormalized (feature: ICaniuseLiteFeature): ICanius
 				delete browserDict[version];
 			}
 			browserDict[normalizedVersion] = supportKind;
+
+			// If a feature correction exists for this feature, apply applicable corrections
+			if (featureCorrectionMatch != null) {
+				// Check if the browser has some corrections
+				const browserMatch = featureCorrectionMatch[browser];
+				if (browserMatch != null) {
+
+					// Apply all corrections
+					browserMatch.forEach(correction => {
+						browserDict[correction.version] = correction.kind;
+					});
+				}
+			}
 		});
 	});
-	return <ICaniuseLiteFeatureNormalized> feature;
+
+	const normalizedFeature = <ICaniuseFeatureNormalized> feature;
+
+	// Now, run through the normalized stats
+	Object.keys(normalizedFeature.stats).forEach((browser: keyof CaniuseStatsNormalized) => {
+		const browserDict = normalizedFeature.stats[browser];
+		Object.entries(browserDict).forEach(([version]: [string, CaniuseSupportKind]) => {
+			// If browser is Android and version is greater than "4.4.4", or if the browser is Chrome, Firefox, UC, QQ for Android, or Baidu,
+			// strip it entirely from the data, since Caniuse only reports the latest versions of those browsers
+			if (shouldIgnoreBrowser(browser, version)) {
+				delete browserDict[version];
+			}
+		});
+	});
+
+	return normalizedFeature;
 }
 
 /**
  * Gets the support from caniuse for the given feature
  * @param {string} feature
- * @returns {ICaniuseLiteFeatureNormalized}
+ * @returns {ICaniuseFeatureNormalized}
  */
-function getSupport (feature: string): CaniuseLiteStatsNormalized {
-	return getCaniuseLiteFeatureNormalized(<ICaniuseLiteFeature> caniuseFeature(caniuseFeatures[feature])).stats;
+function getSupport (feature: string): CaniuseStatsNormalized {
+	return getCaniuseLiteFeatureNormalized(<ICaniuseFeature> caniuseFeature(caniuseFeatures[feature]), feature).stats;
 }
 
 /**
@@ -165,6 +271,25 @@ function sortBrowserslist (a: string, b: string): number {
 	if (a.startsWith("not") && !b.startsWith("not")) return 1;
 	if (!a.startsWith("not") && b.startsWith("not")) return -1;
 	return 0;
+}
+
+/**
+ * Gets a Map between browser names and the first version of them that supported the given feature
+ * @param {string} feature
+ * @returns {Map<CaniuseBrowser, string>}
+ */
+export function getFirstVersionsWithFullSupport (feature: string): Map<CaniuseBrowser, string> {
+	const support = getSupport(feature);
+	// A map between browser names and their required versions
+	const browserMap: Map<CaniuseBrowser, string> = new Map();
+	Object.entries(support)
+		.forEach(([browser, stats]: [CaniuseBrowser, { [key: string]: CaniuseSupportKind }]) => {
+			const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
+			if (fullSupportVersion != null) {
+				browserMap.set(browser, fullSupportVersion);
+			}
+		});
+	return browserMap;
 }
 
 /**
@@ -217,7 +342,7 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 					}
 				}
 
-				if (versionToSet != null) {
+				if (versionToSet != null && !shouldIgnoreBrowser(browser, versionToSet)) {
 					browserMap.set(browser, versionToSet);
 				}
 

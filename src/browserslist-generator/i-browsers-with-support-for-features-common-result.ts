@@ -1,4 +1,4 @@
-import {CaniuseBrowser} from "./i-caniuse-lite";
+import {CaniuseBrowser} from "./i-caniuse";
 
 export interface IBrowsersWithSupportForFeaturesCommonResult {
 	query: string[];

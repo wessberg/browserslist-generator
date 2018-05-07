@@ -1,7 +1,7 @@
 import test from "ava";
-import {browserslistSupportsFeatures, browsersWithoutSupportForFeatures, browsersWithSupportForFeatures, matchBrowserslistOnUserAgent} from "../../src/browserslist-generator/browserslist-generator";
 // @ts-ignore
-import {chrome, safari, firefox, ie, edge} from "useragent-generator";
+import {chrome, edge, firefox, ie, safari} from "useragent-generator";
+import {browserslistSupportsFeatures, browsersWithoutSupportForFeatures, browsersWithSupportForFeatures, getFirstVersionsWithFullSupport, matchBrowserslistOnUserAgent} from "../../src/browserslist-generator/browserslist-generator";
 
 test("browsersWithSupportForFeatures() => Will skip 'Android' in the generated browserslist", t => {
 	t.true(!browsersWithSupportForFeatures(
@@ -100,29 +100,36 @@ test("matchBrowserslistOnUserAgent() => Will match Microsoft Edge", t => {
 });
 
 test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that doesn't support the given features", t => {
-	t.false(matchBrowserslistOnUserAgent(firefox("61"), browsersWithSupportForFeatures( "es6-module", "shadowdomv1", "custom-elementsv1")));
+	t.false(matchBrowserslistOnUserAgent(firefox("61"), browsersWithSupportForFeatures("es6-module", "shadowdomv1", "custom-elementsv1")));
 });
 
 test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that doesn't support the given features", t => {
-	t.true(matchBrowserslistOnUserAgent(firefox("61"), browsersWithoutSupportForFeatures( "es6-module", "shadowdomv1", "custom-elementsv1")));
+	t.true(matchBrowserslistOnUserAgent(firefox("61"), browsersWithoutSupportForFeatures("es6-module", "shadowdomv1", "custom-elementsv1")));
 });
 
 test("browserslistSupportsFeatures() => Will correctly determine if a browserslist support the given set of features #1", t => {
-	const browserslist = browsersWithSupportForFeatures( "es6-module", "shadowdomv1", "custom-elementsv1" );
+	const browserslist = browsersWithSupportForFeatures("es6-module", "shadowdomv1", "custom-elementsv1");
 	t.true(browserslistSupportsFeatures(browserslist, "es6-module", "shadowdomv1", "custom-elementsv1"));
 });
 
 test("browserslistSupportsFeatures() => Will correctly determine if a browserslist support the given set of features #2", t => {
-	const browserslist = browsersWithoutSupportForFeatures( "es6-module", "shadowdomv1", "custom-elementsv1" );
+	const browserslist = browsersWithoutSupportForFeatures("es6-module", "shadowdomv1", "custom-elementsv1");
 	t.false(browserslistSupportsFeatures(browserslist, "es6-module", "shadowdomv1", "custom-elementsv1"));
 });
 
 test("browserslistSupportsFeatures() => Will correctly determine if a browserslist support the given set of features #3", t => {
-	const browserslist = browsersWithSupportForFeatures( "es6-module", "shadowdomv1", "custom-elementsv1" );
+	const browserslist = browsersWithSupportForFeatures("es6-module", "shadowdomv1", "custom-elementsv1");
 	t.true(browserslistSupportsFeatures(browserslist, "es6-module"));
 });
 
 test("browserslistSupportsFeatures() => Will correctly determine if a browserslist support the given set of features #4", t => {
-	const browserslist = browsersWithSupportForFeatures( "es6-module" );
+	const browserslist = browsersWithSupportForFeatures("es6-module");
 	t.false(browserslistSupportsFeatures(browserslist, "es6-module", "shadowdomv1", "custom-elementsv1"));
+});
+
+test("browserslistSupportsFeatures() => Android versions above v4.4.4 will report the Chrome version #1", t => {
+	const browserMap = getFirstVersionsWithFullSupport("es6-class");
+	const androidVersion = browserMap.get("android");
+	// Assert that no android version is reported
+	t.true(androidVersion == null);
 });

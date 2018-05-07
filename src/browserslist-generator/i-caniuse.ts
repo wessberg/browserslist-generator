@@ -7,31 +7,40 @@ export enum CaniuseSupportKind {
 	PREFIXED = "PREFIXED"
 }
 
-export declare type CaniuseLiteStats = {
+export declare type CaniuseStats = {
 	[Key in CaniuseBrowser]: {[key: string]: string};
 };
 
-export declare type CaniuseLiteStatsNormalized = {
+export declare type CaniuseStatsNormalized = {
 	[Key in CaniuseBrowser]: {[key: string]: CaniuseSupportKind};
 };
 
-export interface ICaniuseLiteAgents {
+export interface ICaniuseAgents {
 
 }
 
-export interface ICaniuseLiteAgent {
+export interface ICaniuseAgent {
 	usage_global: {[key: string]: number};
 	prefix: string;
 	browser: string;
 	release_date: {[key: string]: number};
 }
 
-export interface ICaniuseLiteFeature {
+export interface ICaniuseFeature {
 	title: string;
 	status: string;
-	stats: CaniuseLiteStats;
+	stats: CaniuseStats;
 }
 
-export interface ICaniuseLiteFeatureNormalized extends ICaniuseLiteFeature {
-	stats: CaniuseLiteStatsNormalized;
+export interface ICaniuseFeatureNormalized extends ICaniuseFeature {
+	stats: CaniuseStatsNormalized;
 }
+
+export interface ICaniuseDataCorrection {
+	kind: CaniuseSupportKind;
+	version: string;
+}
+
+export declare type ICaniuseBrowserCorrection = {
+	[Key in CaniuseBrowser]?: ICaniuseDataCorrection[];
+};
