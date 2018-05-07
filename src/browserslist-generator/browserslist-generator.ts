@@ -39,7 +39,8 @@ const IGNORED_BROWSERS_INPUT: CaniuseBrowser[] = [
 	"and_ff",
 	"and_uc",
 	"and_qq",
-	"baidu"
+	"baidu",
+	"op_mini"
 ];
 const IGNORED_BROWSERS: Set<CaniuseBrowser> = new Set(IGNORED_BROWSERS_INPUT);
 
@@ -76,6 +77,18 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 					// Caniuse reports that iOS Safari has been supporting classes since v9, but the implementation was only partial
 					kind: CaniuseSupportKind.PARTIAL_SUPPORT,
 					version: "9.3"
+				}
+			],
+			safari: [
+				{
+					// Caniuse reports that Safari has been supporting classes since v9, but the implementation was only partial
+					kind: CaniuseSupportKind.PARTIAL_SUPPORT,
+					version: "9"
+				},
+				{
+					// Caniuse reports that Safari has been supporting classes since v9, but the implementation was only partial
+					kind: CaniuseSupportKind.PARTIAL_SUPPORT,
+					version: "9.1"
 				}
 			]
 		}
@@ -119,7 +132,7 @@ function extendQueryWithUnreleasedVersions (query: string[], browsers: Iterable<
  */
 export function browsersWithSupportForFeatures (...features: string[]): string[] {
 	const {query, browsers} = browsersWithSupportForFeaturesCommon(">=", ...features);
-	return Browserslist(extendQueryWithUnreleasedVersions(query, browsers));
+	return extendQueryWithUnreleasedVersions(query, browsers);
 }
 
 /**
@@ -146,7 +159,7 @@ export function browserslistSupportsFeatures (browserslist: string[], ...feature
  * @returns {string}
  */
 export function browsersWithoutSupportForFeatures (...features: string[]): string[] {
-	return Browserslist(browsersWithSupportForFeaturesCommon("<", ...features).query);
+	return browsersWithSupportForFeaturesCommon("<", ...features).query;
 }
 
 /**
@@ -159,7 +172,8 @@ export function browsersWithoutSupportForFeatures (...features: string[]): strin
  */
 function shouldIgnoreBrowser (browser: CaniuseBrowser, version: string): boolean {
 	return (
-		(browser === "android" && gt(coerce(version)!.toString(), "4.4.4")) ||
+		(browser === "android" && gt(coerce(version)!.toString(), coerce("4.4.4")!.toString())) ||
+		(browser === "op_mob" && gt(coerce(version)!.toString(), coerce("12.1")!.toString())) ||
 		IGNORED_BROWSERS.has(browser)
 	);
 }
@@ -677,3 +691,4 @@ export function matchBrowserslistOnUserAgent (useragent: string, browserslist: s
 	// Now, compare the two, and if the normalized input browserslist includes every option from the user agent, it is matched
 	return useragentBrowserslist.every(option => normalizedInputBrowserslist.includes(option));
 }
+console.log(browsersWithoutSupportForFeatures("es6-class"));
