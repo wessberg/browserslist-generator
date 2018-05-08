@@ -714,7 +714,7 @@ export function userAgentSupportsFeatures (useragent: string, ...features: strin
 	const useragentBrowserslist = generateBrowserslistFromUseragent(useragent);
 
 	// Prepare a browserslist for browsers that support the given features
-	const supportedBrowserslist = browsersWithSupportForFeatures(...features);
+	const supportedBrowserslist = Browserslist(browsersWithSupportForFeatures(...features));
 
 	// Now, compare the two, and if the browserslist with supported browsers includes every option from the user agent, the user agent supports all of the given features
 	return useragentBrowserslist.every(option => supportedBrowserslist.includes(option));
