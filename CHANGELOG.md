@@ -1,3 +1,12 @@
+<a name="0.0.26"></a>
+## <small>0.0.26 (2018-05-18)</small>
+
+* 0.0.26 ([f8e890f](https://github.com/wessberg/browserslist-generator/commit/f8e890f))
+* Bumped deps. Added Patreon to README ([1f3e277](https://github.com/wessberg/browserslist-generator/commit/1f3e277))
+* Bumped version ([0e917f4](https://github.com/wessberg/browserslist-generator/commit/0e917f4))
+
+
+
 <a name="0.0.25"></a>
 ## <small>0.0.25 (2018-05-08)</small>
 
