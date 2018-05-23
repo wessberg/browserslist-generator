@@ -1,3 +1,13 @@
+<a name="0.0.27"></a>
+## <small>0.0.27 (2018-05-23)</small>
+
+* 0.0.27 ([1c3c0d4](https://github.com/wessberg/browserslist-generator/commit/1c3c0d4))
+* Added a 'normalizeBrowserslist' function ([74abdd2](https://github.com/wessberg/browserslist-generator/commit/74abdd2))
+* Bumped deps ([0aef003](https://github.com/wessberg/browserslist-generator/commit/0aef003))
+* Bumped version ([528acdc](https://github.com/wessberg/browserslist-generator/commit/528acdc))
+
+
+
 <a name="0.0.26"></a>
 ## <small>0.0.26 (2018-05-18)</small>
 
