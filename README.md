@@ -37,6 +37,10 @@ Will check if the given user agent string matches the given browserslist and ret
 
 Checks if the given user agent string supports all of the given [caniuse](https://caniuse.com/) features.
 
+#### `normalizeBrowserslist (browserslist: string[]|string): string[]`
+
+Generates a normalized Browserslist from the given one.
+
 ## Installation
 
 `npm install @wessberg/browserslist-generator`

@@ -116,6 +116,15 @@ function extendQueryWith (query: string[], extendWith: string | string[]): strin
 }
 
 /**
+ * Normalizes the given Browserslist
+ * @param {string | string[]} browserslist
+ * @returns {string[]}
+ */
+export function normalizeBrowserslist (browserslist: string|string[]): string[] {
+	return Browserslist(browserslist);
+}
+
+/**
  * Returns the input query, but extended with 'unreleased versions'
  * @param {string[]} query
  * @param {Iterable<CaniuseBrowser>} browsers
@@ -143,10 +152,10 @@ export function browsersWithSupportForFeatures (...features: string[]): string[]
  */
 export function browserslistSupportsFeatures (browserslist: string[], ...features: string[]): boolean {
 	// First, generate an ideal browserslist that would target the given features exactly
-	const normalizedIdealBrowserslist: string[] = Browserslist(browsersWithSupportForFeatures(...features));
+	const normalizedIdealBrowserslist: string[] = normalizeBrowserslist(browsersWithSupportForFeatures(...features));
 
 	// Now, normalize the input browserslist
-	const normalizedInputBrowserslist: string[] = Browserslist(browserslist);
+	const normalizedInputBrowserslist: string[] = normalizeBrowserslist(browserslist);
 
 	// Now, compare the two and see if they align. If they do, the input browserslist *does* support all of the given features.
 	// They align if all members of the input browserslist are included in the ideal browserslist
@@ -682,7 +691,7 @@ function generateBrowserslistFromUseragent (useragent: string): string[] {
 	const browserVersion = getCaniuseVersionForUseragentVersion(browserName, version, browser, os);
 
 	// Prepare a browserslist from the useragent itself
-	return Browserslist([`${browserName} ${browserVersion}`]);
+	return normalizeBrowserslist([`${browserName} ${browserVersion}`]);
 }
 
 /**
@@ -696,7 +705,7 @@ export function matchBrowserslistOnUserAgent (useragent: string, browserslist: s
 	const useragentBrowserslist = generateBrowserslistFromUseragent(useragent);
 
 	// Pipe the input browserslist through Browserslist to normalize it
-	const normalizedInputBrowserslist: string[] = Browserslist(browserslist);
+	const normalizedInputBrowserslist: string[] = normalizeBrowserslist(browserslist);
 
 	// Now, compare the two, and if the normalized input browserslist includes every option from the user agent, it is matched
 	return useragentBrowserslist.every(option => normalizedInputBrowserslist.includes(option));
@@ -714,7 +723,7 @@ export function userAgentSupportsFeatures (useragent: string, ...features: strin
 	const useragentBrowserslist = generateBrowserslistFromUseragent(useragent);
 
 	// Prepare a browserslist for browsers that support the given features
-	const supportedBrowserslist = Browserslist(browsersWithSupportForFeatures(...features));
+	const supportedBrowserslist = normalizeBrowserslist(browsersWithSupportForFeatures(...features));
 
 	// Now, compare the two, and if the browserslist with supported browsers includes every option from the user agent, the user agent supports all of the given features
 	return useragentBrowserslist.every(option => supportedBrowserslist.includes(option));
