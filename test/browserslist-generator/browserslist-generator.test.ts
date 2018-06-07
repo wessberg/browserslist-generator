@@ -83,8 +83,8 @@ test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Chromecas
 	t.true(matchBrowserslistOnUserAgent(chrome.chromecast("66"), ["chrome >= 66", "unreleased versions"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match Android Firefox (as and_ff)", t => {
-	t.true(matchBrowserslistOnUserAgent(firefox.androidPhone("57"), ["and_ff >= 57", "unreleased versions"]));
+test("matchBrowserslistOnUserAgent() => Will match Android Firefox (as desktop firefox)", t => {
+	t.true(matchBrowserslistOnUserAgent(firefox.androidPhone("57"), ["firefox >= 57", "unreleased versions"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Internet Explorer", t => {
