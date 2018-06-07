@@ -481,9 +481,9 @@ function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAPar
 			return "baidu";
 
 		case "Chrome":
-			// Check if the OS is Android, in which case this is actually Chrome for Android
+			// Check if the OS is Android, in which case this is actually Chrome for Android. Never use 'and_chr', but instead use regular Chrome
 			if (os.name === "Android") {
-				return "and_chr";
+				return "chrome";
 			}
 
 			// If the OS is iOS, it is actually Safari that drives the WebView
@@ -667,7 +667,7 @@ function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version:
  * @param {string} useragent
  * @returns {string[]}
  */
-function generateBrowserslistFromUseragent (useragent: string): string[] {
+export function generateBrowserslistFromUseragent (useragent: string): string[] {
 	const parser = new UAParser(useragent);
 	const browser = <IUseragentBrowser> parser.getBrowser();
 	const os = <IUseragentOS> parser.getOS();

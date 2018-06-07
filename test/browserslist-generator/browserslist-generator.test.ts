@@ -39,8 +39,8 @@ test("matchBrowserslistOnUserAgent() => Will match Chrome 68 for a Chrome v68 us
 	t.true(matchBrowserslistOnUserAgent(chrome("68"), ["Chrome >= 68", "unreleased versions"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match Android Chrome for a Chrome v18 user agent", t => {
-	t.true(matchBrowserslistOnUserAgent(chrome.androidPhone("18"), ["and_chr >= 18", "unreleased versions"]));
+test("matchBrowserslistOnUserAgent() => Will match Chrome for an Android Chrome v18 user agent", t => {
+	t.true(matchBrowserslistOnUserAgent(chrome.androidPhone("18"), ["chrome >= 18", "unreleased versions"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match iOS Chrome but treat it as iOS safari", t => {
@@ -71,12 +71,12 @@ test("matchBrowserslistOnUserAgent() => Will match chrome as an Android WebView 
 	t.true(matchBrowserslistOnUserAgent(chrome.androidWebview("4.4.4"), ["android >= 4", "unreleased versions"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Phone (as and_chr)", t => {
-	t.true(matchBrowserslistOnUserAgent(chrome.androidPhone("66"), ["and_chr >= 66", "unreleased versions"]));
+test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Phone (as regular chrome)", t => {
+	t.true(matchBrowserslistOnUserAgent(chrome.androidPhone("66"), ["chrome >= 66", "unreleased versions"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Tablet (as and_chr)", t => {
-	t.true(matchBrowserslistOnUserAgent(chrome.androidTablet("66"), ["and_chr >= 66", "unreleased versions"]));
+test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Tablet (as regular Chrome)", t => {
+	t.true(matchBrowserslistOnUserAgent(chrome.androidTablet("66"), ["chrome >= 66", "unreleased versions"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Chromecast (as chrome)", t => {
