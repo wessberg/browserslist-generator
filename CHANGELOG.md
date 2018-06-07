@@ -1,3 +1,12 @@
+<a name="0.0.28"></a>
+## <small>0.0.28 (2018-06-07)</small>
+
+* 0.0.28 ([2f9f936](https://github.com/wessberg/browserslist-generator/commit/2f9f936))
+* Bumped version ([32b7c75](https://github.com/wessberg/browserslist-generator/commit/32b7c75))
+* Made Android Chrome report as desktop chrome ([6f3c759](https://github.com/wessberg/browserslist-generator/commit/6f3c759))
+
+
+
 <a name="0.0.27"></a>
 ## <small>0.0.27 (2018-05-23)</small>
 
