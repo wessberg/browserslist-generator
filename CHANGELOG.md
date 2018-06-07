@@ -1,3 +1,12 @@
+<a name="0.0.29"></a>
+## <small>0.0.29 (2018-06-07)</small>
+
+* 0.0.29 ([624a70b](https://github.com/wessberg/browserslist-generator/commit/624a70b))
+* Bumped version ([71c74a8](https://github.com/wessberg/browserslist-generator/commit/71c74a8))
+* Made and_ff report as desktop firefox ([f33982c](https://github.com/wessberg/browserslist-generator/commit/f33982c))
+
+
+
 <a name="0.0.28"></a>
 ## <small>0.0.28 (2018-06-07)</small>
 
