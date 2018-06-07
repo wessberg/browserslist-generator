@@ -481,7 +481,7 @@ function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAPar
 			return "baidu";
 
 		case "Chrome":
-			// Check if the OS is Android, in which case this is actually Chrome for Android. Never use 'and_chr', but instead use regular Chrome
+			// Check if the OS is Android, in which case this is actually Chrome for Android. Make it report as regular Chrome
 			if (os.name === "Android") {
 				return "chrome";
 			}
@@ -499,9 +499,10 @@ function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAPar
 
 		case "Firefox":
 
-			// Check if the OS is Android, in which case this is actually Firefox for Android
+			// Check if the OS is Android, in which case this is actually Firefox for Android.
+			// Make it report as regular Firefox
 			if (os.name === "Android") {
-				return "and_ff";
+				return "firefox";
 			}
 
 			// If the OS is iOS, it is actually Safari that drives the WebView
