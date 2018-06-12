@@ -1,3 +1,12 @@
+<a name="0.0.31"></a>
+## <small>0.0.31 (2018-06-12)</small>
+
+* 0.0.31 ([d3498d2](https://github.com/wessberg/browserslist-generator/commit/d3498d2))
+* Bumped version ([de47080](https://github.com/wessberg/browserslist-generator/commit/de47080))
+* Updated IE xhr2 support ([b3d007e](https://github.com/wessberg/browserslist-generator/commit/b3d007e))
+
+
+
 <a name="0.0.30"></a>
 ## <small>0.0.30 (2018-06-07)</small>
 
