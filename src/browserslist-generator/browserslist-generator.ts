@@ -53,6 +53,18 @@ const IGNORED_BROWSERS: Set<CaniuseBrowser> = new Set(IGNORED_BROWSERS_INPUT);
  */
 const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrection][] = [
 	[
+		"xhr2",
+		{
+			ie: [
+				{
+					// Caniuse reports that XMLHttpRequest support is partial in Internet Explorer 11, but it is in fact properly supported
+					kind: CaniuseSupportKind.AVAILABLE,
+					version: "11"
+				}
+			]
+		}
+	],
+	[
 		"es6-class",
 		{
 			edge: [
