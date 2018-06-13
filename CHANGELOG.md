@@ -1,3 +1,11 @@
+## <small>0.0.34 (2018-06-13)</small>
+
+* 0.0.34 ([1779931](https://github.com/wessberg/browserslist-generator/commit/1779931))
+* Bumped version ([f29cf0e](https://github.com/wessberg/browserslist-generator/commit/f29cf0e))
+* Made it possible to pass both Caniuse and MDN features to the same functions to allow for mixing and ([97fe6a9](https://github.com/wessberg/browserslist-generator/commit/97fe6a9))
+
+
+
 ## <small>0.0.33 (2018-06-13)</small>
 
 * 0.0.33 ([8192260](https://github.com/wessberg/browserslist-generator/commit/8192260))
