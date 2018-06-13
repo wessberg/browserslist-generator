@@ -153,3 +153,11 @@ test("browserslistSupportsFeatures() => Will correctly determine if a browsersli
 test("browserslistSupportsFeatures() => Correctly determines that IE 11 supports Object.defineProperty #1", t => {
 	t.true(userAgentSupportsFeatures(ie("11"), "javascript.builtins.Object.defineProperty"));
 });
+
+test("browserslistSupportsFeatures() => Correctly determines that IE 11 doesn't support WeakSets #1", t => {
+	t.true(!userAgentSupportsFeatures(ie("11"), "javascript.builtins.WeakSet"));
+});
+
+test("browserslistSupportsFeatures() => Correctly determines that Chrome 66 supports TypedArray.find #1", t => {
+	t.true(userAgentSupportsFeatures(chrome("66"), "javascript.builtins.TypedArray.find"));
+});

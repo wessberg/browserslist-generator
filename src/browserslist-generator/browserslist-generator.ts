@@ -5,16 +5,34 @@ import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-li
 // @ts-ignore
 import * as MdnBrowserCompatData from "mdn-browser-compat-data";
 import {get} from "object-path";
-import {coerce, gt, gte} from "semver";
+import {coerce, gt, gte, lte} from "semver";
 import {UAParser} from "ua-parser-js";
 import {getNextVersionOfBrowser, getOldestVersionOfBrowser, getPreviousVersionOfBrowser, getSortedBrowserVersions} from "./browser-version";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
-import {IBrowsersWithSupportForFeaturesCommonResult} from "./i-browsers-with-support-for-features-common-result";
-import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, ICaniuseBrowserCorrection, ICaniuseFeature, ICaniuseFeatureNormalized} from "./i-caniuse";
+import {IBrowserSupportForFeaturesCommonResult} from "./i-browser-support-for-features-common-result";
+import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, ICaniuseBrowserCorrection, ICaniuseDataCorrection, ICaniuseFeature} from "./i-caniuse";
 import {IMdn, MdnBrowserName} from "./i-mdn";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
 import {IUseragentBrowser, IUseragentDevice, IUseragentOS} from "./useragent/useragent-typed";
+
+/**
+ * A Cache between user agent names and generated Browserslists
+ * @type {Map<string, string[]>}
+ */
+const userAgentToBrowserslistCache: Map<string, string[]> = new Map();
+
+/**
+ * A Cache for retrieving browser support for some features
+ * @type {Map<string, IBrowserSupportForFeaturesCommonResult>}
+ */
+const browserSupportForFeaturesCache: Map<string, IBrowserSupportForFeaturesCommonResult> = new Map();
+
+/**
+ * A Cache between feature names and their CaniuseStats
+ * @type {Map<string, CaniuseStatsNormalized>}
+ */
+const featureToCaniuseStatsCache: Map<string, CaniuseStatsNormalized> = new Map();
 
 // tslint:disable:no-magic-numbers
 
@@ -47,6 +65,76 @@ const IGNORED_BROWSERS_INPUT: CaniuseBrowser[] = [
 	"op_mini"
 ];
 const IGNORED_BROWSERS: Set<CaniuseBrowser> = new Set(IGNORED_BROWSERS_INPUT);
+
+/**
+ * Applies the given correction within the given version range
+ * @param browser
+ * @param start
+ * @param end
+ * @param supportKind
+ */
+function rangeCorrection (browser: CaniuseBrowser, supportKind: CaniuseSupportKind, start?: string, end?: string): ICaniuseDataCorrection[] {
+	const versions = getSortedBrowserVersions(browser);
+	const corrections: ICaniuseDataCorrection[] = [];
+
+	versions.forEach(version => {
+		let shouldSet: boolean = false;
+
+		if (start == null && end == null) {
+			shouldSet = true;
+		}
+
+		else if (start != null && end == null) {
+			if (version === "TP") {
+				shouldSet = true;
+			}
+
+			else if (version === "all") {
+				shouldSet = true;
+			}
+
+			else {
+				shouldSet = gte(coerceVersion(version), coerceVersion(start));
+			}
+		}
+
+		else if (start == null && end != null) {
+			if (version === "TP") {
+				shouldSet = end === "TP";
+			}
+
+			else if (version === "all") {
+				shouldSet = true;
+			}
+
+			else {
+				shouldSet = lte(coerceVersion(version), coerceVersion(end));
+			}
+		}
+
+		else if (start != null && end != null) {
+			if (version === "TP") {
+				shouldSet = end === "TP";
+			}
+
+			else if (version === "all") {
+				shouldSet = true;
+			}
+
+			else {
+				shouldSet = gte(coerceVersion(version), coerceVersion(start)) && lte(coerceVersion(version), coerceVersion(end));
+			}
+		}
+
+		if (shouldSet) {
+			corrections.push({
+				kind: supportKind,
+				version
+			});
+		}
+	});
+	return corrections;
+}
 
 /**
  * Not all Caniuse data is entirely correct. For some features, the data on https://kangax.github.io/compat-table/es6/
@@ -108,6 +196,149 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 				}
 			]
 		}
+	],
+	[
+		"javascript.builtins.TypedArray.find",
+		{
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Chrome 7
+			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `7`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Chrome 7
+			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `7`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since IE 11
+			ie: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has in all versions of Edge
+			edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Firefox 4
+			firefox: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `4`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Firefox 4
+			and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `4`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Safari 6
+			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `6`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Ios Safari 5.1
+			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `5.1`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Opera 12.1
+			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `12.1`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Opera 12.1
+			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `12`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Android 4
+			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `4`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Android 4
+			bb: rangeCorrection("bb", CaniuseSupportKind.AVAILABLE, `10`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Android 4
+			samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `4`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Android 4
+			and_uc: rangeCorrection("and_uc", CaniuseSupportKind.AVAILABLE, `11.8`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Android 4
+			and_qq: rangeCorrection("and_qq", CaniuseSupportKind.AVAILABLE, `1.2`),
+			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Android 4
+			baidu: rangeCorrection("baidu", CaniuseSupportKind.AVAILABLE, `7.12`)
+		}
+	],
+	[
+		"javascript.builtins.TypedArray.findIndex",
+		{
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Chrome 7
+			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `7`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Chrome 7
+			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `7`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since IE 11
+			ie: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has in all versions of Edge
+			edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Firefox 4
+			firefox: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `4`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Firefox 4
+			and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `4`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Safari 6
+			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `6`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Ios Safari 5.1
+			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `5.1`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Opera 12.1
+			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `12.1`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Opera 12.1
+			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `12`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Android 4
+			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `4`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Android 4
+			bb: rangeCorrection("bb", CaniuseSupportKind.AVAILABLE, `10`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Android 4
+			samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `4`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Android 4
+			and_uc: rangeCorrection("and_uc", CaniuseSupportKind.AVAILABLE, `11.8`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Android 4
+			and_qq: rangeCorrection("and_qq", CaniuseSupportKind.AVAILABLE, `1.2`),
+			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Android 4
+			baidu: rangeCorrection("baidu", CaniuseSupportKind.AVAILABLE, `7.12`)
+		}
+	],
+	[
+		"javascript.builtins.Symbol.asyncIterator",
+		{
+			// MDN reports that it doesn't support Symbol.asyncIterator, but it does and has done since Chrome v63
+			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `63`),
+			// MDN reports that it doesn't support Symbol.asyncIterator, but it does and has done since Chrome for Android v63
+			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `63`),
+			// MDN reports that it doesn't support Symbol.asyncIterator, but it does and has done since Opera v50
+			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `50`),
+			// MDN reports that it doesn't support Symbol.asyncIterator, but it does and has done since Opera Mobile v50
+			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `50`),
+			// MDN reports that it doesn't support Symbol.asyncIterator, but it does and has done since Firefox v55
+			firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `55`),
+			// MDN reports that it doesn't support Symbol.asyncIterator, but it does and has done since Firefox for Android v55
+			and_ff: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `55`)
+		}
+	],
+	[
+		"javascript.builtins.Array.@@species",
+		{
+			// MDN reports that it doesn't support Array.@@species, but it does and has done since Chrome v51
+			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `51`),
+			// MDN reports that it doesn't support Array.@@species, but it does and has done since Chrome for Android v51
+			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `51`),
+			// MDN reports that it doesn't support Array.@@species, but it does and has done since Edge v14
+			edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, `14`),
+			// MDN reports that it doesn't support Array.@@species, but it does and has done since Firefox v41
+			firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `41`),
+			// MDN reports that it doesn't support Array.@@species, but it does and has done since Firefox for Android v41
+			and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `41`),
+			// MDN reports that it doesn't support Array.@@species, but it does and has done since Opera v38
+			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `38`),
+			// MDN reports that it doesn't support Array.@@species, but it does and has done since Opera for Android v38
+			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `38`),
+			// MDN reports that it doesn't support Array.@@species, but it does and has done since Safari v10
+			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
+			// MDN reports that it doesn't support Array.@@species, but it does and has done since Safari for iOS v10
+			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `10`),
+			// MDN reports that it doesn't support Array.@@species, but it does and has done for all Android WebViews
+			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE)
+		}
+	],
+	[
+		"javascript.builtins.Date.@@toPrimitive",
+		{
+			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Chrome v48
+			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `48`),
+			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Chrome for Android v48
+			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `48`),
+			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done in all Edge versions
+			edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE),
+			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Firefox v44
+			firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `44`),
+			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Firefox for Android v44
+			and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `44`),
+			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Opera v35
+			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `35`),
+			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Opera for Android v35
+			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `35`),
+			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Safari v10
+			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
+			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Safari for iOS v10
+			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `10`),
+			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done for all Android WebViews
+			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE),
+			// MDN reports that it doesn't support the Date.@@toPrimitive method, but it does and has done for all Samsung Internet versions
+			samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE)
+		}
 	]
 ];
 
@@ -136,7 +367,7 @@ function extendQueryWith (query: string[], extendWith: string | string[]): strin
  * @param {string | string[]} browserslist
  * @returns {string[]}
  */
-export function normalizeBrowserslist (browserslist: string|string[]): string[] {
+export function normalizeBrowserslist (browserslist: string | string[]): string[] {
 	return Browserslist(browserslist);
 }
 
@@ -156,7 +387,7 @@ function extendQueryWithUnreleasedVersions (query: string[], browsers: Iterable<
  * @returns {string}
  */
 export function browsersWithSupportForFeatures (...features: string[]): string[] {
-	const {query, browsers} = browsersWithSupportForFeaturesCommon(">=", ...features);
+	const {query, browsers} = browserSupportForFeaturesCommon(">=", ...features);
 	return extendQueryWithUnreleasedVersions(query, browsers);
 }
 
@@ -184,7 +415,7 @@ export function browserslistSupportsFeatures (browserslist: string[], ...feature
  * @returns {string}
  */
 export function browsersWithoutSupportForFeatures (...features: string[]): string[] {
-	return browsersWithSupportForFeaturesCommon("<", ...features).query;
+	return browserSupportForFeaturesCommon("<", ...features).query;
 }
 
 /**
@@ -214,21 +445,26 @@ function shouldIgnoreBrowser (browser: CaniuseBrowser, version: string): boolean
 
 /**
  * Normalizes the given ICaniuseLiteFeature
- * @param {ICaniuseFeature} feature
+ * @param {CaniuseStats} stats
  * @param {string} featureName
- * @returns {ICaniuseFeatureNormalized}
+ * @returns {CaniuseStatsNormalized}
  */
-function getCaniuseLiteFeatureNormalized (feature: ICaniuseFeature, featureName: string): ICaniuseFeatureNormalized {
+function getCaniuseLiteFeatureNormalized (stats: CaniuseStats, featureName: string): CaniuseStatsNormalized {
 	// Check if a correction exists for this browser
 	const featureCorrectionMatch = FEATURE_TO_BROWSER_DATA_CORRECTIONS_MAP.get(featureName);
 
-	Object.keys(feature.stats).forEach((browser: keyof CaniuseStats) => {
-		const browserDict = feature.stats[browser];
+	Object.keys(stats).forEach((browser: keyof CaniuseStats) => {
+		const browserDict = stats[browser];
 		Object.entries(browserDict).forEach(([version, support]: [string, string]) => {
 			const versionMatch = version.match(NORMALIZE_BROWSER_VERSION_REGEXP);
 			const normalizedVersion = versionMatch == null ? version : versionMatch[1];
 			let supportKind: CaniuseSupportKind;
-			if (support.startsWith("y")) {
+
+			if (support === CaniuseSupportKind.AVAILABLE || support === CaniuseSupportKind.UNAVAILABLE || support === CaniuseSupportKind.PARTIAL_SUPPORT || support === CaniuseSupportKind.PREFIXED) {
+				supportKind = support;
+			}
+
+			else if (support.startsWith("y")) {
 				supportKind = CaniuseSupportKind.AVAILABLE;
 			}
 
@@ -247,7 +483,9 @@ function getCaniuseLiteFeatureNormalized (feature: ICaniuseFeature, featureName:
 			if (version !== normalizedVersion) {
 				delete browserDict[version];
 			}
-			browserDict[normalizedVersion] = supportKind;
+			if (support !== supportKind) {
+				browserDict[normalizedVersion] = supportKind;
+			}
 
 			// If a feature correction exists for this feature, apply applicable corrections
 			if (featureCorrectionMatch != null) {
@@ -264,11 +502,11 @@ function getCaniuseLiteFeatureNormalized (feature: ICaniuseFeature, featureName:
 		});
 	});
 
-	const normalizedFeature = <ICaniuseFeatureNormalized> feature;
+	const normalizedStats = <CaniuseStatsNormalized> stats;
 
 	// Now, run through the normalized stats
-	Object.keys(normalizedFeature.stats).forEach((browser: keyof CaniuseStatsNormalized) => {
-		const browserDict = normalizedFeature.stats[browser];
+	Object.keys(normalizedStats).forEach((browser: keyof CaniuseStatsNormalized) => {
+		const browserDict = normalizedStats[browser];
 		Object.entries(browserDict).forEach(([version]: [string, CaniuseSupportKind]) => {
 			// If browser is Android and version is greater than "4.4.4", or if the browser is Chrome, Firefox, UC, QQ for Android, or Baidu,
 			// strip it entirely from the data, since Caniuse only reports the latest versions of those browsers
@@ -278,16 +516,16 @@ function getCaniuseLiteFeatureNormalized (feature: ICaniuseFeature, featureName:
 		});
 	});
 
-	return normalizedFeature;
+	return normalizedStats;
 }
 
 /**
  * Gets the support from caniuse for the given feature
  * @param {string} feature
- * @returns {ICaniuseFeatureNormalized}
+ * @returns {CaniuseStatsNormalized}
  */
 function getCaniuseFeatureSupport (feature: string): CaniuseStatsNormalized {
-	return getCaniuseLiteFeatureNormalized(<ICaniuseFeature> caniuseFeature(caniuseFeatures[feature]), feature).stats;
+	return getCaniuseLiteFeatureNormalized((<ICaniuseFeature> caniuseFeature(caniuseFeatures[feature])).stats, feature);
 }
 
 /**
@@ -317,19 +555,39 @@ function assertKnownFeature (feature: string): void {
 }
 
 /**
+ * Gets the feature support for the given feature
+ * @param {string} feature
+ * @returns {CaniuseStatsNormalized}
+ */
+function getFeatureSupport (feature: string): CaniuseStatsNormalized {
+	// First check if the cache has a match and return it if so
+	const cacheHit = featureToCaniuseStatsCache.get(feature);
+	if (cacheHit != null) return cacheHit;
+
+	// Assert that the feature is in fact known
+	assertKnownFeature(feature);
+
+	const result = isMdnFeature(feature) ? getMdnFeatureSupport(feature) : getCaniuseFeatureSupport(feature);
+
+	// Store it in the cache before returning it
+	featureToCaniuseStatsCache.set(feature, result);
+	return result;
+}
+
+/**
  * Gets the support from caniuse for the given feature
  * @param {string} feature
- * @returns {ICaniuseFeatureNormalized}
+ * @returns {CaniuseStatsNormalized}
  */
 function getMdnFeatureSupport (feature: string): CaniuseStatsNormalized {
 
 	const match: IMdn = get(MdnBrowserCompatData, feature);
 	const supportMap = match.__compat.support;
 
-	const formatBrowser = (mdnBrowser: MdnBrowserName, caniuseBrowser: CaniuseBrowser): {[key: string]: CaniuseSupportKind} => {
+	const formatBrowser = (mdnBrowser: MdnBrowserName, caniuseBrowser: CaniuseBrowser): { [key: string]: CaniuseSupportKind } => {
 		const versionAdded = supportMap[mdnBrowser].version_added;
-		const dict: {[key: string]: CaniuseSupportKind} = {};
-		const supportedSince: string|null = versionAdded === false ? null : versionAdded === true ? getOldestVersionOfBrowser(caniuseBrowser) : versionAdded;
+		const dict: { [key: string]: CaniuseSupportKind } = {};
+		const supportedSince: string | null = versionAdded === false ? null : versionAdded === true ? getOldestVersionOfBrowser(caniuseBrowser) : versionAdded;
 
 		getSortedBrowserVersions(caniuseBrowser).forEach(version => {
 
@@ -365,7 +623,7 @@ function getMdnFeatureSupport (feature: string): CaniuseStatsNormalized {
 		op_mob: {},
 		firefox: formatBrowser("firefox", "firefox")
 	};
-	return stats;
+	return getCaniuseLiteFeatureNormalized(stats, feature);
 }
 
 /**
@@ -405,7 +663,7 @@ function sortBrowserslist (a: string, b: string): number {
  * @returns {Map<CaniuseBrowser, string>}
  */
 export function getFirstVersionsWithFullSupport (feature: string): Map<CaniuseBrowser, string> {
-	const support = getCaniuseFeatureSupport(feature);
+	const support = getFeatureSupport(feature);
 	// A map between browser names and their required versions
 	const browserMap: Map<CaniuseBrowser, string> = new Map();
 	Object.entries(support)
@@ -419,19 +677,35 @@ export function getFirstVersionsWithFullSupport (feature: string): Map<CaniuseBr
 }
 
 /**
+ * Gets the Cache key for the given combination of a comparison operator and any amount of features
+ * @param {ComparisonOperator} comparisonOperator
+ * @param {string[]} features
+ */
+function getBrowserSupportForFeaturesCacheKey (comparisonOperator: ComparisonOperator, features: string[]): string {
+	return `${comparisonOperator}.${features.sort().join(",")}`;
+}
+
+/**
  * Common logic for the functions that generate browserslists based on feature support
  * @param {ComparisonOperator} comparisonOperator
  * @param {string} features
- * @returns {IBrowsersWithSupportForFeaturesCommonResult}
+ * @returns {IBrowserSupportForFeaturesCommonResult}
  */
-function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOperator, ...features: string[]): IBrowsersWithSupportForFeaturesCommonResult {
+function browserSupportForFeaturesCommon (comparisonOperator: ComparisonOperator, ...features: string[]): IBrowserSupportForFeaturesCommonResult {
+	const cacheKey = getBrowserSupportForFeaturesCacheKey(comparisonOperator, features);
+
+	// First check if the cache has a hit and return it if so
+	const cacheHit = browserSupportForFeaturesCache.get(cacheKey);
+	if (cacheHit != null) {
+		return cacheHit;
+	}
+
 	// All of the generated browser maps
 	const browserMaps: Map<CaniuseBrowser, string>[] = [];
 
 	for (const feature of features) {
-		// Assert that the feature is known
-		assertKnownFeature(feature);
-		const support = isMdnFeature(feature) ? getMdnFeatureSupport(feature) : getCaniuseFeatureSupport(feature);
+		const support = getFeatureSupport(feature);
+
 		// A map between browser names and their required versions
 		const browserMap: Map<CaniuseBrowser, string> = new Map();
 		Object.entries(support)
@@ -541,10 +815,14 @@ function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOpe
 			}
 		))
 		.sort(sortBrowserslist);
-	return {
+	const returnObject = {
 		query,
 		browsers: new Set(combinedBrowserMap.keys())
 	};
+
+	// Store it in the cache before returning it
+	browserSupportForFeaturesCache.set(cacheKey, returnObject);
+	return returnObject;
 }
 
 /**
@@ -774,6 +1052,11 @@ function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version:
  * @returns {string[]}
  */
 export function generateBrowserslistFromUseragent (useragent: string): string[] {
+	// Check if a user agent has been generated previously for this specific user agent
+	const cacheHit = userAgentToBrowserslistCache.get(useragent);
+	if (cacheHit != null) return cacheHit;
+
+	// Otherwise, generate a new one
 	const parser = new UAParser(useragent);
 	const browser = <IUseragentBrowser> parser.getBrowser();
 	const os = <IUseragentOS> parser.getOS();
@@ -790,6 +1073,7 @@ export function generateBrowserslistFromUseragent (useragent: string): string[] 
 		console.log("device:", parser.getDevice());
 		console.log("cpu:", parser.getCPU());
 		console.log("browser:", parser.getEngine());
+		userAgentToBrowserslistCache.set(useragent, []);
 		return [];
 	}
 
@@ -797,7 +1081,11 @@ export function generateBrowserslistFromUseragent (useragent: string): string[] 
 	const browserVersion = getCaniuseVersionForUseragentVersion(browserName, version, browser, os);
 
 	// Prepare a browserslist from the useragent itself
-	return normalizeBrowserslist([`${browserName} ${browserVersion}`]);
+	const normalizedBrowserslist = normalizeBrowserslist([`${browserName} ${browserVersion}`]);
+
+	// Store it in the cache before returning it
+	userAgentToBrowserslistCache.set(useragent, normalizedBrowserslist);
+	return normalizedBrowserslist;
 }
 
 /**

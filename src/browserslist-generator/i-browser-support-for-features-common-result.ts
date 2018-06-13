@@ -1,6 +1,6 @@
 import {CaniuseBrowser} from "./i-caniuse";
 
-export interface IBrowsersWithSupportForFeaturesCommonResult {
+export interface IBrowserSupportForFeaturesCommonResult {
 	query: string[];
 	browsers: Set<CaniuseBrowser>;
 }
