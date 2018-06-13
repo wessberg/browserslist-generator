@@ -1,4 +1,12 @@
-<a name="0.0.31"></a>
+## <small>0.0.32 (2018-06-13)</small>
+
+* 0.0.32 ([6e59464](https://github.com/wessberg/browserslist-generator/commit/6e59464))
+* Added support for working with MDN features as well ([353fe28](https://github.com/wessberg/browserslist-generator/commit/353fe28))
+* Bumped deps ([35dadbd](https://github.com/wessberg/browserslist-generator/commit/35dadbd))
+* Bumped version ([fd23ee2](https://github.com/wessberg/browserslist-generator/commit/fd23ee2))
+
+
+
 ## <small>0.0.31 (2018-06-12)</small>
 
 * 0.0.31 ([d3498d2](https://github.com/wessberg/browserslist-generator/commit/d3498d2))
@@ -7,7 +15,6 @@
 
 
 
-<a name="0.0.30"></a>
 ## <small>0.0.30 (2018-06-07)</small>
 
 * 0.0.30 ([fb47a3c](https://github.com/wessberg/browserslist-generator/commit/fb47a3c))
@@ -16,7 +23,6 @@
 
 
 
-<a name="0.0.29"></a>
 ## <small>0.0.29 (2018-06-07)</small>
 
 * 0.0.29 ([624a70b](https://github.com/wessberg/browserslist-generator/commit/624a70b))
@@ -25,7 +31,6 @@
 
 
 
-<a name="0.0.28"></a>
 ## <small>0.0.28 (2018-06-07)</small>
 
 * 0.0.28 ([2f9f936](https://github.com/wessberg/browserslist-generator/commit/2f9f936))
@@ -34,7 +39,6 @@
 
 
 
-<a name="0.0.27"></a>
 ## <small>0.0.27 (2018-05-23)</small>
 
 * 0.0.27 ([1c3c0d4](https://github.com/wessberg/browserslist-generator/commit/1c3c0d4))
@@ -44,7 +48,6 @@
 
 
 
-<a name="0.0.26"></a>
 ## <small>0.0.26 (2018-05-18)</small>
 
 * 0.0.26 ([f8e890f](https://github.com/wessberg/browserslist-generator/commit/f8e890f))
@@ -53,7 +56,6 @@
 
 
 
-<a name="0.0.25"></a>
 ## <small>0.0.25 (2018-05-08)</small>
 
 * 0.0.25 ([ba1946d](https://github.com/wessberg/browserslist-generator/commit/ba1946d))
@@ -62,7 +64,6 @@
 
 
 
-<a name="0.0.24"></a>
 ## <small>0.0.24 (2018-05-07)</small>
 
 * 0.0.24 ([7d2af3f](https://github.com/wessberg/browserslist-generator/commit/7d2af3f))
@@ -71,7 +72,6 @@
 
 
 
-<a name="0.0.23"></a>
 ## <small>0.0.23 (2018-05-07)</small>
 
 * 0.0.23 ([a04682a](https://github.com/wessberg/browserslist-generator/commit/a04682a))
@@ -80,7 +80,6 @@
 
 
 
-<a name="0.0.22"></a>
 ## <small>0.0.22 (2018-05-07)</small>
 
 * 0.0.22 ([c62d2a7](https://github.com/wessberg/browserslist-generator/commit/c62d2a7))
@@ -90,7 +89,6 @@
 
 
 
-<a name="0.0.21"></a>
 ## <small>0.0.21 (2018-05-07)</small>
 
 * 0.0.21 ([e344488](https://github.com/wessberg/browserslist-generator/commit/e344488))
@@ -99,7 +97,6 @@
 
 
 
-<a name="0.0.20"></a>
 ## <small>0.0.20 (2018-05-06)</small>
 
 * 0.0.20 ([4e44851](https://github.com/wessberg/browserslist-generator/commit/4e44851))
@@ -108,7 +105,6 @@
 
 
 
-<a name="0.0.19"></a>
 ## <small>0.0.19 (2018-05-06)</small>
 
 * 0.0.19 ([b7df01e](https://github.com/wessberg/browserslist-generator/commit/b7df01e))
@@ -117,7 +113,6 @@
 
 
 
-<a name="0.0.18"></a>
 ## <small>0.0.18 (2018-05-06)</small>
 
 * 0.0.18 ([643f11a](https://github.com/wessberg/browserslist-generator/commit/643f11a))
@@ -126,7 +121,6 @@
 
 
 
-<a name="0.0.17"></a>
 ## <small>0.0.17 (2018-05-05)</small>
 
 * 0.0.17 ([5e6dc24](https://github.com/wessberg/browserslist-generator/commit/5e6dc24))
@@ -136,7 +130,6 @@
 
 
 
-<a name="0.0.16"></a>
 ## <small>0.0.16 (2018-05-05)</small>
 
 * 0.0.16 ([237beaa](https://github.com/wessberg/browserslist-generator/commit/237beaa))
@@ -145,7 +138,6 @@
 
 
 
-<a name="0.0.15"></a>
 ## <small>0.0.15 (2018-05-05)</small>
 
 * 0.0.15 ([9a53ef7](https://github.com/wessberg/browserslist-generator/commit/9a53ef7))
@@ -154,7 +146,6 @@
 
 
 
-<a name="0.0.14"></a>
 ## <small>0.0.14 (2018-05-05)</small>
 
 * 0.0.14 ([87ee3fb](https://github.com/wessberg/browserslist-generator/commit/87ee3fb))
@@ -163,7 +154,6 @@
 
 
 
-<a name="0.0.13"></a>
 ## <small>0.0.13 (2018-05-05)</small>
 
 * 0.0.13 ([af7bbca](https://github.com/wessberg/browserslist-generator/commit/af7bbca))
@@ -172,7 +162,6 @@
 
 
 
-<a name="0.0.12"></a>
 ## <small>0.0.12 (2018-05-05)</small>
 
 * 0.0.12 ([d7697e9](https://github.com/wessberg/browserslist-generator/commit/d7697e9))
@@ -181,7 +170,6 @@
 
 
 
-<a name="0.0.11"></a>
 ## <small>0.0.11 (2018-05-05)</small>
 
 * 0.0.11 ([998d5a4](https://github.com/wessberg/browserslist-generator/commit/998d5a4))
@@ -190,7 +178,6 @@
 
 
 
-<a name="0.0.10"></a>
 ## <small>0.0.10 (2018-05-05)</small>
 
 * 0.0.10 ([7803078](https://github.com/wessberg/browserslist-generator/commit/7803078))
@@ -199,7 +186,6 @@
 
 
 
-<a name="0.0.9"></a>
 ## <small>0.0.9 (2018-05-05)</small>
 
 * 0.0.9 ([8bb7932](https://github.com/wessberg/browserslist-generator/commit/8bb7932))
@@ -208,7 +194,6 @@
 
 
 
-<a name="0.0.8"></a>
 ## <small>0.0.8 (2018-05-05)</small>
 
 * 0.0.8 ([d806aca](https://github.com/wessberg/browserslist-generator/commit/d806aca))
@@ -217,7 +202,6 @@
 
 
 
-<a name="0.0.7"></a>
 ## <small>0.0.7 (2018-05-01)</small>
 
 * 0.0.7 ([69b2c46](https://github.com/wessberg/browserslist-generator/commit/69b2c46))
@@ -226,7 +210,6 @@
 
 
 
-<a name="0.0.6"></a>
 ## <small>0.0.6 (2018-04-30)</small>
 
 * 0.0.6 ([0af214f](https://github.com/wessberg/browserslist-generator/commit/0af214f))
@@ -235,7 +218,6 @@
 
 
 
-<a name="0.0.5"></a>
 ## <small>0.0.5 (2018-04-30)</small>
 
 * 0.0.5 ([bb70540](https://github.com/wessberg/browserslist-generator/commit/bb70540))
@@ -243,7 +225,6 @@
 
 
 
-<a name="0.0.4"></a>
 ## <small>0.0.4 (2018-04-30)</small>
 
 * 0.0.4 ([f4b6558](https://github.com/wessberg/browserslist-generator/commit/f4b6558))
