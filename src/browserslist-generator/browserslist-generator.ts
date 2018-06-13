@@ -34,6 +34,12 @@ const browserSupportForFeaturesCache: Map<string, IBrowserSupportForFeaturesComm
  */
 const featureToCaniuseStatsCache: Map<string, CaniuseStatsNormalized> = new Map();
 
+/**
+ * A Cache between user agents with any amount of features and whether or not they are supported by the user agent
+ * @type {Map<string, boolean>}
+ */
+const userAgentWithFeaturesToSupportCache: Map<string, boolean> = new Map();
+
 // tslint:disable:no-magic-numbers
 
 /**
@@ -1106,12 +1112,26 @@ export function matchBrowserslistOnUserAgent (useragent: string, browserslist: s
 }
 
 /**
+ * Returns a key to use for the cache between user agents with feature names and whether or not the user agent supports them
+ * @param {string} useragent
+ * @param {string[]} features
+ */
+function userAgentWithFeaturesCacheKey (useragent: string, features: string[]): string {
+	return `${useragent}.${features.join(",")}`;
+}
+
+/**
  * Returns true if the given user agent supports the given features
  * @param {string} useragent
  * @param {string[]} features
  * @returns {string[]}
  */
 export function userAgentSupportsFeatures (useragent: string, ...features: string[]): boolean {
+	// Check if these features has been computed previously for the given user agent
+	const cacheKey = userAgentWithFeaturesCacheKey(useragent, features);
+	const cacheHit = userAgentWithFeaturesToSupportCache.get(cacheKey);
+	// If so, return the cache hit
+	if (cacheHit != null) return cacheHit;
 
 	// Prepare a browserslist from the useragent itself
 	const useragentBrowserslist = generateBrowserslistFromUseragent(useragent);
@@ -1120,5 +1140,9 @@ export function userAgentSupportsFeatures (useragent: string, ...features: strin
 	const supportedBrowserslist = normalizeBrowserslist(browsersWithSupportForFeatures(...features));
 
 	// Now, compare the two, and if the browserslist with supported browsers includes every option from the user agent, the user agent supports all of the given features
-	return useragentBrowserslist.every(option => supportedBrowserslist.includes(option));
+	const support = useragentBrowserslist.every(option => supportedBrowserslist.includes(option));
+
+	// Set it in the cache and return it
+	userAgentWithFeaturesToSupportCache.set(cacheKey, support);
+	return support;
 }
