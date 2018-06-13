@@ -350,7 +350,7 @@ function getMdnSupport (feature: string): CaniuseStatsNormalized {
 			}
 
 			else {
-				dict[version] = gte(coerceVersion(version), coerceVersion(supportedSince)) ? CaniuseSupportKind.AVAILABLE : CaniuseSupportKind.UNAVAILABLE;
+				dict[version] = version === "TP" || version === "all" || gte(coerceVersion(version), coerceVersion(supportedSince)) ? CaniuseSupportKind.AVAILABLE : CaniuseSupportKind.UNAVAILABLE;
 			}
 		});
 		return dict;

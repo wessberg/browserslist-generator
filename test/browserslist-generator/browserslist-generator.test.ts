@@ -149,3 +149,7 @@ test("browserslistSupportsFeatures() => Will correctly determine if a browsersli
 	);
 	t.false(browserslistSupportsMdnFeatures(browserslist, "javascript.builtins.Promise.finally", "javascript.builtins.TypedArray.@@species"));
 });
+
+test("browserslistSupportsMdnFeatures() => Correctly determines that IE 11 supports Object.defineProperty #1", t => {
+	t.true(userAgentSupportsMdnFeatures(ie("11"), "javascript.builtins.Object.defineProperty"));
+});
