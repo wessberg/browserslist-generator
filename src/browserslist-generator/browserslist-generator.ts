@@ -156,17 +156,7 @@ function extendQueryWithUnreleasedVersions (query: string[], browsers: Iterable<
  * @returns {string}
  */
 export function browsersWithSupportForFeatures (...features: string[]): string[] {
-	const {query, browsers} = browsersWithSupportForFeaturesCommon(">=", getSupport, ...features);
-	return extendQueryWithUnreleasedVersions(query, browsers);
-}
-
-/**
- * Generates a Browserslist based on browser support for the given Mdn features
- * @param {string[]} features
- * @returns {string}
- */
-export function browsersWithSupportForMdnFeatures (...features: string[]): string[] {
-	const {query, browsers} = browsersWithSupportForFeaturesCommon(">=", getMdnSupport, ...features);
+	const {query, browsers} = browsersWithSupportForFeaturesCommon(">=", ...features);
 	return extendQueryWithUnreleasedVersions(query, browsers);
 }
 
@@ -189,39 +179,12 @@ export function browserslistSupportsFeatures (browserslist: string[], ...feature
 }
 
 /**
- * Returns true if the given browserslist support all of the given Mdn features
- * @param {string[]} browserslist
- * @param {string} features
- * @returns {boolean}
- */
-export function browserslistSupportsMdnFeatures (browserslist: string[], ...features: string[]): boolean {
-	// First, generate an ideal browserslist that would target the given features exactly
-	const normalizedIdealBrowserslist: string[] = normalizeBrowserslist(browsersWithSupportForMdnFeatures(...features));
-
-	// Now, normalize the input browserslist
-	const normalizedInputBrowserslist: string[] = normalizeBrowserslist(browserslist);
-
-	// Now, compare the two and see if they align. If they do, the input browserslist *does* support all of the given features.
-	// They align if all members of the input browserslist are included in the ideal browserslist
-	return normalizedInputBrowserslist.every(option => normalizedIdealBrowserslist.includes(option));
-}
-
-/**
  * Generates a Browserslist based on browsers that *doesn't* support the given features
  * @param {string[]} features
  * @returns {string}
  */
 export function browsersWithoutSupportForFeatures (...features: string[]): string[] {
-	return browsersWithSupportForFeaturesCommon("<", getSupport, ...features).query;
-}
-
-/**
- * Generates a Browserslist based on browsers that *doesn't* support the given Mdn features
- * @param {string[]} features
- * @returns {string}
- */
-export function browsersWithoutSupportForMdnFeatures (...features: string[]): string[] {
-	return browsersWithSupportForFeaturesCommon("<", getMdnSupport, ...features).query;
+	return browsersWithSupportForFeaturesCommon("<", ...features).query;
 }
 
 /**
@@ -323,8 +286,34 @@ function getCaniuseLiteFeatureNormalized (feature: ICaniuseFeature, featureName:
  * @param {string} feature
  * @returns {ICaniuseFeatureNormalized}
  */
-function getSupport (feature: string): CaniuseStatsNormalized {
+function getCaniuseFeatureSupport (feature: string): CaniuseStatsNormalized {
 	return getCaniuseLiteFeatureNormalized(<ICaniuseFeature> caniuseFeature(caniuseFeatures[feature]), feature).stats;
+}
+
+/**
+ * Returns true if the given feature is a Caniuse feature
+ * @param feature
+ */
+function isCaniuseFeature (feature: string): boolean {
+	return caniuseFeatures[feature] != null;
+}
+
+/**
+ * Returns true if the given feature is a MDN feature
+ * @param feature
+ */
+function isMdnFeature (feature: string): boolean {
+	return get(MdnBrowserCompatData, feature) != null;
+}
+
+/**
+ * Asserts that the given feature is a valid Caniuse or MDN feature name
+ * @param {string} feature
+ */
+function assertKnownFeature (feature: string): void {
+	if (!isCaniuseFeature(feature) && !isMdnFeature(feature)) {
+		throw new TypeError(`The given feature: '${feature}' is unknown. It must be a valid Caniuse or MDN feature!`);
+	}
 }
 
 /**
@@ -332,7 +321,7 @@ function getSupport (feature: string): CaniuseStatsNormalized {
  * @param {string} feature
  * @returns {ICaniuseFeatureNormalized}
  */
-function getMdnSupport (feature: string): CaniuseStatsNormalized {
+function getMdnFeatureSupport (feature: string): CaniuseStatsNormalized {
 
 	const match: IMdn = get(MdnBrowserCompatData, feature);
 	const supportMap = match.__compat.support;
@@ -416,7 +405,7 @@ function sortBrowserslist (a: string, b: string): number {
  * @returns {Map<CaniuseBrowser, string>}
  */
 export function getFirstVersionsWithFullSupport (feature: string): Map<CaniuseBrowser, string> {
-	const support = getSupport(feature);
+	const support = getCaniuseFeatureSupport(feature);
 	// A map between browser names and their required versions
 	const browserMap: Map<CaniuseBrowser, string> = new Map();
 	Object.entries(support)
@@ -432,16 +421,17 @@ export function getFirstVersionsWithFullSupport (feature: string): Map<CaniuseBr
 /**
  * Common logic for the functions that generate browserslists based on feature support
  * @param {ComparisonOperator} comparisonOperator
- * @param {Function} getSupportFunction
  * @param {string} features
  * @returns {IBrowsersWithSupportForFeaturesCommonResult}
  */
-function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOperator, getSupportFunction: (feature: string) => CaniuseStatsNormalized, ...features: string[]): IBrowsersWithSupportForFeaturesCommonResult {
+function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOperator, ...features: string[]): IBrowsersWithSupportForFeaturesCommonResult {
 	// All of the generated browser maps
 	const browserMaps: Map<CaniuseBrowser, string>[] = [];
 
 	for (const feature of features) {
-		const support = getSupportFunction(feature);
+		// Assert that the feature is known
+		assertKnownFeature(feature);
+		const support = isMdnFeature(feature) ? getMdnFeatureSupport(feature) : getCaniuseFeatureSupport(feature);
 		// A map between browser names and their required versions
 		const browserMap: Map<CaniuseBrowser, string> = new Map();
 		Object.entries(support)
@@ -840,24 +830,6 @@ export function userAgentSupportsFeatures (useragent: string, ...features: strin
 
 	// Prepare a browserslist for browsers that support the given features
 	const supportedBrowserslist = normalizeBrowserslist(browsersWithSupportForFeatures(...features));
-
-	// Now, compare the two, and if the browserslist with supported browsers includes every option from the user agent, the user agent supports all of the given features
-	return useragentBrowserslist.every(option => supportedBrowserslist.includes(option));
-}
-
-/**
- * Returns true if the given user agent supports the given MDN features
- * @param {string} useragent
- * @param {string[]} features
- * @returns {string[]}
- */
-export function userAgentSupportsMdnFeatures (useragent: string, ...features: string[]): boolean {
-
-	// Prepare a browserslist from the useragent itself
-	const useragentBrowserslist = generateBrowserslistFromUseragent(useragent);
-
-	// Prepare a browserslist for browsers that support the given features
-	const supportedBrowserslist = normalizeBrowserslist(browsersWithSupportForMdnFeatures(...features));
 
 	// Now, compare the two, and if the browserslist with supported browsers includes every option from the user agent, the user agent supports all of the given features
 	return useragentBrowserslist.every(option => supportedBrowserslist.includes(option));

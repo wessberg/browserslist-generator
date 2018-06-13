@@ -19,27 +19,15 @@ Or, a browserslist can be generated that target only browsers that *doesn't* sup
 
 ##### `browsersWithSupportForFeatures (...features: string[]): string[]`
 
-Takes any amount of [caniuse](https://caniuse.com/) features and generates a browserslist that targets all browsers that support these features
-
-##### `browsersWithSupportForMdnFeatures (...features: string[]): string[]`
-
-Takes any amount of [MDN](https://github.com/mdn/browser-compat-data) features and generates a browserslist that targets all browsers that support these features
+Takes any amount of [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features and generates a browserslist that targets all browsers that support these features
 
 ##### `browsersWithoutSupportForFeatures (...features: string[]): string[]`
 
-Takes any amount of [caniuse](https://caniuse.com/) features and generates a browserslist that targets all browsers that *doesn't* support these features
-
-##### `browsersWithoutSupportForMdnFeatures (...features: string[]): string[]`
-
-Takes any amount of [MDN](https://github.com/mdn/browser-compat-data) features and generates a browserslist that targets all browsers that *doesn't* support these features
+Takes any amount of [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features and generates a browserslist that targets all browsers that *doesn't* support these features
 
 ##### `browserslistSupportsFeatures (browserslist: string[], ...features: string[]): boolean`
 
-Returns true if the given [browserslist](https://github.com/browserslist/browserslist) supports all of the given [caniuse](https://caniuse.com/) features
-
-##### `browserslistSupportsMdnFeatures (browserslist: string[], ...features: string[]): boolean`
-
-Returns true if the given [browserslist](https://github.com/browserslist/browserslist) supports all of the given [MDN](https://github.com/mdn/browser-compat-data) features
+Returns true if the given [browserslist](https://github.com/browserslist/browserslist) supports all of the given [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features
 
 #### `matchBrowserslistOnUserAgent (userAgent: string, browserslist: string[]): boolean`
 
@@ -47,11 +35,7 @@ Will check if the given user agent string matches the given browserslist and ret
 
 #### `userAgentSupportsFeatures (useragent: string, ...features: string[]): boolean`
 
-Checks if the given user agent string supports all of the given [caniuse](https://caniuse.com/) features.
-
-#### `userAgentSupportsMdnFeatures (useragent: string, ...features: string[]): boolean`
-
-Checks if the given user agent string supports all of the given [MDN](https://github.com/mdn/browser-compat-data) features.
+Checks if the given user agent string supports all of the given [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features.
 
 #### `normalizeBrowserslist (browserslist: string[]|string): string[]`
 
