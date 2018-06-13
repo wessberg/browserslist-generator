@@ -1,7 +1,7 @@
 import test from "ava";
 // @ts-ignore
 import {chrome, edge, firefox, ie, safari} from "useragent-generator";
-import {browserslistSupportsFeatures, browsersWithoutSupportForFeatures, browsersWithSupportForFeatures, getFirstVersionsWithFullSupport, matchBrowserslistOnUserAgent} from "../../src/browserslist-generator/browserslist-generator";
+import {browserslistSupportsFeatures, browserslistSupportsMdnFeatures, browsersWithoutSupportForFeatures, browsersWithoutSupportForMdnFeatures, browsersWithSupportForFeatures, getFirstVersionsWithFullSupport, matchBrowserslistOnUserAgent, userAgentSupportsMdnFeatures} from "../../src/browserslist-generator/browserslist-generator";
 
 test("browsersWithSupportForFeatures() => Will skip 'Android' in the generated browserslist", t => {
 	t.true(!browsersWithSupportForFeatures(
@@ -132,4 +132,20 @@ test("browserslistSupportsFeatures() => Android versions above v4.4.4 will repor
 	const androidVersion = browserMap.get("android");
 	// Assert that no android version is reported
 	t.true(androidVersion == null);
+});
+
+test("browserslistSupportsMdnFeatures() => Correctly determines that Chrome 63 supports Promise.finally #1", t => {
+	t.true(userAgentSupportsMdnFeatures(chrome("63"), "javascript.builtins.Promise.finally"));
+});
+
+test("browserslistSupportsMdnFeatures() => Correctly determines that Safari 11 doesn't support Promise.finally #1", t => {
+	t.true(!userAgentSupportsMdnFeatures(safari("11"), "javascript.builtins.Promise.finally"));
+});
+
+test("browserslistSupportsFeatures() => Will correctly determine if a browserslist support the given set of Mdn features #1", t => {
+	const browserslist = browsersWithoutSupportForMdnFeatures(
+		"javascript.builtins.Promise.finally",
+		"javascript.builtins.TypedArray.@@species"
+	);
+	t.false(browserslistSupportsMdnFeatures(browserslist, "javascript.builtins.Promise.finally", "javascript.builtins.TypedArray.@@species"));
 });

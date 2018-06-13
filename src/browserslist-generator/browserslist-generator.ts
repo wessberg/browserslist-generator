@@ -2,13 +2,17 @@
 import * as Browserslist from "browserslist";
 // @ts-ignore
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
-import {coerce, gt} from "semver";
+// @ts-ignore
+import * as MdnBrowserCompatData from "mdn-browser-compat-data";
+import {get} from "object-path";
+import {coerce, gt, gte} from "semver";
 import {UAParser} from "ua-parser-js";
-import {getNextVersionOfBrowser, getPreviousVersionOfBrowser} from "./browser-version";
+import {getNextVersionOfBrowser, getOldestVersionOfBrowser, getPreviousVersionOfBrowser, getSortedBrowserVersions} from "./browser-version";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
 import {IBrowsersWithSupportForFeaturesCommonResult} from "./i-browsers-with-support-for-features-common-result";
 import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, ICaniuseBrowserCorrection, ICaniuseFeature, ICaniuseFeatureNormalized} from "./i-caniuse";
+import {IMdn, MdnBrowserName} from "./i-mdn";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
 import {IUseragentBrowser, IUseragentDevice, IUseragentOS} from "./useragent/useragent-typed";
 
@@ -152,7 +156,17 @@ function extendQueryWithUnreleasedVersions (query: string[], browsers: Iterable<
  * @returns {string}
  */
 export function browsersWithSupportForFeatures (...features: string[]): string[] {
-	const {query, browsers} = browsersWithSupportForFeaturesCommon(">=", ...features);
+	const {query, browsers} = browsersWithSupportForFeaturesCommon(">=", getSupport, ...features);
+	return extendQueryWithUnreleasedVersions(query, browsers);
+}
+
+/**
+ * Generates a Browserslist based on browser support for the given Mdn features
+ * @param {string[]} features
+ * @returns {string}
+ */
+export function browsersWithSupportForMdnFeatures (...features: string[]): string[] {
+	const {query, browsers} = browsersWithSupportForFeaturesCommon(">=", getMdnSupport, ...features);
 	return extendQueryWithUnreleasedVersions(query, browsers);
 }
 
@@ -175,12 +189,48 @@ export function browserslistSupportsFeatures (browserslist: string[], ...feature
 }
 
 /**
+ * Returns true if the given browserslist support all of the given Mdn features
+ * @param {string[]} browserslist
+ * @param {string} features
+ * @returns {boolean}
+ */
+export function browserslistSupportsMdnFeatures (browserslist: string[], ...features: string[]): boolean {
+	// First, generate an ideal browserslist that would target the given features exactly
+	const normalizedIdealBrowserslist: string[] = normalizeBrowserslist(browsersWithSupportForMdnFeatures(...features));
+
+	// Now, normalize the input browserslist
+	const normalizedInputBrowserslist: string[] = normalizeBrowserslist(browserslist);
+
+	// Now, compare the two and see if they align. If they do, the input browserslist *does* support all of the given features.
+	// They align if all members of the input browserslist are included in the ideal browserslist
+	return normalizedInputBrowserslist.every(option => normalizedIdealBrowserslist.includes(option));
+}
+
+/**
  * Generates a Browserslist based on browsers that *doesn't* support the given features
  * @param {string[]} features
  * @returns {string}
  */
 export function browsersWithoutSupportForFeatures (...features: string[]): string[] {
-	return browsersWithSupportForFeaturesCommon("<", ...features).query;
+	return browsersWithSupportForFeaturesCommon("<", getSupport, ...features).query;
+}
+
+/**
+ * Generates a Browserslist based on browsers that *doesn't* support the given Mdn features
+ * @param {string[]} features
+ * @returns {string}
+ */
+export function browsersWithoutSupportForMdnFeatures (...features: string[]): string[] {
+	return browsersWithSupportForFeaturesCommon("<", getMdnSupport, ...features).query;
+}
+
+/**
+ * Coerces the given version
+ * @param {string} version
+ * @returns {string}
+ */
+function coerceVersion (version: string): string {
+	return coerce(version)!.toString();
 }
 
 /**
@@ -193,8 +243,8 @@ export function browsersWithoutSupportForFeatures (...features: string[]): strin
  */
 function shouldIgnoreBrowser (browser: CaniuseBrowser, version: string): boolean {
 	return (
-		(browser === "android" && gt(coerce(version)!.toString(), coerce("4.4.4")!.toString())) ||
-		(browser === "op_mob" && gt(coerce(version)!.toString(), coerce("12.1")!.toString())) ||
+		(browser === "android" && gt(coerceVersion(version), coerceVersion("4.4.4"))) ||
+		(browser === "op_mob" && gt(coerceVersion(version), coerceVersion("12.1"))) ||
 		IGNORED_BROWSERS.has(browser)
 	);
 }
@@ -278,6 +328,58 @@ function getSupport (feature: string): CaniuseStatsNormalized {
 }
 
 /**
+ * Gets the support from caniuse for the given feature
+ * @param {string} feature
+ * @returns {ICaniuseFeatureNormalized}
+ */
+function getMdnSupport (feature: string): CaniuseStatsNormalized {
+
+	const match: IMdn = get(MdnBrowserCompatData, feature);
+	const supportMap = match.__compat.support;
+
+	const formatBrowser = (mdnBrowser: MdnBrowserName, caniuseBrowser: CaniuseBrowser): {[key: string]: CaniuseSupportKind} => {
+		const versionAdded = supportMap[mdnBrowser].version_added;
+		const dict: {[key: string]: CaniuseSupportKind} = {};
+		const supportedSince: string|null = versionAdded === false ? null : versionAdded === true ? getOldestVersionOfBrowser(caniuseBrowser) : versionAdded;
+
+		getSortedBrowserVersions(caniuseBrowser).forEach(version => {
+
+			// If the features has never been supported, mark the feature as unavailable
+			if (supportedSince == null) {
+				dict[version] = CaniuseSupportKind.UNAVAILABLE;
+			}
+
+			else {
+				dict[version] = gte(coerceVersion(version), coerceVersion(supportedSince)) ? CaniuseSupportKind.AVAILABLE : CaniuseSupportKind.UNAVAILABLE;
+			}
+		});
+		return dict;
+	};
+
+	const stats: CaniuseStatsNormalized = {
+		and_chr: formatBrowser("chrome_android", "and_chr"),
+		chrome: formatBrowser("chrome", "chrome"),
+		and_ff: formatBrowser("firefox_android", "and_ff"),
+		and_qq: {},
+		and_uc: {},
+		android: formatBrowser("webview_android", "android"),
+		baidu: {},
+		bb: {},
+		edge: formatBrowser("edge", "edge"),
+		samsung: formatBrowser("samsunginternet_android", "samsung"),
+		ie: formatBrowser("ie", "ie"),
+		ie_mob: formatBrowser("ie", "ie_mob"),
+		safari: formatBrowser("safari", "safari"),
+		ios_saf: formatBrowser("safari_ios", "ios_saf"),
+		opera: formatBrowser("opera", "opera"),
+		op_mini: {},
+		op_mob: {},
+		firefox: formatBrowser("firefox", "firefox")
+	};
+	return stats;
+}
+
+/**
  * Gets the first version that matches the given CaniuseSupportKind
  * @param {CaniuseSupportKind} kind
  * @param {object} stats
@@ -330,15 +432,16 @@ export function getFirstVersionsWithFullSupport (feature: string): Map<CaniuseBr
 /**
  * Common logic for the functions that generate browserslists based on feature support
  * @param {ComparisonOperator} comparisonOperator
+ * @param {Function} getSupportFunction
  * @param {string} features
  * @returns {IBrowsersWithSupportForFeaturesCommonResult}
  */
-function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOperator, ...features: string[]): IBrowsersWithSupportForFeaturesCommonResult {
+function browsersWithSupportForFeaturesCommon (comparisonOperator: ComparisonOperator, getSupportFunction: (feature: string) => CaniuseStatsNormalized, ...features: string[]): IBrowsersWithSupportForFeaturesCommonResult {
 	// All of the generated browser maps
 	const browserMaps: Map<CaniuseBrowser, string>[] = [];
 
 	for (const feature of features) {
-		const support = getSupport(feature);
+		const support = getSupportFunction(feature);
 		// A map between browser names and their required versions
 		const browserMap: Map<CaniuseBrowser, string> = new Map();
 		Object.entries(support)
@@ -725,7 +828,7 @@ export function matchBrowserslistOnUserAgent (useragent: string, browserslist: s
 }
 
 /**
- * Generates a browserslist from the provided useragent string
+ * Returns true if the given user agent supports the given features
  * @param {string} useragent
  * @param {string[]} features
  * @returns {string[]}
@@ -737,6 +840,24 @@ export function userAgentSupportsFeatures (useragent: string, ...features: strin
 
 	// Prepare a browserslist for browsers that support the given features
 	const supportedBrowserslist = normalizeBrowserslist(browsersWithSupportForFeatures(...features));
+
+	// Now, compare the two, and if the browserslist with supported browsers includes every option from the user agent, the user agent supports all of the given features
+	return useragentBrowserslist.every(option => supportedBrowserslist.includes(option));
+}
+
+/**
+ * Returns true if the given user agent supports the given MDN features
+ * @param {string} useragent
+ * @param {string[]} features
+ * @returns {string[]}
+ */
+export function userAgentSupportsMdnFeatures (useragent: string, ...features: string[]): boolean {
+
+	// Prepare a browserslist from the useragent itself
+	const useragentBrowserslist = generateBrowserslistFromUseragent(useragent);
+
+	// Prepare a browserslist for browsers that support the given features
+	const supportedBrowserslist = normalizeBrowserslist(browsersWithSupportForMdnFeatures(...features));
 
 	// Now, compare the two, and if the browserslist with supported browsers includes every option from the user agent, the user agent supports all of the given features
 	return useragentBrowserslist.every(option => supportedBrowserslist.includes(option));

@@ -59,10 +59,13 @@
 		"typescript": "^2.8.3"
 	},
 	"dependencies": {
+		"@types/object-path": "^0.9.29",
 		"@types/semver": "^5.5.0",
 		"@types/ua-parser-js": "^0.7.32",
 		"browserslist": "^3.2.8",
 		"caniuse-lite": "^1.0.30000844",
+		"mdn-browser-compat-data": "0.0.38",
+		"object-path": "^0.11.4",
 		"semver": "^5.5.0",
 		"tslib": "^1.9.1",
 		"ua-parser-js": "^0.7.18",

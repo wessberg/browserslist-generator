@@ -9,7 +9,7 @@ import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-rege
  * @param {CaniuseBrowser} browser
  * @returns {string}
  */
-function getSortedBrowserVersions (browser: CaniuseBrowser): string[] {
+export function getSortedBrowserVersions (browser: CaniuseBrowser): string[] {
 	const queryResultsMapped: Map<CaniuseBrowser, string[]> = new Map();
 
 	// Generate the Browserslist query
@@ -42,6 +42,16 @@ function getSortedBrowserVersions (browser: CaniuseBrowser): string[] {
 export function getLatestVersionOfBrowser (browser: CaniuseBrowser): string {
 	const versions = getSortedBrowserVersions(browser);
 	return versions[versions.length - 1];
+}
+
+/**
+ * Gets the oldest (stable) version of the given browser
+ * @param {CaniuseBrowser} browser
+ * @returns {string}
+ */
+export function getOldestVersionOfBrowser (browser: CaniuseBrowser): string {
+	const versions = getSortedBrowserVersions(browser);
+	return versions[0];
 }
 
 /**
