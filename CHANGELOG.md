@@ -1,3 +1,11 @@
+## <small>0.0.36 (2018-06-13)</small>
+
+* 0.0.36 ([b9aef38](https://github.com/wessberg/browserslist-generator/commit/b9aef38))
+* Added additional memory caching ([35b6bbc](https://github.com/wessberg/browserslist-generator/commit/35b6bbc))
+* Bumped version ([5fe4c07](https://github.com/wessberg/browserslist-generator/commit/5fe4c07))
+
+
+
 ## <small>0.0.35 (2018-06-13)</small>
 
 * 0.0.35 ([1b57d01](https://github.com/wessberg/browserslist-generator/commit/1b57d01))
