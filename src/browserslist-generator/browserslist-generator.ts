@@ -591,7 +591,8 @@ function getMdnFeatureSupport (feature: string): CaniuseStatsNormalized {
 	const supportMap = match.__compat.support;
 
 	const formatBrowser = (mdnBrowser: MdnBrowserName, caniuseBrowser: CaniuseBrowser): { [key: string]: CaniuseSupportKind } => {
-		const versionAdded = supportMap[mdnBrowser].version_added;
+		const versionMap = supportMap[mdnBrowser];
+		const versionAdded = versionMap == null ? false : supportMap[mdnBrowser].version_added;
 		const dict: { [key: string]: CaniuseSupportKind } = {};
 		const supportedSince: string | null = versionAdded === false ? null : versionAdded === true ? getOldestVersionOfBrowser(caniuseBrowser) : versionAdded;
 
