@@ -158,6 +158,6 @@ test("browserslistSupportsFeatures() => Correctly determines that IE 11 doesn't 
 	t.true(!userAgentSupportsFeatures(ie("11"), "javascript.builtins.WeakSet"));
 });
 
-test("browserslistSupportsFeatures() => Correctly determines that Chrome 66 supports TypedArray.find #1", t => {
-	t.true(userAgentSupportsFeatures(chrome("66"), "javascript.builtins.TypedArray.find"));
+test("browserslistSupportsFeatures() => Correctly determines that Chrome 70 supports TypedArray.find #1", t => {
+	t.true(userAgentSupportsFeatures(chrome("70"), "javascript.builtins.TypedArray.find"));
 });

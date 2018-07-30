@@ -55,21 +55,21 @@
 		"ava": "^0.25.0",
 		"conventional-changelog-cli": "^2.0.1",
 		"husky": "^0.14.3",
-		"tslint": "^5.10.0",
-		"typescript": "^2.9.1"
+		"tslint": "^5.11.0",
+		"typescript": "^2.9.2"
 	},
 	"dependencies": {
 		"@types/object-path": "^0.9.29",
 		"@types/semver": "^5.5.0",
 		"@types/ua-parser-js": "^0.7.32",
-		"browserslist": "^3.2.8",
-		"caniuse-lite": "^1.0.30000853",
-		"mdn-browser-compat-data": "0.0.38",
+		"browserslist": "^4.0.1",
+		"caniuse-lite": "^1.0.30000865",
+		"mdn-browser-compat-data": "0.0.44",
 		"object-path": "^0.11.4",
 		"semver": "^5.5.0",
-		"tslib": "^1.9.2",
+		"tslib": "^1.9.3",
 		"ua-parser-js": "^0.7.18",
-		"useragent-generator": "^1.0.3"
+		"useragent-generator": "^1.1.0"
 	},
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/es2015/index.js",
