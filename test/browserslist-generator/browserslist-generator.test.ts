@@ -138,8 +138,8 @@ test("browserslistSupportsMdnFeatures() => Correctly determines that Chrome 63 s
 	t.true(userAgentSupportsFeatures(chrome("63"), "javascript.builtins.Promise.finally"));
 });
 
-test("browserslistSupportsMdnFeatures() => Correctly determines that Safari 11 doesn't support Promise.finally #1", t => {
-	t.true(!userAgentSupportsFeatures(safari("11"), "javascript.builtins.Promise.finally"));
+test("browserslistSupportsMdnFeatures() => Correctly determines that Safari 10 doesn't support Promise.finally #1", t => {
+	t.false(!userAgentSupportsFeatures(safari("10"), "javascript.builtins.Promise.finally"));
 });
 
 test("browserslistSupportsFeatures() => Will correctly determine if a browserslist support the given set of Mdn features #1", t => {
