@@ -1,3 +1,11 @@
+## <small>0.0.39 (2018-08-29)</small>
+
+* 0.0.39 ([8abba86](https://github.com/wessberg/browserslist-generator/commit/8abba86))
+* Bumped deps ([279aaf3](https://github.com/wessberg/browserslist-generator/commit/279aaf3))
+* Bumped version ([28657ac](https://github.com/wessberg/browserslist-generator/commit/28657ac))
+
+
+
 ## <small>0.0.38 (2018-07-30)</small>
 
 * 0.0.38 ([d1ab3b6](https://github.com/wessberg/browserslist-generator/commit/d1ab3b6))
