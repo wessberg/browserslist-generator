@@ -70,11 +70,11 @@
     "useragent-generator": "^1.1.0"
   },
   "main": "./dist/cjs/index.js",
-  "module": "./dist/es2015/index.js",
-  "browser": "./dist/es2015/index.js",
-  "types": "./dist/es2015/index.d.ts",
-  "typings": "./dist/es2015/index.d.ts",
-  "es2015": "./dist/es2015/index.js",
+  "module": "./dist/esm/index.js",
+  "browser": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "typings": "./dist/esm/index.d.ts",
+  "es2015": "./dist/esm/index.js",
   "engines": {
     "node": ">=9.0.0"
   },
