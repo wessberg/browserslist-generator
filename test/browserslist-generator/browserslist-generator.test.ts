@@ -127,18 +127,18 @@ test("browserslistSupportsFeatures() => Will correctly determine if a browsersli
 	t.false(browserslistSupportsFeatures(browserslist, "es6-module", "shadowdomv1", "custom-elementsv1"));
 });
 
-test("browserslistSupportsFeatures() => Android versions above v4.4.4 will report the Chrome version #1", t => {
+test("Android versions above v4.4.4 will report the Chrome version #1", t => {
 	const browserMap = getFirstVersionsWithFullSupport("es6-class");
 	const androidVersion = browserMap.get("android");
 	// Assert that no android version is reported
 	t.true(androidVersion == null);
 });
 
-test("browserslistSupportsMdnFeatures() => Correctly determines that Chrome 63 supports Promise.finally #1", t => {
+test("userAgentSupportsFeatures() => Correctly determines that Chrome 63 supports Promise.finally #1", t => {
 	t.true(userAgentSupportsFeatures(chrome("63"), "javascript.builtins.Promise.finally"));
 });
 
-test("browserslistSupportsMdnFeatures() => Correctly determines that Safari 10 doesn't support Promise.finally #1", t => {
+test("userAgentSupportsFeatures() => Correctly determines that Safari 10 doesn't support Promise.finally #1", t => {
 	t.false(!userAgentSupportsFeatures(safari("10"), "javascript.builtins.Promise.finally"));
 });
 
@@ -150,14 +150,14 @@ test("browserslistSupportsFeatures() => Will correctly determine if a browsersli
 	t.false(browserslistSupportsFeatures(browserslist, "javascript.builtins.Promise.finally", "javascript.builtins.TypedArray.@@species"));
 });
 
-test("browserslistSupportsFeatures() => Correctly determines that IE 11 supports Object.defineProperty #1", t => {
+test("userAgentSupportsFeatures() => Correctly determines that IE 11 supports Object.defineProperty #1", t => {
 	t.true(userAgentSupportsFeatures(ie("11"), "javascript.builtins.Object.defineProperty"));
 });
 
-test("browserslistSupportsFeatures() => Correctly determines that IE 11 doesn't support WeakSets #1", t => {
+test("userAgentSupportsFeatures() => Correctly determines that IE 11 doesn't support WeakSets #1", t => {
 	t.true(!userAgentSupportsFeatures(ie("11"), "javascript.builtins.WeakSet"));
 });
 
-test("browserslistSupportsFeatures() => Correctly determines that Chrome 70 supports TypedArray.find #1", t => {
+test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 supports TypedArray.find #1", t => {
 	t.true(userAgentSupportsFeatures(chrome("70"), "javascript.builtins.TypedArray.find"));
 });

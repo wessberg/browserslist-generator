@@ -1,83 +1,93 @@
 {
-	"name": "@wessberg/browserslist-generator",
-	"version": "0.0.39",
-	"description": "A library that helps with generating a browserslist automatically. For example, a browserslist can be generated that targets only browsers that support specific required features.",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/wessberg/browserslist-generator.git"
-	},
-	"bugs": {
-		"url": "https://github.com/wessberg/browserslist-generator/issues"
-	},
-	"scripts": {
-		"test": "NODE_ENV=TEST ava",
-		"changelog:generate": "conventional-changelog --outfile CHANGELOG.md --release-count 0",
-		"readme:badges": "node node_modules/@wessberg/ts-config/readme/badge/helper/add-badges.js",
-		"readme:refresh": "npm run changelog:generate && npm run readme:badges",
-		"commit:readme": "npm run readme:refresh && git commit -am \"Bumped version\" --no-verify || true",
-		"clean:dist": "rm -r -f dist",
-		"clean:compiled": "rm -r -f compiled",
-		"clean": "npm run clean:dist && npm run clean:compiled",
-		"tsc:dist:cjs": "tsc --module commonjs --outDir dist/cjs -p tsconfig.dist.json",
-		"tsc:dist:es2015": "tsc --module es2015 --outDir dist/es2015 -p tsconfig.dist.json",
-		"tsc:test": "tsc --module commonjs --target es2017 --sourceMap",
-		"build:cjs": "npm run tsc:dist:cjs",
-		"build:es2015": "npm run tsc:dist:es2015",
-		"prebuild": "npm run clean",
-		"build": "npm run build:cjs & npm run build:es2015",
-		"tslint": "tslint -c tslint.json -p tsconfig.json",
-		"validate": "npm run tslint && npm run test",
-		"pretest": "npm run clean:compiled && npm run tsc:test",
-		"posttest": "npm run clean:compiled",
-		"prepublishOnly": "npm run validate && npm run build",
-		"precommit": "npm run tslint && exit 0",
-		"prepush": "npm run validate && exit 0",
-		"publish:major": "npm version major && npm run commit:readme && git push --no-verify && npm publish",
-		"publish:minor": "npm version minor && npm run commit:readme && git push --no-verify && npm publish",
-		"publish:patch": "npm version patch && npm run commit:readme && git push --no-verify && npm publish"
-	},
-	"keywords": [
-		"browserslist",
-		"caniuse",
-		"generate",
-		"support",
-		"babel-preset-env",
-		"util"
-	],
-	"author": {
-		"name": "Frederik Wessberg",
-		"email": "frederikwessberg@hotmail.com",
-		"url": "https://github.com/wessberg"
-	},
-	"license": "MIT",
-	"devDependencies": {
-		"@wessberg/ts-config": "0.0.27",
-		"ava": "^0.25.0",
-		"conventional-changelog-cli": "^2.0.5",
-		"husky": "^0.14.3",
-		"tslint": "^5.11.0",
-		"typescript": "^3.0.1"
-	},
-	"dependencies": {
-		"@types/object-path": "^0.9.29",
-		"@types/semver": "^5.5.0",
-		"@types/ua-parser-js": "^0.7.32",
-		"browserslist": "^4.1.0",
-		"caniuse-lite": "^1.0.30000882",
-		"mdn-browser-compat-data": "0.0.48",
-		"object-path": "^0.11.4",
-		"semver": "^5.5.1",
-		"tslib": "^1.9.3",
-		"ua-parser-js": "^0.7.18",
-		"useragent-generator": "^1.1.0"
-	},
-	"main": "./dist/cjs/index.js",
-	"module": "./dist/es2015/index.js",
-	"browser": "./dist/es2015/index.js",
-	"types": "./dist/es2015/index.d.ts",
-	"typings": "./dist/es2015/index.d.ts",
-	"es2015": "./dist/es2015/index.js",
-	"engines": {
-		"node": ">=9.0.0"
-	}
+  "name": "@wessberg/browserslist-generator",
+  "version": "0.0.39",
+  "description": "A library that makes generating and validating Browserslists a breeze!",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wessberg/browserslist-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wessberg/browserslist-generator/issues"
+  },
+  "scripts": {
+    "generate:readme": "scaffold readme",
+    "generate:license": "scaffold license",
+    "generate:contributing": "scaffold contributing",
+    "generate:coc": "scaffold coc",
+    "generate:all": "npm run generate:license & npm run generate:contributing & npm run generate:coc & npm run generate:readme",
+    "update": "ncu -ua && npm update && npm install",
+    "lint": "tsc --noEmit && tslint -c tslint.json --project tsconfig.json",
+    "clean:dist": "rm -rf dist",
+    "clean:compiled": "rm -rf compiled",
+    "clean": "npm run clean:dist && npm run clean:compiled",
+    "tsc:cjs": "tsc --module commonjs --outDir dist/cjs -p tsconfig.dist.json",
+    "tsc:test": "tsc --module commonjs --target es2017 --sourceMap",
+    "tsc:esm": "tsc --module es2015 --outDir dist/esm -p tsconfig.dist.json",
+    "pretest": "npm run clean:compiled && npm run tsc:test",
+    "test": "NODE_ENV=TEST ava",
+    "posttest": "npm run clean:compiled",
+    "prebuild": "npm run clean:dist",
+    "build": "npm run tsc:cjs & npm run tsc:esm",
+    "validate": "npm run lint && npm run test",
+    "prepare": "npm run build",
+    "prepublish:patch": "NODE_ENV=production npm run lint && NODE_ENV=production npm run prepare && npm run generate:all && git commit -am \"Bumped version\" || true",
+    "publish:patch": "npm version patch && git push && npm publish"
+  },
+  "keywords": [
+    "browserslist",
+    "caniuse",
+    "generate",
+    "support",
+    "babel-preset-env",
+    "util"
+  ],
+  "author": {
+    "name": "Frederik Wessberg",
+    "email": "frederikwessberg@hotmail.com",
+    "url": "https://github.com/wessberg"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@wessberg/scaffold": "^1.0.0",
+    "@wessberg/ts-config": "0.0.29",
+    "ava": "^0.25.0",
+    "conventional-changelog-cli": "^2.0.5",
+    "husky": "^0.14.3",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.3"
+  },
+  "dependencies": {
+    "@types/object-path": "^0.9.29",
+    "@types/semver": "^5.5.0",
+    "@types/ua-parser-js": "^0.7.32",
+    "browserslist": "^4.1.0",
+    "caniuse-lite": "^1.0.30000883",
+    "mdn-browser-compat-data": "0.0.49",
+    "object-path": "^0.11.4",
+    "semver": "^5.5.1",
+    "tslib": "^1.9.3",
+    "ua-parser-js": "^0.7.18",
+    "useragent-generator": "^1.1.0"
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/es2015/index.js",
+  "browser": "./dist/es2015/index.js",
+  "types": "./dist/es2015/index.d.ts",
+  "typings": "./dist/es2015/index.d.ts",
+  "es2015": "./dist/es2015/index.js",
+  "engines": {
+    "node": ">=9.0.0"
+  },
+  "scaffold": {
+    "patreonUserId": "11315442",
+    "contributorMeta": {
+      "Frederik Wessberg": {
+        "imageUrl": "https://avatars2.githubusercontent.com/u/20454213?s=460&v=4",
+        "role": "Maintainer",
+        "twitterHandle": "FredWessberg",
+        "isCocEnforcer": true
+      }
+    },
+    "backers": []
+  }
 }
