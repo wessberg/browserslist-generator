@@ -1,6 +1,6 @@
 {
   "name": "@wessberg/browserslist-generator",
-  "version": "0.0.39",
+  "version": "0.0.40",
   "description": "A library that makes generating and validating Browserslists a breeze!",
   "repository": {
     "type": "git",
