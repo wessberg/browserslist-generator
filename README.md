@@ -104,9 +104,8 @@ You can now generate two Browserslists via `@wessberg/browserslist-generator`:
 
 - `browsersWithSupportForFeatures("es6-module");`
 - `browsersWithoutSupportForFeatures("es6-module");`
-
-Now, you can then pass each one into tools like `@babel/preset-env` and `postcss`.
-On the server, you can use the function `userAgentSupportsFeatures` to check if the same features are supported and respond with resources that points to the right bundle.
+  Now, you can then pass each one into tools like `@babel/preset-env` and `postcss`.
+  On the server, you can use the function `userAgentSupportsFeatures` to check if the same features are supported and respond with resources that points to the right bundle.
 
 ## Backers 🏅
 
