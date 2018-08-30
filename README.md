@@ -12,11 +12,9 @@
 ## Description
 
 This is a library that makes it easier to work with [browserslists](https://github.com/browserslist/browserslist).
-
-It can do things like generating a Browserslist that targets only browsers that support - *or don't support* - specific required features, or even generate a Browserslist from a User Agent string!
+It can do things like generating a Browserslist that targets only browsers that support - _or don't support_ - specific required features, or even generate a Browserslist from a User Agent string!
 It can also do the same in reverse - match a Browserslist on a user agent.
-
-A *Feature* is anything that can be found on [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data).
+A _Feature_ is anything that can be found on [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data).
 
 ## Install
 
@@ -49,12 +47,11 @@ Instead, simply declare the features that should be available:
 
 ```typescript
 import {browsersWithSupportForFeatures} from "@wessberg/browserslist-generator";
-
 // Generate a browserslist for browsers that support all of the given features
 const browserslist = browsersWithSupportForFeatures(
-	"es6-module",
-	"shadowdomv1",
-	"custom-elementsv1"
+  "es6-module",
+  "shadowdomv1",
+  "custom-elementsv1"
 );
 ```
 
@@ -67,11 +64,10 @@ This could be useful, among other things, for conditional bundle serving:
 
 ```typescript
 import {userAgentSupportsFeatures} from "@wessberg/browserslist-generator";
-
 if (userAgentSupportsFeatures(userAgentString, "javascript.builtins.Promise.finally")) {
-	doA();
+  doA();
 } else {
-	doB();
+  doB();
 }
 ```
 
@@ -82,11 +78,10 @@ This could be useful, among other things, for conditional bundle serving:
 
 ```typescript
 import {browserslistSupportsFeatures} from "@wessberg/browserslist-generator";
-
 if (browserslistSupportsFeatures(browserslist, "es6-module")) {
-	useModernBundle();
+  useModernBundle();
 } else {
-	useLegacyBundle();
+  useLegacyBundle();
 }
 ```
 
@@ -103,18 +98,15 @@ Do you want to contribute? Awesome! Please follow [these recommendations](./CONT
 ### What is some cool example of a use case for this library?
 
 Well, here's one I think is pretty neat:
-
 You're building an app, and you care about serving the smallest amount of code to your users.
-You've decided to build two bundles: One for browsers *with*, and one for browsers *without* ES-module support.
-
+You've decided to build two bundles: One for browsers _with_, and one for browsers _without_ ES-module support.
 You can now generate two Browserslists via `@wessberg/browserslist-generator`:
+
 - `browsersWithSupportForFeatures("es6-module");`
 - `browsersWithoutSupportForFeatures("es6-module");`
-
-Now, you can then pass each one into tools like `@babel/preset-env` and `postcss`.
-
-On the server, you can use the function `userAgentSupportsFeatures` to check if the same features are supported and respond
-with resources that points to the right bundle.
+  Now, you can then pass each one into tools like `@babel/preset-env` and `postcss`.
+  On the server, you can use the function `userAgentSupportsFeatures` to check if the same features are supported and respond
+  with resources that points to the right bundle.
 
 ## Backers 🏅
 
@@ -132,7 +124,7 @@ Takes any amount of [caniuse](https://caniuse.com/) or [MDN](https://github.com/
 
 ##### `browsersWithoutSupportForFeatures (...features: string[]): string[]`
 
-Takes any amount of [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features and generates a browserslist that targets all browsers that *doesn't* support these features
+Takes any amount of [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features and generates a browserslist that targets all browsers that _doesn't_ support these features
 
 ##### `browserslistSupportsFeatures (browserslist: string[], ...features: string[]): boolean`
 
