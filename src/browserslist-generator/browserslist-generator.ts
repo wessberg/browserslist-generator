@@ -7,7 +7,7 @@ import * as MdnBrowserCompatData from "mdn-browser-compat-data";
 import {get} from "object-path";
 import {coerce, gt, gte, lte} from "semver";
 import {UAParser} from "ua-parser-js";
-import {getNextVersionOfBrowser, getOldestVersionOfBrowser, getPreviousVersionOfBrowser, getSortedBrowserVersions} from "./browser-version";
+import {getLatestVersionOfBrowser, getNextVersionOfBrowser, getOldestVersionOfBrowser, getPreviousVersionOfBrowser, getSortedBrowserVersions} from "./browser-version";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
 import {IBrowserSupportForFeaturesCommonResult} from "./i-browser-support-for-features-common-result";
@@ -940,6 +940,30 @@ function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAPar
 }
 
 /**
+ * Ensures that for any given version of a browser, if it is newer than the latest known version, the last known version will be used as a fallback
+ * @param {CaniuseBrowser} browser
+ * @param {string} givenVersion
+ */
+function takeVersionOfBrowserWithFallbackToLatestKnownVersion (browser: Exclude<CaniuseBrowser, "op_mini">, givenVersion: string): string {
+	const givenVersionCoerced = coerce(givenVersion);
+	const latestVersion = getLatestVersionOfBrowser(browser);
+	const latestVersionCoerced = coerce(latestVersion);
+
+	if (givenVersionCoerced == null || latestVersionCoerced == null) {
+		throw new TypeError(`Could not detect the version of: '${givenVersion}' for browser: ${browser}`);
+	}
+
+	if (
+		(givenVersionCoerced.major > latestVersionCoerced.major) ||
+		(givenVersionCoerced.major === latestVersionCoerced.major && givenVersionCoerced.minor > latestVersionCoerced.minor) ||
+		(givenVersionCoerced.major === latestVersionCoerced.major && givenVersionCoerced.minor === latestVersionCoerced.minor && givenVersionCoerced.patch > latestVersionCoerced.patch)
+	) {
+		return latestVersion;
+	}
+	return givenVersion;
+}
+
+/**
  * Normalizes the version of the browser such that it plays well with Caniuse
  * @param {CaniuseBrowser} browser
  * @param {string} version
@@ -948,14 +972,13 @@ function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAPar
  * @returns {string}
  */
 function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version: string, useragentBrowser: IUseragentBrowser, useragentOS: IUseragentOS): string {
-	const coerced = coerce(version);
 
 	// Always use 'all' with Opera Mini
 	if (browser === "op_mini") {
 		return "all";
 	}
 
-	if (browser === "safari") {
+	else if (browser === "safari") {
 		// Check if there is a newer version of the browser
 		const nextBrowserVersion = getNextVersionOfBrowser(browser, version);
 
@@ -964,6 +987,8 @@ function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version:
 			return "TP";
 		}
 	}
+
+	const coerced = coerce(takeVersionOfBrowserWithFallbackToLatestKnownVersion(browser, version));
 
 	// Make sure that we have a proper Semver version to work with
 	if (coerced == null) throw new TypeError(`Could not detect the version of: '${version}' for browser: ${browser}`);

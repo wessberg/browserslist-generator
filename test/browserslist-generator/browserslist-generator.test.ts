@@ -1,7 +1,7 @@
 import test from "ava";
 // @ts-ignore
 import {chrome, edge, firefox, ie, safari} from "useragent-generator";
-import {browserslistSupportsFeatures, browsersWithoutSupportForFeatures, browsersWithSupportForFeatures, getFirstVersionsWithFullSupport, matchBrowserslistOnUserAgent, userAgentSupportsFeatures} from "../../src/browserslist-generator/browserslist-generator";
+import {browserslistSupportsFeatures, browsersWithoutSupportForFeatures, browsersWithSupportForFeatures, getFirstVersionsWithFullSupport, matchBrowserslistOnUserAgent, userAgentSupportsFeatures, generateBrowserslistFromUseragent} from "../../src/browserslist-generator/browserslist-generator";
 
 // tslint:disable:no-duplicate-string
 
@@ -168,4 +168,8 @@ test("userAgentSupportsFeatures() => Correctly determines that IE 11 doesn't sup
 
 test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 supports TypedArray.find #1", t => {
 	t.true(userAgentSupportsFeatures(chrome("70"), "javascript.builtins.TypedArray.find"));
+});
+
+test("generateBrowserslistFromUseragent() => Will fall back to the latest known version if given a version of a browser that is newer than what is known by Caniuse #1", t => {
+	t.notThrows(() => generateBrowserslistFromUseragent(firefox("9999")));
 });
