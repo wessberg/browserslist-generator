@@ -30,12 +30,6 @@ $ npm install @wessberg/browserslist-generator
 $ yarn add @wessberg/browserslist-generator
 ```
 
-### Run once with NPX
-
-```
-$ npx @wessberg/browserslist-generator
-```
-
 ## Usage
 
 ### Generating a Browserslist based on features

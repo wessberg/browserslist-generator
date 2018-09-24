@@ -46,14 +46,18 @@ const userAgentWithFeaturesToSupportCache: Map<string, boolean> = new Map();
  * A Map between features and browsers that has partial support for them but should be allowed anyway
  * @type {Map<string, string[]>}
  */
-const PARTIAL_SUPPORT_ALLOWANCES: Map<string, CaniuseBrowser[]> = new Map([
+const PARTIAL_SUPPORT_ALLOWANCES: Map<string, CaniuseBrowser[]|"*"> = new Map([
 	[
 		"shadowdomv1",
-		<CaniuseBrowser[]>["chrome", "safari", "ios_saf"]
+		<"*">"*"
 	],
 	[
 		"custom-elementsv1",
-		<CaniuseBrowser[]>["chrome", "safari", "ios_saf"]
+		<"*">"*"
+	],
+	[
+		"web-animation",
+		<"*">"*"
 	]
 ]);
 
@@ -732,7 +736,7 @@ function browserSupportForFeaturesCommon (comparisonOperator: ComparisonOperator
 
 					if (partialSupportMatch != null) {
 						// Check if partial support exists for the browser
-						if (partialSupportMatch.includes(browser)) {
+						if (partialSupportMatch === "*" || partialSupportMatch.includes(browser)) {
 							// If no full supported version exists or if the partial supported version has a lower version number than the full supported one, use that one instead
 							if (fullSupportVersion == null || compareVersions(partialSupportVersion, fullSupportVersion) < 0) {
 								versionToSet = partialSupportVersion;

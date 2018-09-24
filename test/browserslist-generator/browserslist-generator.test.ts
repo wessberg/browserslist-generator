@@ -173,3 +173,7 @@ test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 support
 test("generateBrowserslistFromUseragent() => Will fall back to the latest known version if given a version of a browser that is newer than what is known by Caniuse #1", t => {
 	t.notThrows(() => generateBrowserslistFromUseragent(firefox("9999")));
 });
+
+test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 supports Web Animations (even though support is partial) #1", t => {
+	t.true(userAgentSupportsFeatures(chrome("70"), "web-animation"));
+});
