@@ -46,18 +46,18 @@ const userAgentWithFeaturesToSupportCache: Map<string, boolean> = new Map();
  * A Map between features and browsers that has partial support for them but should be allowed anyway
  * @type {Map<string, string[]>}
  */
-const PARTIAL_SUPPORT_ALLOWANCES: Map<string, CaniuseBrowser[]|"*"> = new Map([
+const PARTIAL_SUPPORT_ALLOWANCES = <Map<string, CaniuseBrowser[]|"*">> new Map([
 	[
 		"shadowdomv1",
-		<"*">"*"
+		"*"
 	],
 	[
 		"custom-elementsv1",
-		<"*">"*"
+		"*"
 	],
 	[
 		"web-animation",
-		<"*">"*"
+		"*"
 	]
 ]);
 
