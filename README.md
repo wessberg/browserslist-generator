@@ -106,15 +106,15 @@ if (browserslistSupportsEcmaVersion(browserslist, "es2015")) {
 #### Getting the most appropriate ECMAScript version for a Browserslist
 
 Given an existing Browserslist, this library can detect the most appropriate ECMAScript version to target.
-This could be useful, for example, when using the Typescript compiler based on a Browserslist. 
+This could be useful, for example, when using the Typescript compiler based on a Browserslist.
 
 ```typescript
 import {getAppropriateEcmaVersionForBrowserslist} from "@wessberg/browserslist-generator";
 
 const typescriptOptions = {
-	// ...
-	target: getAppropriateEcmaVersionForBrowserslist(browserslist)
-}
+  // ...
+  target: getAppropriateEcmaVersionForBrowserslist(browserslist)
+};
 ```
 
 #### Possible ECMAScript versions
