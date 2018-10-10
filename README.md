@@ -116,15 +116,38 @@ MIT © [Frederik Wessberg](https://github.com/wessberg)
 
 ##### `browsersWithSupportForFeatures (...features: string[]): string[]`
 
-Takes any amount of [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features and generates a browserslist that targets all browsers that support these features
+Takes any amount of [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features and generates a [browserslist](https://github.com/browserslist/browserslist) that targets all browsers that support these features
 
 ##### `browsersWithoutSupportForFeatures (...features: string[]): string[]`
 
-Takes any amount of [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features and generates a browserslist that targets all browsers that _doesn't_ support these features
+Takes any amount of [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features and generates a [browserslist](https://github.com/browserslist/browserslist) that targets all browsers that _doesn't_ support these features
+
+##### `browsersWithSupportForEcmaVersion (version: EcmaVersion): string[]`
+
+Generates a [browserslist](https://github.com/browserslist/browserslist) that targets all the browsers that support the given Ecma version.
+
+Possible Ecma versions are:
+
+- `es3`
+- `es5`
+- `es2015`
+- `es2016`
+- `es2017`
+- `es2018`
 
 ##### `browserslistSupportsFeatures (browserslist: string[], ...features: string[]): boolean`
 
 Returns true if the given [browserslist](https://github.com/browserslist/browserslist) supports all of the given [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features
+
+##### `browserslistSupportsEcmaVersion (browserslist: string[], version: EcmaVersion): boolean`
+
+Returns true if the given [browserslist](https://github.com/browserslist/browserslist) supports the given Ecma version.
+See [this section](#browserswithsupportforecmaversion-version-ecmaversion-string) for an overview of all supported Ecma versions.
+
+##### `getAppropriateEcmaVersionForBrowserslist (browserslist: string[]): EcmaVersion`
+
+Gets the Ecma version that is most appropriate for the given [browserslist](https://github.com/browserslist/browserslist).
+See [this section](#browserswithsupportforecmaversion-version-ecmaversion-string) for an overview of all supported Ecma versions.
 
 #### `matchBrowserslistOnUserAgent (userAgent: string, browserslist: string[]): boolean`
 

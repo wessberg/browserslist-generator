@@ -10,6 +10,7 @@ import {UAParser} from "ua-parser-js";
 import {getLatestVersionOfBrowser, getNextVersionOfBrowser, getOldestVersionOfBrowser, getPreviousVersionOfBrowser, getSortedBrowserVersions} from "./browser-version";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
+import {EcmaVersion, ES2015_FEATURES, ES2016_FEATURES, ES2017_FEATURES, ES2018_FEATURES, ES5_FEATURES} from "./ecma-version";
 import {IBrowserSupportForFeaturesCommonResult} from "./i-browser-support-for-features-common-result";
 import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, ICaniuseBrowserCorrection, ICaniuseDataCorrection, ICaniuseFeature} from "./i-caniuse";
 import {IMdn, MdnBrowserName} from "./i-mdn";
@@ -46,7 +47,7 @@ const userAgentWithFeaturesToSupportCache: Map<string, boolean> = new Map();
  * A Map between features and browsers that has partial support for them but should be allowed anyway
  * @type {Map<string, string[]>}
  */
-const PARTIAL_SUPPORT_ALLOWANCES = <Map<string, CaniuseBrowser[]|"*">> new Map([
+const PARTIAL_SUPPORT_ALLOWANCES = <Map<string, CaniuseBrowser[] | "*">> new Map([
 	[
 		"shadowdomv1",
 		"*"
@@ -92,46 +93,28 @@ function rangeCorrection (browser: CaniuseBrowser, supportKind: CaniuseSupportKi
 
 		if (start == null && end == null) {
 			shouldSet = true;
-		}
-
-		else if (start != null && end == null) {
+		} else if (start != null && end == null) {
 			if (version === "TP") {
 				shouldSet = true;
-			}
-
-			else if (version === "all") {
+			} else if (version === "all") {
 				shouldSet = true;
-			}
-
-			else {
+			} else {
 				shouldSet = gte(coerceVersion(version), coerceVersion(start));
 			}
-		}
-
-		else if (start == null && end != null) {
+		} else if (start == null && end != null) {
 			if (version === "TP") {
 				shouldSet = end === "TP";
-			}
-
-			else if (version === "all") {
+			} else if (version === "all") {
 				shouldSet = true;
-			}
-
-			else {
+			} else {
 				shouldSet = lte(coerceVersion(version), coerceVersion(end));
 			}
-		}
-
-		else if (start != null && end != null) {
+		} else if (start != null && end != null) {
 			if (version === "TP") {
 				shouldSet = end === "TP";
-			}
-
-			else if (version === "all") {
+			} else if (version === "all") {
 				shouldSet = true;
-			}
-
-			else {
+			} else {
 				shouldSet = gte(coerceVersion(version), coerceVersion(start)) && lte(coerceVersion(version), coerceVersion(end));
 			}
 		}
@@ -402,6 +385,71 @@ export function browsersWithSupportForFeatures (...features: string[]): string[]
 }
 
 /**
+ * Returns true if the given Browserslist supports the given EcmaVersion
+ * @param browserslist
+ * @param version
+ */
+export function browserslistSupportsEcmaVersion (browserslist: string[], version: EcmaVersion): boolean {
+	switch (version) {
+		case "es3":
+			// ES3 is the lowest possible target and will always be treated as supported
+			return true;
+
+		case "es5":
+			return browserslistSupportsFeatures(browserslist, ...ES5_FEATURES);
+
+		case "es2015":
+			return browserslistSupportsFeatures(browserslist, ...ES2015_FEATURES);
+
+		case "es2016":
+			return browserslistSupportsFeatures(browserslist, ...ES2016_FEATURES);
+
+		case "es2017":
+			return browserslistSupportsFeatures(browserslist, ...ES2017_FEATURES);
+
+		case "es2018":
+			return browserslistSupportsFeatures(browserslist, ...ES2018_FEATURES);
+	}
+}
+
+/**
+ * Returns the appropriate Ecma version for the given Browserslist
+ * @param {string[]} browserslist
+ * @returns {EcmaVersion}
+ */
+export function getAppropriateEcmaVersionForBrowserslist (browserslist: string[]): EcmaVersion {
+	if (browserslistSupportsEcmaVersion(browserslist, "es2018")) return "es2018";
+	else if (browserslistSupportsEcmaVersion(browserslist, "es2017")) return "es2017";
+	else if (browserslistSupportsEcmaVersion(browserslist, "es2016")) return "es2016";
+	else if (browserslistSupportsEcmaVersion(browserslist, "es2015")) return "es2015";
+	else if (browserslistSupportsEcmaVersion(browserslist, "es5")) return "es5";
+	else return "es3";
+}
+
+/**
+ * Generates a Browserslist based on browser support for the given ECMA version
+ * @param {EcmaVersion} version
+ * @returns {string[]}
+ */
+export function browsersWithSupportForEcmaVersion (version: EcmaVersion): string[] {
+
+	switch (version) {
+		case "es3":
+			return browsersWithoutSupportForFeatures(...ES5_FEATURES);
+		case "es5":
+			return browsersWithSupportForFeatures(...ES5_FEATURES);
+		case "es2015":
+			return browsersWithSupportForFeatures(...ES2015_FEATURES);
+		case "es2016":
+			return browsersWithSupportForFeatures(...ES2016_FEATURES);
+		case "es2017":
+			return browsersWithSupportForFeatures(...ES2017_FEATURES);
+		case "es2018":
+			return browsersWithSupportForFeatures(...ES2018_FEATURES);
+	}
+}
+
+/**
  * Returns true if the given browserslist support all of the given features
  * @param {string[]} browserslist
  * @param {string} features
@@ -472,20 +520,13 @@ function getCaniuseLiteFeatureNormalized (stats: CaniuseStats, featureName: stri
 
 			if (support === CaniuseSupportKind.AVAILABLE || support === CaniuseSupportKind.UNAVAILABLE || support === CaniuseSupportKind.PARTIAL_SUPPORT || support === CaniuseSupportKind.PREFIXED) {
 				supportKind = support;
-			}
-
-			else if (support.startsWith("y")) {
+			} else if (support.startsWith("y")) {
 				supportKind = CaniuseSupportKind.AVAILABLE;
-			}
-
-			else if (support.startsWith("n")) {
+			} else if (support.startsWith("n")) {
 				supportKind = CaniuseSupportKind.UNAVAILABLE;
-			}
-
-			else if (support.startsWith("a")) {
+			} else if (support.startsWith("a")) {
 				supportKind = CaniuseSupportKind.PARTIAL_SUPPORT;
-			}
-			else {
+			} else {
 				supportKind = CaniuseSupportKind.PREFIXED;
 			}
 
@@ -605,9 +646,7 @@ function getMdnFeatureSupport (feature: string): CaniuseStatsNormalized {
 			// If the features has never been supported, mark the feature as unavailable
 			if (supportedSince == null) {
 				dict[version] = CaniuseSupportKind.UNAVAILABLE;
-			}
-
-			else {
+			} else {
 				dict[version] = version === "TP" || version === "all" || gte(coerceVersion(version), coerceVersion(supportedSince)) ? CaniuseSupportKind.AVAILABLE : CaniuseSupportKind.UNAVAILABLE;
 			}
 		});
@@ -980,9 +1019,7 @@ function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version:
 	// Always use 'all' with Opera Mini
 	if (browser === "op_mini") {
 		return "all";
-	}
-
-	else if (browser === "safari") {
+	} else if (browser === "safari") {
 		// Check if there is a newer version of the browser
 		const nextBrowserVersion = getNextVersionOfBrowser(browser, version);
 
@@ -1059,13 +1096,9 @@ function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version:
 			// Up to version 4.4.4, these could include patch releases. After that, only use major versions
 			if (major < 4) {
 				return buildSemverVersion(major, minor);
-			}
-
-			else if (major === 4) {
+			} else if (major === 4) {
 				return buildSemverVersion(major, minor, patch);
-			}
-
-			else {
+			} else {
 				return buildSemverVersion(major);
 			}
 

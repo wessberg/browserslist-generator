@@ -1,9 +1,11 @@
 import test from "ava";
 // @ts-ignore
 import {chrome, edge, firefox, ie, safari} from "useragent-generator";
-import {browserslistSupportsFeatures, browsersWithoutSupportForFeatures, browsersWithSupportForFeatures, getFirstVersionsWithFullSupport, matchBrowserslistOnUserAgent, userAgentSupportsFeatures, generateBrowserslistFromUseragent} from "../../src/browserslist-generator/browserslist-generator";
+import {browserslistSupportsFeatures, browsersWithoutSupportForFeatures, browsersWithSupportForFeatures, getFirstVersionsWithFullSupport, matchBrowserslistOnUserAgent, userAgentSupportsFeatures, generateBrowserslistFromUseragent, browsersWithSupportForEcmaVersion, browserslistSupportsEcmaVersion, getAppropriateEcmaVersionForBrowserslist} from "../../src/browserslist-generator/browserslist-generator";
 
 // tslint:disable:no-duplicate-string
+
+// tslint:disable:no-identical-functions
 
 const ES_MODULE_FEATURE_NAME = "es6-module";
 const SHADOW_DOM_FEATURE_NAME = "shadowdomv1";
@@ -176,4 +178,118 @@ test("generateBrowserslistFromUseragent() => Will fall back to the latest known 
 
 test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 supports Web Animations (even though support is partial) #1", t => {
 	t.true(userAgentSupportsFeatures(chrome("70"), "web-animation"));
+});
+
+test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES3 doesn't support ES5 features #1", t => {
+	t.false(
+		browserslistSupportsFeatures(browsersWithSupportForEcmaVersion("es3"), "es5")
+	);
+});
+
+test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES5 doesn't support ES2015 features #1", t => {
+	t.false(
+		browserslistSupportsFeatures(browsersWithSupportForEcmaVersion("es5"), "es6-class")
+	);
+});
+
+test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES2015 doesn't support ES2016 features #1", t => {
+	t.false(
+		browserslistSupportsFeatures(browsersWithSupportForEcmaVersion("es2015"), "javascript.operators.arithmetic.exponentiation")
+	);
+});
+
+test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES2016 doesn't support ES2017 features #1", t => {
+	t.false(
+		browserslistSupportsFeatures(browsersWithSupportForEcmaVersion("es2016"), "async-functions")
+	);
+});
+
+test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES2017 doesn't support ES2018 features #1", t => {
+	t.false(
+		browserslistSupportsFeatures(browsersWithSupportForEcmaVersion("es2017"), "javascript.operators.spread.spread_in_object_literals")
+	);
+});
+
+test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES2018 does support LATEST features #1", t => {
+	t.true(
+		browserslistSupportsFeatures(browsersWithSupportForEcmaVersion("es2018"), "javascript.operators.spread.spread_in_object_literals")
+	);
+});
+
+test("browserslistSupportsEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES3 doesn't support ES5 features #1", t => {
+	t.false(
+		browserslistSupportsEcmaVersion(browsersWithSupportForEcmaVersion("es3"), "es5")
+	);
+});
+
+test("browserslistSupportsEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES5 doesn't support ES2015 features #1", t => {
+	t.false(
+		browserslistSupportsEcmaVersion(browsersWithSupportForEcmaVersion("es5"), "es2015")
+	);
+});
+
+test("browserslistSupportsEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES2015 doesn't support ES2016 features #1", t => {
+	t.false(
+		browserslistSupportsEcmaVersion(browsersWithSupportForEcmaVersion("es2015"), "es2016")
+	);
+});
+
+test("browserslistSupportsEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES2016 doesn't support ES2017 features #1", t => {
+	t.false(
+		browserslistSupportsEcmaVersion(browsersWithSupportForEcmaVersion("es2016"), "es2017")
+	);
+});
+
+test("browserslistSupportsEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES2017 doesn't support ES2018 features #1", t => {
+	t.false(
+		browserslistSupportsEcmaVersion(browsersWithSupportForEcmaVersion("es2017"), "es2018")
+	);
+});
+
+test("browserslistSupportsEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES2018 does support LATEST features #1", t => {
+	t.true(
+		browserslistSupportsEcmaVersion(browsersWithSupportForEcmaVersion("es2018"), "es2018")
+	);
+});
+
+test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for a Browserslist targeting browsers only compatible with ES3 is indeed ES3 #1", t => {
+	t.deepEqual(
+		getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es3")),
+		"es3"
+	);
+});
+
+test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for a Browserslist targeting browsers only compatible with ES5 is indeed ES5 #1", t => {
+	t.deepEqual(
+		getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es5")),
+		"es5"
+	);
+});
+
+test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for a Browserslist targeting browsers only compatible with ES2015 is indeed ES2015 #1", t => {
+	t.deepEqual(
+		getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es2015")),
+		"es2015"
+	);
+});
+
+test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for a Browserslist targeting browsers only compatible with ES2016 is indeed ES2016 #1", t => {
+	t.deepEqual(
+		getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es2016")),
+		"es2016"
+	);
+});
+
+test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for a Browserslist targeting browsers only compatible with ES2017 is indeed ES2017 #1", t => {
+	t.deepEqual(
+		getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es2017")),
+		"es2017"
+	);
+});
+
+test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for a Browserslist targeting browsers only compatible with ES2018 is indeed ES2018 #1", t => {
+	t.deepEqual(
+		getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es2018")),
+		"es2018"
+	);
 });
