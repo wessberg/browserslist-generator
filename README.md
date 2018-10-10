@@ -49,8 +49,6 @@ const browserslist = browsersWithSupportForFeatures(
 );
 ```
 
-It also works in reverse - You can simply use `browsersWithoutSupportForFeatures` instead.
-
 ### Checking if a User Agent supports a specific feature
 
 This library offers simple ways that you can check if a given User Agent supports any amount of features.
@@ -78,6 +76,57 @@ if (browserslistSupportsFeatures(browserslist, "es6-module")) {
   useLegacyBundle();
 }
 ```
+
+### Generating a Browserslist based on a ECMAScript version
+
+When deciding which Browsers and environments to support, it is quite common to make
+the decision based on a specific version of ECMAScript to target. For example, with the Typescript Compiler,
+the `target` option takes an ECMAScript version and the Typescript Compiler then knows which transformations to apply accordingly.
+
+```typescript
+import {browsersWithSupportForEcmaVersion} from "@wessberg/browserslist-generator";
+// Generate a browserslist for browsers that support the given version of ECMAScript
+const browserslist = browsersWithSupportForEcmaVersion("es2015");
+```
+
+#### Checking if a Browserslist supports a specific ECMAScript version
+
+Given an existing Browserslist, this library can also check if it supports a specific version of ECMAScript.
+This could be useful, among other things, for conditional bundle serving:
+
+```typescript
+import {browserslistSupportsEcmaVersion} from "@wessberg/browserslist-generator";
+if (browserslistSupportsEcmaVersion(browserslist, "es2015")) {
+  useModernBundle();
+} else {
+  useLegacyBundle();
+}
+```
+
+#### Getting the most appropriate ECMAScript version for a Browserslist
+
+Given an existing Browserslist, this library can detect the most appropriate ECMAScript version to target.
+This could be useful, for example, when using the Typescript compiler based on a Browserslist. 
+
+```typescript
+import {getAppropriateEcmaVersionForBrowserslist} from "@wessberg/browserslist-generator";
+
+const typescriptOptions = {
+	// ...
+	target: getAppropriateEcmaVersionForBrowserslist(browserslist)
+}
+```
+
+#### Possible ECMAScript versions
+
+All of the possible ECMAScript versions are:
+
+- `es3`
+- `es5`
+- `es2015`
+- `es2016`
+- `es2017`
+- `es2018`
 
 ## Contributing
 
@@ -124,16 +173,8 @@ Takes any amount of [caniuse](https://caniuse.com/) or [MDN](https://github.com/
 
 ##### `browsersWithSupportForEcmaVersion (version: EcmaVersion): string[]`
 
-Generates a [browserslist](https://github.com/browserslist/browserslist) that targets all the browsers that support the given Ecma version.
-
-Possible Ecma versions are:
-
-- `es3`
-- `es5`
-- `es2015`
-- `es2016`
-- `es2017`
-- `es2018`
+Generates a [browserslist](https://github.com/browserslist/browserslist) that targets all the browsers that support the given ECMAScript version.
+See [this section](#possible-ecmascript-versions) for an overview of all supported ECMAScript versions.
 
 ##### `browserslistSupportsFeatures (browserslist: string[], ...features: string[]): boolean`
 
@@ -141,13 +182,13 @@ Returns true if the given [browserslist](https://github.com/browserslist/browser
 
 ##### `browserslistSupportsEcmaVersion (browserslist: string[], version: EcmaVersion): boolean`
 
-Returns true if the given [browserslist](https://github.com/browserslist/browserslist) supports the given Ecma version.
-See [this section](#browserswithsupportforecmaversion-version-ecmaversion-string) for an overview of all supported Ecma versions.
+Returns true if the given [browserslist](https://github.com/browserslist/browserslist) supports the given ECMAScript version.
+See [this section](#possible-ecmascript-versions) for an overview of all supported ECMAScript versions.
 
 ##### `getAppropriateEcmaVersionForBrowserslist (browserslist: string[]): EcmaVersion`
 
-Gets the Ecma version that is most appropriate for the given [browserslist](https://github.com/browserslist/browserslist).
-See [this section](#browserswithsupportforecmaversion-version-ecmaversion-string) for an overview of all supported Ecma versions.
+Gets the ECMAScript version that is most appropriate for the given [browserslist](https://github.com/browserslist/browserslist).
+See [this section](#possible-ecmascript-versions) for an overview of all supported ECMAScript versions.
 
 ##### `matchBrowserslistOnUserAgent (userAgent: string, browserslist: string[]): boolean`
 
