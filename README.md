@@ -149,14 +149,14 @@ See [this section](#browserswithsupportforecmaversion-version-ecmaversion-string
 Gets the Ecma version that is most appropriate for the given [browserslist](https://github.com/browserslist/browserslist).
 See [this section](#browserswithsupportforecmaversion-version-ecmaversion-string) for an overview of all supported Ecma versions.
 
-#### `matchBrowserslistOnUserAgent (userAgent: string, browserslist: string[]): boolean`
+##### `matchBrowserslistOnUserAgent (userAgent: string, browserslist: string[]): boolean`
 
 Will check if the given user agent string matches the given browserslist and return true if so.
 
-#### `userAgentSupportsFeatures (useragent: string, ...features: string[]): boolean`
+##### `userAgentSupportsFeatures (useragent: string, ...features: string[]): boolean`
 
 Checks if the given user agent string supports all of the given [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features.
 
-#### `normalizeBrowserslist (browserslist: string[]|string): string[]`
+##### `normalizeBrowserslist (browserslist: string[]|string): string[]`
 
 Generates a normalized Browserslist from the given one.
