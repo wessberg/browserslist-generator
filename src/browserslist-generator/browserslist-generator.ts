@@ -637,19 +637,27 @@ function getMdnFeatureSupport (feature: string): CaniuseStatsNormalized {
 
 	const formatBrowser = (mdnBrowser: MdnBrowserName, caniuseBrowser: CaniuseBrowser): { [key: string]: CaniuseSupportKind } => {
 		const versionMap = supportMap[mdnBrowser];
-		const versionAdded = versionMap == null ? false : versionMap.version_added;
+		const versionAdded = versionMap == null ? false : Array.isArray(versionMap)
+			// If there are multiple entries, take the one that hasn't been removed yet, if any
+			? (() => {
+				const versionStillInBrowser = versionMap.filter(element => element.version_removed == null)[0];
+				return versionStillInBrowser == null || versionStillInBrowser.version_added == null ? false : versionStillInBrowser.version_added;
+			})()
+			: versionMap.version_added;
+
 		const dict: { [key: string]: CaniuseSupportKind } = {};
 		const supportedSince: string | null = versionAdded === false ? null : versionAdded === true ? getOldestVersionOfBrowser(caniuseBrowser) : versionAdded;
 
-		getSortedBrowserVersions(caniuseBrowser).forEach(version => {
+		getSortedBrowserVersions(caniuseBrowser)
+			.forEach(version => {
 
-			// If the features has never been supported, mark the feature as unavailable
-			if (supportedSince == null) {
-				dict[version] = CaniuseSupportKind.UNAVAILABLE;
-			} else {
-				dict[version] = version === "TP" || version === "all" || gte(coerceVersion(version), coerceVersion(supportedSince)) ? CaniuseSupportKind.AVAILABLE : CaniuseSupportKind.UNAVAILABLE;
-			}
-		});
+				// If the features has never been supported, mark the feature as unavailable
+				if (supportedSince == null) {
+					dict[version] = CaniuseSupportKind.UNAVAILABLE;
+				} else {
+					dict[version] = version === "TP" || version === "all" || gte(coerceVersion(version), coerceVersion(supportedSince)) ? CaniuseSupportKind.AVAILABLE : CaniuseSupportKind.UNAVAILABLE;
+				}
+			});
 		return dict;
 	};
 

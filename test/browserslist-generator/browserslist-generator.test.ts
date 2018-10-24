@@ -41,14 +41,16 @@ test("matchBrowserslistOnUserAgent() => Will not match Firefox > 54 for a Firefo
 	t.false(matchBrowserslistOnUserAgent(firefox("54"), ["Firefox > 54"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will not match Firefox v62 for es6-module", t => {
-	t.true(
-		browserslistSupportsFeatures(generateBrowserslistFromUseragent(firefox("62")), "es6-module"));
+test("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox v62 supports es6-module", t => {
+	t.true(userAgentSupportsFeatures(firefox(63), "es6-module"));
 });
 
-test("matchBrowserslistOnUserAgent() => Will not match Firefox v63 for custom-elementsv1", t => {
-	t.true(
-		browserslistSupportsFeatures(generateBrowserslistFromUseragent(firefox("63")), CUSTOM_ELEMENTS_FEATURE_NAME));
+test("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox v63 supports javascript.builtins.Map", t => {
+	t.true(userAgentSupportsFeatures(firefox(63), "javascript.builtins.Map.@@iterator"));
+});
+
+test("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox v63 supports custom-elementsv1", t => {
+	t.true(userAgentSupportsFeatures(firefox(63), CUSTOM_ELEMENTS_FEATURE_NAME));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Firefox >= 54 for a Firefox v54 user agent", t => {
