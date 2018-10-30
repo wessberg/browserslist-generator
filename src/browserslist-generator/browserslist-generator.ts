@@ -129,6 +129,84 @@ function rangeCorrection (browser: CaniuseBrowser, supportKind: CaniuseSupportKi
 	return corrections;
 }
 
+const TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
+	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `4`),
+	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `7`),
+	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `7`),
+	edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, "12"),
+	samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `4`),
+	opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `12`),
+	op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `12`),
+	firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `4`),
+	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `4`),
+	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `6`),
+	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `5`),
+	ie: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`),
+	op_mini: rangeCorrection("op_mini", CaniuseSupportKind.AVAILABLE, `all`),
+	bb: rangeCorrection("bb", CaniuseSupportKind.AVAILABLE, `10`),
+	and_uc: rangeCorrection("and_uc", CaniuseSupportKind.AVAILABLE, `11.8`),
+	and_qq: rangeCorrection("and_qq", CaniuseSupportKind.AVAILABLE, `1.2`),
+	baidu: rangeCorrection("baidu", CaniuseSupportKind.AVAILABLE, `7.12`)
+};
+
+const TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
+	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `45`),
+	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `45`),
+	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `45`),
+	edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, "12"),
+	samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `5`),
+	opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `32`),
+	op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `32`),
+	firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `38`),
+	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `38`),
+	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
+	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
+	ie: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`),
+	ie_mob: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`)
+};
+
+const TYPED_ARRAY_ES2016_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
+	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `47`),
+	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `47`),
+	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `47`),
+	edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, "14"),
+	samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `5`),
+	opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `34`),
+	op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `34`),
+	firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `43`),
+	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `43`),
+	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
+	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`)
+};
+
+const TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
+	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `38`),
+	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `38`),
+	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `38`),
+	edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, "12"),
+	samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `5`),
+	opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `26`),
+	op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `26`),
+	firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `37`),
+	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `37`),
+	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
+	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`)
+};
+
+const TYPED_ARRAY_SPECIES_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
+	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `51`),
+	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `51`),
+	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `51`),
+	edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, "13"),
+	samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `5`),
+	opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `38`),
+	op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `38`),
+	firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `48`),
+	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `48`),
+	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
+	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`)
+};
+
 /**
  * Not all Caniuse data is entirely correct. For some features, the data on https://kangax.github.io/compat-table/es6/
  * is more correct. When a Browserslist is generated based on support for specific features, it is really important
@@ -191,78 +269,156 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 		}
 	],
 	[
+		"javascript.builtins.TypedArray.from",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.of",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.subarray",
+		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.copyWithin",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.every",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.fill",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.filter",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
 		"javascript.builtins.TypedArray.find",
-		{
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Chrome 7
-			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `7`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Chrome 7
-			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `7`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since IE 11
-			ie: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has in all versions of Edge
-			edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Firefox 4
-			firefox: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `4`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Firefox 4
-			and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `4`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Safari 6
-			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `6`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Ios Safari 5.1
-			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `5.1`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Opera 12.1
-			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `12.1`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Opera 12.1
-			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `12`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Android 4
-			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `4`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Android 4
-			bb: rangeCorrection("bb", CaniuseSupportKind.AVAILABLE, `10`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Android 4
-			samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `4`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Android 4
-			and_uc: rangeCorrection("and_uc", CaniuseSupportKind.AVAILABLE, `11.8`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Android 4
-			and_qq: rangeCorrection("and_qq", CaniuseSupportKind.AVAILABLE, `1.2`),
-			// MDN reports that it doesn't support the TypedArray.find method, but it does and has done since Android 4
-			baidu: rangeCorrection("baidu", CaniuseSupportKind.AVAILABLE, `7.12`)
-		}
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
 	],
 	[
 		"javascript.builtins.TypedArray.findIndex",
-		{
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Chrome 7
-			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `7`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Chrome 7
-			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `7`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since IE 11
-			ie: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has in all versions of Edge
-			edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Firefox 4
-			firefox: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `4`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Firefox 4
-			and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `4`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Safari 6
-			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `6`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Ios Safari 5.1
-			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `5.1`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Opera 12.1
-			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `12.1`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Opera 12.1
-			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `12`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Android 4
-			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `4`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Android 4
-			bb: rangeCorrection("bb", CaniuseSupportKind.AVAILABLE, `10`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Android 4
-			samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `4`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Android 4
-			and_uc: rangeCorrection("and_uc", CaniuseSupportKind.AVAILABLE, `11.8`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Android 4
-			and_qq: rangeCorrection("and_qq", CaniuseSupportKind.AVAILABLE, `1.2`),
-			// MDN reports that it doesn't support the TypedArray.findIndex method, but it does and has done since Android 4
-			baidu: rangeCorrection("baidu", CaniuseSupportKind.AVAILABLE, `7.12`)
-		}
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.forEach",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.indexOf",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.join",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.lastIndexOf",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.map",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.reduce",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.reduceRight",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.reverse",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.some",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.sort",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.toLocaleString",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.toString",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.slice",
+		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.includes",
+		TYPED_ARRAY_ES2016_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.keys",
+		TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.values",
+		TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.entries",
+		TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.@@iterator",
+		TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray.@@species",
+		TYPED_ARRAY_SPECIES_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.TypedArray",
+		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.Int8Array",
+		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.Int16Array",
+		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.Int32Array",
+		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.Float32Array",
+		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.Float64Array",
+		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.Uint8Array",
+		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.Uint8ClampedArray",
+		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.Uint16ClampedArray",
+		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
+	],
+	[
+		"javascript.builtins.Uint32ClampedArray",
+		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
 	],
 	[
 		"javascript.builtins.Symbol.asyncIterator",
