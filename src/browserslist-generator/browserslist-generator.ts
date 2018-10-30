@@ -421,25 +421,39 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
 	],
 	[
+		"javascript.builtins.String.@@iterator",
+		{
+			android: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `38`),
+			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `38`),
+			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `38`),
+			edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, `12`),
+			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `25`),
+			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `25`),
+			firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `36`),
+			and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `36`),
+			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `9`),
+			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `9`),
+			samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `3`)
+		}
+	],
+	[
 		"javascript.builtins.Symbol.asyncIterator",
 		{
-			// MDN reports that it doesn't support Symbol.asyncIterator, but it does and has done since Chrome v63
+			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `63`),
 			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `63`),
-			// MDN reports that it doesn't support Symbol.asyncIterator, but it does and has done since Chrome for Android v63
 			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `63`),
-			// MDN reports that it doesn't support Symbol.asyncIterator, but it does and has done since Opera v50
 			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `50`),
-			// MDN reports that it doesn't support Symbol.asyncIterator, but it does and has done since Opera Mobile v50
 			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `50`),
-			// MDN reports that it doesn't support Symbol.asyncIterator, but it does and has done since Firefox v55
-			firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `55`),
-			// MDN reports that it doesn't support Symbol.asyncIterator, but it does and has done since Firefox for Android v55
-			and_ff: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `55`)
+			firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `57`),
+			and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `57`),
+			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `11.1`),
+			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `11.1`)
 		}
 	],
 	[
 		"javascript.builtins.Array.@@species",
 		{
+			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `51`),
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Chrome v51
 			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `51`),
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Chrome for Android v51
@@ -457,14 +471,13 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Safari v10
 			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Safari for iOS v10
-			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `10`),
-			// MDN reports that it doesn't support Array.@@species, but it does and has done for all Android WebViews
-			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE)
+			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `10`)
 		}
 	],
 	[
 		"javascript.builtins.Date.@@toPrimitive",
 		{
+			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `48`),
 			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Chrome v48
 			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `48`),
 			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Chrome for Android v48
@@ -483,8 +496,6 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
 			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Safari for iOS v10
 			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `10`),
-			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done for all Android WebViews
-			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE),
 			// MDN reports that it doesn't support the Date.@@toPrimitive method, but it does and has done for all Samsung Internet versions
 			samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE)
 		}

@@ -54,19 +54,19 @@
     "conventional-changelog-cli": "^2.0.5",
     "husky": "^1.1.2",
     "tslint": "^5.11.0",
-    "typescript": "^3.1.3"
+    "typescript": "^3.1.4"
   },
   "dependencies": {
     "@types/object-path": "^0.9.29",
     "@types/semver": "^5.5.0",
     "@types/ua-parser-js": "^0.7.32",
-    "browserslist": "^4.3.2",
-    "caniuse-lite": "^1.0.30000898",
-    "mdn-browser-compat-data": "0.0.55",
+    "browserslist": "^4.3.4",
+    "caniuse-lite": "^1.0.30000902",
+    "mdn-browser-compat-data": "0.0.56",
     "object-path": "^0.11.4",
     "semver": "^5.6.0",
     "tslib": "^1.9.3",
-    "ua-parser-js": "^0.7.18",
+    "ua-parser-js": "^0.7.19",
     "useragent-generator": "^1.1.0"
   },
   "main": "./dist/cjs/index.js",
