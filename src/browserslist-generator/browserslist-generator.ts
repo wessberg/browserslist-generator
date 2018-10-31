@@ -499,6 +499,18 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 			// MDN reports that it doesn't support the Date.@@toPrimitive method, but it does and has done for all Samsung Internet versions
 			samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE)
 		}
+	],
+	[
+		"fetch",
+		{
+			edge: [
+				{
+					// Caniuse reports that Microsoft Edge has been supporting fetch since v14, but the implementation was quite unstable until v15
+					kind: CaniuseSupportKind.UNAVAILABLE,
+					version: "14"
+				}
+			]
+		}
 	]
 ];
 
