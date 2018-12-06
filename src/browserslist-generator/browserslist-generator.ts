@@ -1,9 +1,9 @@
 // @ts-ignore
-import * as Browserslist from "browserslist";
+import Browserslist from "browserslist";
 // @ts-ignore
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
 // @ts-ignore
-import * as MdnBrowserCompatData from "mdn-browser-compat-data";
+import MdnBrowserCompatData from "mdn-browser-compat-data";
 import {get} from "object-path";
 import {coerce, gt, gte, lte} from "semver";
 import {UAParser} from "ua-parser-js";
@@ -47,7 +47,7 @@ const userAgentWithFeaturesToSupportCache: Map<string, boolean> = new Map();
  * A Map between features and browsers that has partial support for them but should be allowed anyway
  * @type {Map<string, string[]>}
  */
-const PARTIAL_SUPPORT_ALLOWANCES = <Map<string, CaniuseBrowser[] | "*">> new Map([
+const PARTIAL_SUPPORT_ALLOWANCES = <Map<string, CaniuseBrowser[] | "*">>new Map([
 	[
 		"shadowdomv1",
 		"*"
@@ -732,7 +732,7 @@ function getCaniuseLiteFeatureNormalized (stats: CaniuseStats, featureName: stri
 		});
 	});
 
-	const normalizedStats = <CaniuseStatsNormalized> stats;
+	const normalizedStats = <CaniuseStatsNormalized>stats;
 
 	// Now, run through the normalized stats
 	Object.keys(normalizedStats).forEach((browser: keyof CaniuseStatsNormalized) => {
@@ -755,7 +755,7 @@ function getCaniuseLiteFeatureNormalized (stats: CaniuseStats, featureName: stri
  * @returns {CaniuseStatsNormalized}
  */
 function getCaniuseFeatureSupport (feature: string): CaniuseStatsNormalized {
-	return getCaniuseLiteFeatureNormalized((<ICaniuseFeature> caniuseFeature(caniuseFeatures[feature])).stats, feature);
+	return getCaniuseLiteFeatureNormalized((<ICaniuseFeature>caniuseFeature(caniuseFeatures[feature])).stats, feature);
 }
 
 /**
@@ -960,14 +960,15 @@ function browserSupportForFeaturesCommon (comparisonOperator: ComparisonOperator
 					// Get all partial support allowances for this specific feature
 					const partialSupportMatch = PARTIAL_SUPPORT_ALLOWANCES.get(feature);
 
-					if (partialSupportMatch != null) {
-						// Check if partial support exists for the browser
-						if (partialSupportMatch === "*" || partialSupportMatch.includes(browser)) {
-							// If no full supported version exists or if the partial supported version has a lower version number than the full supported one, use that one instead
-							if (fullSupportVersion == null || compareVersions(partialSupportVersion, fullSupportVersion) < 0) {
-								versionToSet = partialSupportVersion;
-							}
-						}
+					// Check if partial support exists for the browser. // If no full supported version exists or if the partial supported version has a lower version number than the full supported one, use that one instead
+					if (
+						partialSupportMatch != null &&
+						(
+							(partialSupportMatch === "*" || partialSupportMatch.includes(browser)) &&
+							(fullSupportVersion == null || compareVersions(partialSupportVersion, fullSupportVersion) < 0)
+						)
+					) {
+						versionToSet = partialSupportVersion;
 					}
 				}
 
@@ -1020,7 +1021,7 @@ function browserSupportForFeaturesCommon (comparisonOperator: ComparisonOperator
 
 	// Finally, generate a string array of the browsers
 	// Make sure that 'not' expressions come last
-	const query = [].concat.apply([], Array.from(
+	const query: string[] = ([] as string[]).concat.apply([], Array.from(
 		combinedBrowserMap.entries()
 	)
 		.map(([browser, version]) => {
@@ -1068,9 +1069,9 @@ function browserSupportForFeaturesCommon (comparisonOperator: ComparisonOperator
  * @returns {CaniuseBrowser}
  */
 function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAParser>): CaniuseBrowser | undefined {
-	const browser = <IUseragentBrowser> parser.getBrowser();
-	const device = <IUseragentDevice> parser.getDevice();
-	const os = <IUseragentOS> parser.getOS();
+	const browser = <IUseragentBrowser>parser.getBrowser();
+	const device = <IUseragentDevice>parser.getDevice();
+	const os = <IUseragentOS>parser.getOS();
 
 	// First, if it is a Blackberry device, it will always be the 'bb' browser
 	if (device.vendor === "BlackBerry" || os.name === "BlackBerry") {
@@ -1314,8 +1315,8 @@ export function generateBrowserslistFromUseragent (useragent: string): string[] 
 
 	// Otherwise, generate a new one
 	const parser = new UAParser(useragent);
-	const browser = <IUseragentBrowser> parser.getBrowser();
-	const os = <IUseragentOS> parser.getOS();
+	const browser = <IUseragentBrowser>parser.getBrowser();
+	const os = <IUseragentOS>parser.getOS();
 	const version = browser.version;
 
 	// Prepare a CaniuseBrowser name from the useragent string

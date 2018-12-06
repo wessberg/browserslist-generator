@@ -49,20 +49,20 @@
   "license": "MIT",
   "devDependencies": {
     "@wessberg/scaffold": "^1.0.4",
-    "@wessberg/ts-config": "0.0.30",
+    "@wessberg/ts-config": "0.0.34",
     "ava": "^0.25.0",
-    "conventional-changelog-cli": "^2.0.5",
-    "husky": "^1.1.2",
+    "conventional-changelog-cli": "^2.0.11",
+    "husky": "^1.2.0",
     "tslint": "^5.11.0",
-    "typescript": "^3.1.4"
+    "typescript": "^3.2.1"
   },
   "dependencies": {
     "@types/object-path": "^0.9.29",
     "@types/semver": "^5.5.0",
     "@types/ua-parser-js": "^0.7.32",
-    "browserslist": "^4.3.4",
-    "caniuse-lite": "^1.0.30000903",
-    "mdn-browser-compat-data": "0.0.56",
+    "browserslist": "^4.3.5",
+    "caniuse-lite": "^1.0.30000916",
+    "mdn-browser-compat-data": "0.0.59",
     "object-path": "^0.11.4",
     "semver": "^5.6.0",
     "tslib": "^1.9.3",

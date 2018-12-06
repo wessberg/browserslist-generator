@@ -1,5 +1,5 @@
 // @ts-ignore
-import * as Browserslist from "browserslist";
+import Browserslist from "browserslist";
 import {compareVersions} from "./compare-versions";
 import {CaniuseBrowser} from "./i-caniuse";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
