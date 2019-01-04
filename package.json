@@ -52,9 +52,9 @@
     "@wessberg/scaffold": "^1.0.5",
     "@wessberg/ts-config": "0.0.34",
     "ava": "^1.0.1",
-    "conventional-changelog-cli": "^2.0.11",
     "tslint": "^5.12.0",
-    "typescript": "^3.2.2"
+    "typescript": "^3.2.2",
+    "standard-changelog": "^2.0.6"
   },
   "dependencies": {
     "@types/object-path": "^0.11.0",
