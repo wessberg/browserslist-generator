@@ -121,11 +121,11 @@ test("matchBrowserslistOnUserAgent() => Will match Microsoft Edge", t => {
 	t.true(matchBrowserslistOnUserAgent(edge("16"), ["edge >= 16", UNRELEASED_VERSIONS]));
 });
 
-test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that doesn't support the given features", t => {
+test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that doesn't support the given features #1", t => {
 	t.false(matchBrowserslistOnUserAgent(firefox("61"), browsersWithSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME)));
 });
 
-test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that doesn't support the given features", t => {
+test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that doesn't support the given features #2", t => {
 	t.true(matchBrowserslistOnUserAgent(firefox("61"), browsersWithoutSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME)));
 });
 
