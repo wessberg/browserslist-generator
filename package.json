@@ -31,8 +31,11 @@
     "build": "npm run tsc:cjs & npm run tsc:esm",
     "validate": "npm run lint && npm run test",
     "prepare": "npm run build",
-    "prepublish:patch": "NODE_ENV=production npm run lint && NODE_ENV=production npm run prepare && npm run generate:all && git commit -am \"Bumped version\" || true",
-    "publish:patch": "npm version patch && git push && npm publish"
+    "publish:before": "NODE_ENV=production npm run lint && NODE_ENV=production npm run prepare && npm run generate:all && git commit -am \"Bumped version\" || true",,,
+    "publish:after": "git push && npm publish",
+    "publish:patch": "npm run publish:before && npm version patch && npm run publish:after",
+    "publish:minor": "npm run publish:before && npm version minor && npm run publish:after",
+    "publish:major": "npm run publish:before && npm version major && npm run publish:after"
   },
   "keywords": [
     "browserslist",
