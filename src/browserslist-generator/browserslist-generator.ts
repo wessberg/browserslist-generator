@@ -1069,9 +1069,9 @@ function browserSupportForFeaturesCommon (comparisonOperator: ComparisonOperator
  * @returns {CaniuseBrowser}
  */
 function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAParser>): CaniuseBrowser | undefined {
-	const browser = <IUseragentBrowser>parser.getBrowser();
-	const device = <IUseragentDevice>parser.getDevice();
-	const os = <IUseragentOS>parser.getOS();
+	const browser = parser.getBrowser() as IUseragentBrowser;
+	const device = parser.getDevice() as IUseragentDevice;
+	const os = parser.getOS() as IUseragentOS;
 
 	// First, if it is a Blackberry device, it will always be the 'bb' browser
 	if (device.vendor === "BlackBerry" || os.name === "BlackBerry") {
@@ -1100,6 +1100,9 @@ function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAPar
 
 		case "Baidu":
 			return "baidu";
+
+		case "Chrome Headless":
+			return "chrome";
 
 		case "Chrome":
 			// Check if the OS is Android, in which case this is actually Chrome for Android. Make it report as regular Chrome
@@ -1315,8 +1318,8 @@ export function generateBrowserslistFromUseragent (useragent: string): string[] 
 
 	// Otherwise, generate a new one
 	const parser = new UAParser(useragent);
-	const browser = <IUseragentBrowser>parser.getBrowser();
-	const os = <IUseragentOS>parser.getOS();
+	const browser = parser.getBrowser() as IUseragentBrowser;
+	const os = parser.getOS() as IUseragentOS;
 	const version = browser.version;
 
 	// Prepare a CaniuseBrowser name from the useragent string

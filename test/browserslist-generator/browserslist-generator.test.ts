@@ -105,6 +105,10 @@ test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Chromecas
 	t.true(matchBrowserslistOnUserAgent(chrome.chromecast("66"), ["chrome >= 66", UNRELEASED_VERSIONS]));
 });
 
+test("matchBrowserslistOnUserAgent() => Will match Headless Chrome as Chrome", t => {
+	t.true(matchBrowserslistOnUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/72.0.3617.0 Safari/537.36", ["chrome >= 72", UNRELEASED_VERSIONS]));
+});
+
 test("matchBrowserslistOnUserAgent() => Will match Android Firefox (as desktop firefox)", t => {
 	t.true(matchBrowserslistOnUserAgent(firefox.androidPhone("57"), ["firefox >= 57", UNRELEASED_VERSIONS]));
 });

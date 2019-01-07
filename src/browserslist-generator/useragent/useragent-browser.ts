@@ -10,6 +10,7 @@ export declare type UseragentBrowser =
 	| "Chimera"
 	| "Chrome"
 	| "Chromium"
+	| "Chrome Headless"
 	| "Comodo Dragon"
 	| "Conkeror"
 	| "Dillo"
