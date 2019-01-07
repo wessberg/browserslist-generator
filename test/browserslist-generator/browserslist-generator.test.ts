@@ -1,6 +1,6 @@
 import test from "ava";
 // @ts-ignore
-import {chrome, edge, firefox, ie, safari} from "useragent-generator";
+import {chrome, googleBot, bingBot, yahooBot, edge, firefox, ie, safari} from "useragent-generator";
 import {browserslistSupportsFeatures, browsersWithoutSupportForFeatures, browsersWithSupportForFeatures, getFirstVersionsWithFullSupport, matchBrowserslistOnUserAgent, userAgentSupportsFeatures, generateBrowserslistFromUseragent, browsersWithSupportForEcmaVersion, browserslistSupportsEcmaVersion, getAppropriateEcmaVersionForBrowserslist} from "../../src/browserslist-generator/browserslist-generator";
 
 // tslint:disable:no-duplicate-string
@@ -107,6 +107,18 @@ test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Chromecas
 
 test("matchBrowserslistOnUserAgent() => Will match Headless Chrome as Chrome", t => {
 	t.true(matchBrowserslistOnUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/72.0.3617.0 Safari/537.36", ["chrome >= 72", UNRELEASED_VERSIONS]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match GoogleBot as Chrome v41", t => {
+	t.true(matchBrowserslistOnUserAgent(googleBot(), ["chrome >= 41", UNRELEASED_VERSIONS]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match BingBot as IE 8", t => {
+	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 8", UNRELEASED_VERSIONS]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match YahooBot as IE 8", t => {
+	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 8", UNRELEASED_VERSIONS]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Android Firefox (as desktop firefox)", t => {

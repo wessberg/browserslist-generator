@@ -6,7 +6,6 @@ import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-li
 import MdnBrowserCompatData from "mdn-browser-compat-data";
 import {get} from "object-path";
 import {coerce, gt, gte, lte} from "semver";
-import {UAParser} from "ua-parser-js";
 import {getLatestVersionOfBrowser, getNextVersionOfBrowser, getOldestVersionOfBrowser, getPreviousVersionOfBrowser, getSortedBrowserVersions} from "./browser-version";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
@@ -15,7 +14,8 @@ import {IBrowserSupportForFeaturesCommonResult} from "./i-browser-support-for-fe
 import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, ICaniuseBrowserCorrection, ICaniuseDataCorrection, ICaniuseFeature} from "./i-caniuse";
 import {IMdn, MdnBrowserName} from "./i-mdn";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
-import {IUseragentBrowser, IUseragentDevice, IUseragentOS} from "./useragent/useragent-typed";
+import {UaParserWrapper} from "./ua-parser-wrapper";
+import {IUseragentBrowser, IUseragentOS} from "./useragent/useragent-typed";
 
 /**
  * A Cache between user agent names and generated Browserslists
@@ -1065,13 +1065,13 @@ function browserSupportForFeaturesCommon (comparisonOperator: ComparisonOperator
 
 /**
  * Gets the matching CaniuseBrowser for the given UseragentBrowser. Not all are supported, so it may return undefined
- * @param {UAParser} parser
+ * @param {UaParserWrapper} parser
  * @returns {CaniuseBrowser}
  */
-function getCaniuseBrowserForUseragentBrowser (parser: InstanceType<typeof UAParser>): CaniuseBrowser | undefined {
-	const browser = parser.getBrowser() as IUseragentBrowser;
-	const device = parser.getDevice() as IUseragentDevice;
-	const os = parser.getOS() as IUseragentOS;
+function getCaniuseBrowserForUseragentBrowser (parser: UaParserWrapper): CaniuseBrowser | undefined {
+	const browser = parser.getBrowser();
+	const device = parser.getDevice();
+	const os = parser.getOS();
 
 	// First, if it is a Blackberry device, it will always be the 'bb' browser
 	if (device.vendor === "BlackBerry" || os.name === "BlackBerry") {
@@ -1317,9 +1317,9 @@ export function generateBrowserslistFromUseragent (useragent: string): string[] 
 	if (cacheHit != null) return cacheHit;
 
 	// Otherwise, generate a new one
-	const parser = new UAParser(useragent);
-	const browser = parser.getBrowser() as IUseragentBrowser;
-	const os = parser.getOS() as IUseragentOS;
+	const parser = new UaParserWrapper(useragent);
+	const browser = parser.getBrowser();
+	const os = parser.getOS();
 	const version = browser.version;
 
 	// Prepare a CaniuseBrowser name from the useragent string
