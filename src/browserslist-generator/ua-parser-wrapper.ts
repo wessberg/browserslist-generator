@@ -2,7 +2,15 @@ import {UAParser} from "ua-parser-js";
 import {BOT_TO_USER_AGENTS_MAP} from "./useragent/bot/bot-to-user-agents-map";
 import {IUseragentBrowser, IUseragentDevice, IUseragentOS} from "./useragent/useragent-typed";
 
+// tslint:disable
+
+/**
+ * A class that wraps UAParser
+ */
 export class UaParserWrapper {
+	/**
+	 * An instanceof UAParser
+	 */
 	private readonly parser: InstanceType<typeof UAParser>;
 
 	constructor (private userAgent: string) {
