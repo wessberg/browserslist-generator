@@ -31,7 +31,7 @@
     "build": "npm run tsc:cjs & npm run tsc:esm",
     "validate": "npm run lint && npm run test",
     "prepare": "npm run build",
-    "publish:before": "NODE_ENV=production npm run lint && NODE_ENV=production npm run prepare && npm run generate:all && git commit -am \"Bumped version\" || true",,,
+    "publish:before": "NODE_ENV=production npm run lint && NODE_ENV=production npm run prepare && npm run generate:all && git commit -am \"Bumped version\" || true",
     "publish:after": "git push && npm publish",
     "publish:patch": "npm run publish:before && npm version patch && npm run publish:after",
     "publish:minor": "npm run publish:before && npm version minor && npm run publish:after",
