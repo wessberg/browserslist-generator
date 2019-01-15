@@ -54,7 +54,7 @@
   "devDependencies": {
     "@wessberg/scaffold": "^1.0.5",
     "@wessberg/ts-config": "0.0.34",
-    "ava": "^1.0.1",
+    "ava": "^1.1.0",
     "tslint": "^5.12.1",
     "typescript": "^3.2.2",
     "standard-changelog": "^2.0.6"
@@ -63,7 +63,7 @@
     "@types/object-path": "^0.11.0",
     "@types/semver": "^5.5.0",
     "@types/ua-parser-js": "^0.7.32",
-    "browserslist": "^4.3.7",
+    "browserslist": "^4.4.0",
     "caniuse-lite": "^1.0.30000928",
     "mdn-browser-compat-data": "0.0.62",
     "object-path": "^0.11.4",
