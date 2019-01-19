@@ -17,8 +17,6 @@
 		"generate:changelog": "standard-changelog --first-release",
 		"generate:all": "npm run generate:license & npm run generate:contributing & npm run generate:coc & npm run generate:readme  & npm run generate:changelog",
 		"update": "ncu -ua && npm update && npm install",
-		"prettier:check": "prettier --check 'src/**/*.*'",
-		"prettier:write": "prettier --write 'src/**/*.*'",
 		"lint": "tsc --noEmit && tslint -c tslint.json --project tsconfig.json",
 		"clean:dist": "rm -rf dist",
 		"clean:compiled": "rm -rf compiled",
