@@ -1,6 +1,3 @@
 {
-	"extends": "./node_modules/@wessberg/ts-config/tslint/tslint.json",
-	"rules": {
-		"completed-docs": false
-	}
+	"extends": "./node_modules/@wessberg/ts-config/tslint.json"
 }

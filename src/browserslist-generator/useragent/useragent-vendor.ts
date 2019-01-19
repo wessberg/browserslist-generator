@@ -1,5 +1,5 @@
 export declare type UseragentVendor =
-	"Acer"
+	| "Acer"
 	| "Alcatel"
 	| "Amazon"
 	| "Apple"

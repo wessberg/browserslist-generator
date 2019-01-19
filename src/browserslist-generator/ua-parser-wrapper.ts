@@ -13,7 +13,7 @@ export class UaParserWrapper {
 	 */
 	private readonly parser: InstanceType<typeof UAParser>;
 
-	constructor (private userAgent: string) {
+	constructor(private userAgent: string) {
 		this.parser = new UAParser(userAgent);
 	}
 
@@ -21,7 +21,7 @@ export class UaParserWrapper {
 	 * Gets the IUserAgentBrowser based on the UAParser
 	 * @returns {IUseragentBrowser}
 	 */
-	public getBrowser (): IUseragentBrowser {
+	public getBrowser(): IUseragentBrowser {
 		return this.extendGetBrowserResult(this.parser.getBrowser() as IUseragentBrowser);
 	}
 
@@ -29,7 +29,7 @@ export class UaParserWrapper {
 	 * Gets the IUserAgentOS based on the UAParser
 	 * @returns {IUseragentOS}
 	 */
-	public getOS (): IUseragentOS {
+	public getOS(): IUseragentOS {
 		return this.parser.getOS() as IUseragentOS;
 	}
 
@@ -37,7 +37,7 @@ export class UaParserWrapper {
 	 * Gets the IUserAgentDevice based on the UAParser
 	 * @returns {IUseragentDevice}
 	 */
-	public getDevice (): IUseragentDevice {
+	public getDevice(): IUseragentDevice {
 		return this.parser.getDevice() as IUseragentDevice;
 	}
 
@@ -45,7 +45,7 @@ export class UaParserWrapper {
 	 * Gets the IEngine based on the UAParser
 	 * @returns {*}
 	 */
-	public getEngine (): ReturnType<InstanceType<typeof UAParser>["getEngine"]> {
+	public getEngine(): ReturnType<InstanceType<typeof UAParser>["getEngine"]> {
 		return this.parser.getEngine();
 	}
 
@@ -53,7 +53,7 @@ export class UaParserWrapper {
 	 * Gets the ICPU based on the UAParser
 	 * @returns {*}
 	 */
-	public getCPU (): ReturnType<InstanceType<typeof UAParser>["getCPU"]> {
+	public getCPU(): ReturnType<InstanceType<typeof UAParser>["getCPU"]> {
 		return this.parser.getCPU();
 	}
 
@@ -61,7 +61,7 @@ export class UaParserWrapper {
 	 * Extends the result of calling 'getBrowser' on the UAParser and always takes bots into account
 	 * @param {IUseragentBrowser} result
 	 */
-	private extendGetBrowserResult (result: IUseragentBrowser): IUseragentBrowser {
+	private extendGetBrowserResult(result: IUseragentBrowser): IUseragentBrowser {
 		// If the parse result already includes a Browser, use it as-is
 		if (result.name != null) return result;
 

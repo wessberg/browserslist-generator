@@ -47,34 +47,14 @@ const userAgentWithFeaturesToSupportCache: Map<string, boolean> = new Map();
  * A Map between features and browsers that has partial support for them but should be allowed anyway
  * @type {Map<string, string[]>}
  */
-const PARTIAL_SUPPORT_ALLOWANCES = <Map<string, CaniuseBrowser[] | "*">>new Map([
-	[
-		"shadowdomv1",
-		"*"
-	],
-	[
-		"custom-elementsv1",
-		"*"
-	],
-	[
-		"web-animation",
-		"*"
-	]
-]);
+const PARTIAL_SUPPORT_ALLOWANCES = <Map<string, CaniuseBrowser[] | "*">>new Map([["shadowdomv1", "*"], ["custom-elementsv1", "*"], ["web-animation", "*"]]);
 
 /**
  * These browsers will be ignored all-together since they only report the latest
  * version from Caniuse and is considered unreliable because of it
  * @type {Set<string>}
  */
-const IGNORED_BROWSERS_INPUT: CaniuseBrowser[] = [
-	"and_chr",
-	"and_ff",
-	"and_uc",
-	"and_qq",
-	"baidu",
-	"op_mini"
-];
+const IGNORED_BROWSERS_INPUT: CaniuseBrowser[] = ["and_chr", "and_ff", "and_uc", "and_qq", "baidu", "op_mini"];
 const IGNORED_BROWSERS: Set<CaniuseBrowser> = new Set(IGNORED_BROWSERS_INPUT);
 
 /**
@@ -84,7 +64,7 @@ const IGNORED_BROWSERS: Set<CaniuseBrowser> = new Set(IGNORED_BROWSERS_INPUT);
  * @param end
  * @param supportKind
  */
-function rangeCorrection (browser: CaniuseBrowser, supportKind: CaniuseSupportKind, start?: string, end?: string): ICaniuseDataCorrection[] {
+function rangeCorrection(browser: CaniuseBrowser, supportKind: CaniuseSupportKind, start?: string, end?: string): ICaniuseDataCorrection[] {
 	const versions = getSortedBrowserVersions(browser);
 	const corrections: ICaniuseDataCorrection[] = [];
 
@@ -268,158 +248,44 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 			]
 		}
 	],
-	[
-		"javascript.builtins.TypedArray.from",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.of",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.subarray",
-		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.copyWithin",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.every",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.fill",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.filter",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.find",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.findIndex",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.forEach",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.indexOf",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.join",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.lastIndexOf",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.map",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.reduce",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.reduceRight",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.reverse",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.some",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.sort",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.toLocaleString",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.toString",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.slice",
-		TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.includes",
-		TYPED_ARRAY_ES2016_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.keys",
-		TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.values",
-		TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.entries",
-		TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.@@iterator",
-		TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray.@@species",
-		TYPED_ARRAY_SPECIES_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.TypedArray",
-		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.Int8Array",
-		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.Int16Array",
-		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.Int32Array",
-		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.Float32Array",
-		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.Float64Array",
-		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.Uint8Array",
-		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.Uint8ClampedArray",
-		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.Uint16ClampedArray",
-		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
-	],
-	[
-		"javascript.builtins.Uint32ClampedArray",
-		TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT
-	],
+	["javascript.builtins.TypedArray.from", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.of", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.subarray", TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.copyWithin", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.every", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.fill", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.filter", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.find", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.findIndex", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.forEach", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.indexOf", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.join", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.lastIndexOf", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.map", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.reduce", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.reduceRight", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.reverse", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.some", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.sort", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.toLocaleString", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.toString", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.slice", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.includes", TYPED_ARRAY_ES2016_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.keys", TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.values", TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.entries", TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.@@iterator", TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray.@@species", TYPED_ARRAY_SPECIES_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.TypedArray", TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.Int8Array", TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.Int16Array", TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.Int32Array", TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.Float32Array", TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.Float64Array", TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.Uint8Array", TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.Uint8ClampedArray", TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.Uint16ClampedArray", TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT],
+	["javascript.builtins.Uint32ClampedArray", TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT],
 	[
 		"javascript.builtins.String.@@iterator",
 		{
@@ -526,12 +392,9 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_MAP: Map<string, ICaniuseBrowserCorrec
  * @param {string|string[]} extendWith
  * @returns {string[]}
  */
-function extendQueryWith (query: string[], extendWith: string | string[]): string[] {
+function extendQueryWith(query: string[], extendWith: string | string[]): string[] {
 	const normalizedExtendWith = Array.isArray(extendWith) ? extendWith : [extendWith];
-	return [...new Set([
-		...query,
-		...normalizedExtendWith
-	])];
+	return [...new Set([...query, ...normalizedExtendWith])];
 }
 
 /**
@@ -539,7 +402,7 @@ function extendQueryWith (query: string[], extendWith: string | string[]): strin
  * @param {string | string[]} browserslist
  * @returns {string[]}
  */
-export function normalizeBrowserslist (browserslist: string | string[]): string[] {
+export function normalizeBrowserslist(browserslist: string | string[]): string[] {
 	return Browserslist(browserslist);
 }
 
@@ -549,7 +412,7 @@ export function normalizeBrowserslist (browserslist: string | string[]): string[
  * @param {Iterable<CaniuseBrowser>} browsers
  * @returns {string[]}
  */
-function extendQueryWithUnreleasedVersions (query: string[], browsers: Iterable<CaniuseBrowser>): string[] {
+function extendQueryWithUnreleasedVersions(query: string[], browsers: Iterable<CaniuseBrowser>): string[] {
 	return extendQueryWith(query, Array.from(browsers).map(browser => `unreleased ${browser} versions`));
 }
 
@@ -558,7 +421,7 @@ function extendQueryWithUnreleasedVersions (query: string[], browsers: Iterable<
  * @param {string[]} features
  * @returns {string}
  */
-export function browsersWithSupportForFeatures (...features: string[]): string[] {
+export function browsersWithSupportForFeatures(...features: string[]): string[] {
 	const {query, browsers} = browserSupportForFeaturesCommon(">=", ...features);
 	return extendQueryWithUnreleasedVersions(query, browsers);
 }
@@ -568,7 +431,7 @@ export function browsersWithSupportForFeatures (...features: string[]): string[]
  * @param browserslist
  * @param version
  */
-export function browserslistSupportsEcmaVersion (browserslist: string[], version: EcmaVersion): boolean {
+export function browserslistSupportsEcmaVersion(browserslist: string[], version: EcmaVersion): boolean {
 	switch (version) {
 		case "es3":
 			// ES3 is the lowest possible target and will always be treated as supported
@@ -596,7 +459,7 @@ export function browserslistSupportsEcmaVersion (browserslist: string[], version
  * @param {string[]} browserslist
  * @returns {EcmaVersion}
  */
-export function getAppropriateEcmaVersionForBrowserslist (browserslist: string[]): EcmaVersion {
+export function getAppropriateEcmaVersionForBrowserslist(browserslist: string[]): EcmaVersion {
 	if (browserslistSupportsEcmaVersion(browserslist, "es2018")) return "es2018";
 	else if (browserslistSupportsEcmaVersion(browserslist, "es2017")) return "es2017";
 	else if (browserslistSupportsEcmaVersion(browserslist, "es2016")) return "es2016";
@@ -610,8 +473,7 @@ export function getAppropriateEcmaVersionForBrowserslist (browserslist: string[]
  * @param {EcmaVersion} version
  * @returns {string[]}
  */
-export function browsersWithSupportForEcmaVersion (version: EcmaVersion): string[] {
-
+export function browsersWithSupportForEcmaVersion(version: EcmaVersion): string[] {
 	switch (version) {
 		case "es3":
 			return browsersWithoutSupportForFeatures(...ES5_FEATURES);
@@ -634,7 +496,7 @@ export function browsersWithSupportForEcmaVersion (version: EcmaVersion): string
  * @param {string} features
  * @returns {boolean}
  */
-export function browserslistSupportsFeatures (browserslist: string[], ...features: string[]): boolean {
+export function browserslistSupportsFeatures(browserslist: string[], ...features: string[]): boolean {
 	// First, generate an ideal browserslist that would target the given features exactly
 	const normalizedIdealBrowserslist: string[] = normalizeBrowserslist(browsersWithSupportForFeatures(...features));
 
@@ -651,7 +513,7 @@ export function browserslistSupportsFeatures (browserslist: string[], ...feature
  * @param {string[]} features
  * @returns {string}
  */
-export function browsersWithoutSupportForFeatures (...features: string[]): string[] {
+export function browsersWithoutSupportForFeatures(...features: string[]): string[] {
 	return browserSupportForFeaturesCommon("<", ...features).query;
 }
 
@@ -660,7 +522,7 @@ export function browsersWithoutSupportForFeatures (...features: string[]): strin
  * @param {string} version
  * @returns {string}
  */
-function coerceVersion (version: string): string {
+function coerceVersion(version: string): string {
 	return coerce(version)!.toString();
 }
 
@@ -672,12 +534,8 @@ function coerceVersion (version: string): string {
  * @param {string} version
  * @returns {boolean}
  */
-function shouldIgnoreBrowser (browser: CaniuseBrowser, version: string): boolean {
-	return (
-		(browser === "android" && gt(coerceVersion(version), coerceVersion("4.4.4"))) ||
-		(browser === "op_mob" && gt(coerceVersion(version), coerceVersion("12.1"))) ||
-		IGNORED_BROWSERS.has(browser)
-	);
+function shouldIgnoreBrowser(browser: CaniuseBrowser, version: string): boolean {
+	return (browser === "android" && gt(coerceVersion(version), coerceVersion("4.4.4"))) || (browser === "op_mob" && gt(coerceVersion(version), coerceVersion("12.1"))) || IGNORED_BROWSERS.has(browser);
 }
 
 /**
@@ -686,7 +544,7 @@ function shouldIgnoreBrowser (browser: CaniuseBrowser, version: string): boolean
  * @param {string} featureName
  * @returns {CaniuseStatsNormalized}
  */
-function getCaniuseLiteFeatureNormalized (stats: CaniuseStats, featureName: string): CaniuseStatsNormalized {
+function getCaniuseLiteFeatureNormalized(stats: CaniuseStats, featureName: string): CaniuseStatsNormalized {
 	// Check if a correction exists for this browser
 	const featureCorrectionMatch = FEATURE_TO_BROWSER_DATA_CORRECTIONS_MAP.get(featureName);
 
@@ -722,7 +580,6 @@ function getCaniuseLiteFeatureNormalized (stats: CaniuseStats, featureName: stri
 				// Check if the browser has some corrections
 				const browserMatch = featureCorrectionMatch[browser];
 				if (browserMatch != null) {
-
 					// Apply all corrections
 					browserMatch.forEach(correction => {
 						browserDict[correction.version] = correction.kind;
@@ -754,7 +611,7 @@ function getCaniuseLiteFeatureNormalized (stats: CaniuseStats, featureName: stri
  * @param {string} feature
  * @returns {CaniuseStatsNormalized}
  */
-function getCaniuseFeatureSupport (feature: string): CaniuseStatsNormalized {
+function getCaniuseFeatureSupport(feature: string): CaniuseStatsNormalized {
 	return getCaniuseLiteFeatureNormalized((<ICaniuseFeature>caniuseFeature(caniuseFeatures[feature])).stats, feature);
 }
 
@@ -762,7 +619,7 @@ function getCaniuseFeatureSupport (feature: string): CaniuseStatsNormalized {
  * Returns true if the given feature is a Caniuse feature
  * @param feature
  */
-function isCaniuseFeature (feature: string): boolean {
+function isCaniuseFeature(feature: string): boolean {
 	return caniuseFeatures[feature] != null;
 }
 
@@ -770,7 +627,7 @@ function isCaniuseFeature (feature: string): boolean {
  * Returns true if the given feature is a MDN feature
  * @param feature
  */
-function isMdnFeature (feature: string): boolean {
+function isMdnFeature(feature: string): boolean {
 	return get(MdnBrowserCompatData, feature) != null;
 }
 
@@ -778,7 +635,7 @@ function isMdnFeature (feature: string): boolean {
  * Asserts that the given feature is a valid Caniuse or MDN feature name
  * @param {string} feature
  */
-function assertKnownFeature (feature: string): void {
+function assertKnownFeature(feature: string): void {
 	if (!isCaniuseFeature(feature) && !isMdnFeature(feature)) {
 		throw new TypeError(`The given feature: '${feature}' is unknown. It must be a valid Caniuse or MDN feature!`);
 	}
@@ -789,7 +646,7 @@ function assertKnownFeature (feature: string): void {
  * @param {string} feature
  * @returns {CaniuseStatsNormalized}
  */
-function getFeatureSupport (feature: string): CaniuseStatsNormalized {
+function getFeatureSupport(feature: string): CaniuseStatsNormalized {
 	// First check if the cache has a match and return it if so
 	const cacheHit = featureToCaniuseStatsCache.get(feature);
 	if (cacheHit != null) return cacheHit;
@@ -809,34 +666,34 @@ function getFeatureSupport (feature: string): CaniuseStatsNormalized {
  * @param {string} feature
  * @returns {CaniuseStatsNormalized}
  */
-function getMdnFeatureSupport (feature: string): CaniuseStatsNormalized {
-
+function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
 	const match: IMdn = get(MdnBrowserCompatData, feature);
 	const supportMap = match.__compat.support;
 
-	const formatBrowser = (mdnBrowser: MdnBrowserName, caniuseBrowser: CaniuseBrowser): { [key: string]: CaniuseSupportKind } => {
+	const formatBrowser = (mdnBrowser: MdnBrowserName, caniuseBrowser: CaniuseBrowser): {[key: string]: CaniuseSupportKind} => {
 		const versionMap = supportMap[mdnBrowser];
-		const versionAdded = versionMap == null ? false : Array.isArray(versionMap)
-			// If there are multiple entries, take the one that hasn't been removed yet, if any
-			? (() => {
-				const versionStillInBrowser = versionMap.filter(element => element.version_removed == null)[0];
-				return versionStillInBrowser == null || versionStillInBrowser.version_added == null ? false : versionStillInBrowser.version_added;
-			})()
-			: versionMap.version_added;
+		const versionAdded =
+			versionMap == null
+				? false
+				: Array.isArray(versionMap)
+				? // If there are multiple entries, take the one that hasn't been removed yet, if any
+				  (() => {
+						const versionStillInBrowser = versionMap.filter(element => element.version_removed == null)[0];
+						return versionStillInBrowser == null || versionStillInBrowser.version_added == null ? false : versionStillInBrowser.version_added;
+				  })()
+				: versionMap.version_added;
 
-		const dict: { [key: string]: CaniuseSupportKind } = {};
+		const dict: {[key: string]: CaniuseSupportKind} = {};
 		const supportedSince: string | null = versionAdded === false ? null : versionAdded === true ? getOldestVersionOfBrowser(caniuseBrowser) : versionAdded;
 
-		getSortedBrowserVersions(caniuseBrowser)
-			.forEach(version => {
-
-				// If the features has never been supported, mark the feature as unavailable
-				if (supportedSince == null) {
-					dict[version] = CaniuseSupportKind.UNAVAILABLE;
-				} else {
-					dict[version] = version === "TP" || version === "all" || gte(coerceVersion(version), coerceVersion(supportedSince)) ? CaniuseSupportKind.AVAILABLE : CaniuseSupportKind.UNAVAILABLE;
-				}
-			});
+		getSortedBrowserVersions(caniuseBrowser).forEach(version => {
+			// If the features has never been supported, mark the feature as unavailable
+			if (supportedSince == null) {
+				dict[version] = CaniuseSupportKind.UNAVAILABLE;
+			} else {
+				dict[version] = version === "TP" || version === "all" || gte(coerceVersion(version), coerceVersion(supportedSince)) ? CaniuseSupportKind.AVAILABLE : CaniuseSupportKind.UNAVAILABLE;
+			}
+		});
 		return dict;
 	};
 
@@ -869,7 +726,7 @@ function getMdnFeatureSupport (feature: string): CaniuseStatsNormalized {
  * @param {object} stats
  * @returns {string | undefined}
  */
-function getFirstVersionWithSupportKind (kind: CaniuseSupportKind, stats: { [key: string]: CaniuseSupportKind }): string | undefined {
+function getFirstVersionWithSupportKind(kind: CaniuseSupportKind, stats: {[key: string]: CaniuseSupportKind}): string | undefined {
 	// Sort all keys of the object
 	const sortedKeys = Object.keys(stats).sort(compareVersions);
 
@@ -888,7 +745,7 @@ function getFirstVersionWithSupportKind (kind: CaniuseSupportKind, stats: { [key
  * @param {string} b
  * @returns {number}
  */
-function sortBrowserslist (a: string, b: string): number {
+function sortBrowserslist(a: string, b: string): number {
 	if (a.startsWith("not") && !b.startsWith("not")) return 1;
 	if (!a.startsWith("not") && b.startsWith("not")) return -1;
 	return 0;
@@ -899,17 +756,16 @@ function sortBrowserslist (a: string, b: string): number {
  * @param {string} feature
  * @returns {Map<CaniuseBrowser, string>}
  */
-export function getFirstVersionsWithFullSupport (feature: string): Map<CaniuseBrowser, string> {
+export function getFirstVersionsWithFullSupport(feature: string): Map<CaniuseBrowser, string> {
 	const support = getFeatureSupport(feature);
 	// A map between browser names and their required versions
 	const browserMap: Map<CaniuseBrowser, string> = new Map();
-	Object.entries(support)
-		.forEach(([browser, stats]: [CaniuseBrowser, { [key: string]: CaniuseSupportKind }]) => {
-			const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
-			if (fullSupportVersion != null) {
-				browserMap.set(browser, fullSupportVersion);
-			}
-		});
+	Object.entries(support).forEach(([browser, stats]: [CaniuseBrowser, {[key: string]: CaniuseSupportKind}]) => {
+		const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
+		if (fullSupportVersion != null) {
+			browserMap.set(browser, fullSupportVersion);
+		}
+	});
 	return browserMap;
 }
 
@@ -918,7 +774,7 @@ export function getFirstVersionsWithFullSupport (feature: string): Map<CaniuseBr
  * @param {ComparisonOperator} comparisonOperator
  * @param {string[]} features
  */
-function getBrowserSupportForFeaturesCacheKey (comparisonOperator: ComparisonOperator, features: string[]): string {
+function getBrowserSupportForFeaturesCacheKey(comparisonOperator: ComparisonOperator, features: string[]): string {
 	return `${comparisonOperator}.${features.sort().join(",")}`;
 }
 
@@ -928,7 +784,7 @@ function getBrowserSupportForFeaturesCacheKey (comparisonOperator: ComparisonOpe
  * @param {string} features
  * @returns {IBrowserSupportForFeaturesCommonResult}
  */
-function browserSupportForFeaturesCommon (comparisonOperator: ComparisonOperator, ...features: string[]): IBrowserSupportForFeaturesCommonResult {
+function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator, ...features: string[]): IBrowserSupportForFeaturesCommonResult {
 	const cacheKey = getBrowserSupportForFeaturesCacheKey(comparisonOperator, features);
 
 	// First check if the cache has a hit and return it if so
@@ -945,48 +801,43 @@ function browserSupportForFeaturesCommon (comparisonOperator: ComparisonOperator
 
 		// A map between browser names and their required versions
 		const browserMap: Map<CaniuseBrowser, string> = new Map();
-		Object.entries(support)
-			.forEach(([browser, stats]: [CaniuseBrowser, { [key: string]: CaniuseSupportKind }]) => {
-				const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
-				const partialSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.PARTIAL_SUPPORT, stats);
-				let versionToSet: string | undefined;
+		Object.entries(support).forEach(([browser, stats]: [CaniuseBrowser, {[key: string]: CaniuseSupportKind}]) => {
+			const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
+			const partialSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.PARTIAL_SUPPORT, stats);
+			let versionToSet: string | undefined;
 
-				if (fullSupportVersion != null) {
-					versionToSet = fullSupportVersion;
+			if (fullSupportVersion != null) {
+				versionToSet = fullSupportVersion;
+			}
+
+			// Otherwise, check if partial support exists and should be allowed
+			if (partialSupportVersion != null) {
+				// Get all partial support allowances for this specific feature
+				const partialSupportMatch = PARTIAL_SUPPORT_ALLOWANCES.get(feature);
+
+				// Check if partial support exists for the browser. // If no full supported version exists or if the partial supported version has a lower version number than the full supported one, use that one instead
+				if (
+					partialSupportMatch != null &&
+					((partialSupportMatch === "*" || partialSupportMatch.includes(browser)) && (fullSupportVersion == null || compareVersions(partialSupportVersion, fullSupportVersion) < 0))
+				) {
+					versionToSet = partialSupportVersion;
 				}
+			}
 
-				// Otherwise, check if partial support exists and should be allowed
-				if (partialSupportVersion != null) {
-					// Get all partial support allowances for this specific feature
-					const partialSupportMatch = PARTIAL_SUPPORT_ALLOWANCES.get(feature);
-
-					// Check if partial support exists for the browser. // If no full supported version exists or if the partial supported version has a lower version number than the full supported one, use that one instead
-					if (
-						partialSupportMatch != null &&
-						(
-							(partialSupportMatch === "*" || partialSupportMatch.includes(browser)) &&
-							(fullSupportVersion == null || compareVersions(partialSupportVersion, fullSupportVersion) < 0)
-						)
-					) {
-						versionToSet = partialSupportVersion;
-					}
+			if (versionToSet == null) {
+				// Apply additional checks depending on the comparison operator
+				switch (comparisonOperator) {
+					case "<":
+					case "<=":
+						// Add all browsers with no support whatsoever, or those that require prefixing or flags
+						versionToSet = "-1";
 				}
+			}
 
-				if (versionToSet == null) {
-					// Apply additional checks depending on the comparison operator
-					switch (comparisonOperator) {
-						case "<":
-						case "<=":
-							// Add all browsers with no support whatsoever, or those that require prefixing or flags
-							versionToSet = "-1";
-					}
-				}
-
-				if (versionToSet != null && !shouldIgnoreBrowser(browser, versionToSet)) {
-					browserMap.set(browser, versionToSet);
-				}
-
-			});
+			if (versionToSet != null && !shouldIgnoreBrowser(browser, versionToSet)) {
+				browserMap.set(browser, versionToSet);
+			}
+		});
 
 		browserMaps.push(browserMap);
 	}
@@ -1015,43 +866,36 @@ function browserSupportForFeaturesCommon (comparisonOperator: ComparisonOperator
 				// Set the version in the map
 				combinedBrowserMap.set(browser, version);
 			}
-
 		}
 	}
 
 	// Finally, generate a string array of the browsers
 	// Make sure that 'not' expressions come last
-	const query: string[] = ([] as string[]).concat.apply([], Array.from(
-		combinedBrowserMap.entries()
-	)
-		.map(([browser, version]) => {
+	const query: string[] = ([] as string[]).concat
+		.apply(
+			[],
+			Array.from(combinedBrowserMap.entries()).map(([browser, version]) => {
 				// The version is not a number, so we can't do comparisons on it.
 				if (isNaN(parseFloat(version))) {
 					switch (comparisonOperator) {
 						case "<":
 						case "<=":
 							const previousVersion = getPreviousVersionOfBrowser(browser, version);
-							return [
-								`not ${browser} ${version}`,
-								...(previousVersion == null ? [] : [`${browser} ${comparisonOperator} ${previousVersion}`])
-							];
+							return [`not ${browser} ${version}`, ...(previousVersion == null ? [] : [`${browser} ${comparisonOperator} ${previousVersion}`])];
 						case ">":
 						case ">=":
 							const nextVersion = getNextVersionOfBrowser(browser, version);
-							return [
-								`${browser} ${version}`,
-								...(nextVersion == null ? [] : [`${browser} ${comparisonOperator} ${nextVersion}`])
-							];
+							return [`${browser} ${version}`, ...(nextVersion == null ? [] : [`${browser} ${comparisonOperator} ${nextVersion}`])];
 					}
 				}
 				return parseInt(version) === -1
 					? [
-						`${comparisonOperator === ">" || comparisonOperator === ">=" ? "not " : ""}${browser} ${browser === "op_mini" ? "all" : "> 0"}`,
-						`${comparisonOperator === ">" || comparisonOperator === ">=" ? "not " : ""}unreleased ${browser} versions`
-					]
+							`${comparisonOperator === ">" || comparisonOperator === ">=" ? "not " : ""}${browser} ${browser === "op_mini" ? "all" : "> 0"}`,
+							`${comparisonOperator === ">" || comparisonOperator === ">=" ? "not " : ""}unreleased ${browser} versions`
+					  ]
 					: [`${browser} ${comparisonOperator} ${version}`];
-			}
-		))
+			})
+		)
 		.sort(sortBrowserslist);
 	const returnObject = {
 		query,
@@ -1068,7 +912,7 @@ function browserSupportForFeaturesCommon (comparisonOperator: ComparisonOperator
  * @param {UaParserWrapper} parser
  * @returns {CaniuseBrowser}
  */
-function getCaniuseBrowserForUseragentBrowser (parser: UaParserWrapper): CaniuseBrowser | undefined {
+function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseBrowser | undefined {
 	const browser = parser.getBrowser();
 	const device = parser.getDevice();
 	const os = parser.getOS();
@@ -1079,7 +923,6 @@ function getCaniuseBrowserForUseragentBrowser (parser: UaParserWrapper): Caniuse
 	}
 
 	switch (browser.name) {
-
 		case "Android Browser": {
 			// If the vendor is Samsung, the default browser is Samsung Internet
 			if (device.vendor === "Samsung") {
@@ -1122,7 +965,6 @@ function getCaniuseBrowserForUseragentBrowser (parser: UaParserWrapper): Caniuse
 			return "edge";
 
 		case "Firefox":
-
 			// Check if the OS is Android, in which case this is actually Firefox for Android.
 			// Make it report as regular Firefox
 			if (os.name === "Android") {
@@ -1178,7 +1020,7 @@ function getCaniuseBrowserForUseragentBrowser (parser: UaParserWrapper): Caniuse
  * @param {CaniuseBrowser} browser
  * @param {string} givenVersion
  */
-function takeVersionOfBrowserWithFallbackToLatestKnownVersion (browser: Exclude<CaniuseBrowser, "op_mini">, givenVersion: string): string {
+function takeVersionOfBrowserWithFallbackToLatestKnownVersion(browser: Exclude<CaniuseBrowser, "op_mini">, givenVersion: string): string {
 	const givenVersionCoerced = coerce(givenVersion);
 	const latestVersion = getLatestVersionOfBrowser(browser);
 	const latestVersionCoerced = coerce(latestVersion);
@@ -1188,7 +1030,7 @@ function takeVersionOfBrowserWithFallbackToLatestKnownVersion (browser: Exclude<
 	}
 
 	if (
-		(givenVersionCoerced.major > latestVersionCoerced.major) ||
+		givenVersionCoerced.major > latestVersionCoerced.major ||
 		(givenVersionCoerced.major === latestVersionCoerced.major && givenVersionCoerced.minor > latestVersionCoerced.minor) ||
 		(givenVersionCoerced.major === latestVersionCoerced.major && givenVersionCoerced.minor === latestVersionCoerced.minor && givenVersionCoerced.patch > latestVersionCoerced.patch)
 	) {
@@ -1205,8 +1047,7 @@ function takeVersionOfBrowserWithFallbackToLatestKnownVersion (browser: Exclude<
  * @param {IUseragentOS} useragentOS
  * @returns {string}
  */
-function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version: string, useragentBrowser: IUseragentBrowser, useragentOS: IUseragentOS): string {
-
+function getCaniuseVersionForUseragentVersion(browser: CaniuseBrowser, version: string, useragentBrowser: IUseragentBrowser, useragentOS: IUseragentOS): string {
 	// Always use 'all' with Opera Mini
 	if (browser === "op_mini") {
 		return "all";
@@ -1234,7 +1075,6 @@ function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version:
 	};
 
 	switch (browser) {
-
 		case "chrome":
 		case "ie":
 		case "ie_mob":
@@ -1311,7 +1151,7 @@ function getCaniuseVersionForUseragentVersion (browser: CaniuseBrowser, version:
  * @param {string} useragent
  * @returns {string[]}
  */
-export function generateBrowserslistFromUseragent (useragent: string): string[] {
+export function generateBrowserslistFromUseragent(useragent: string): string[] {
 	// Check if a user agent has been generated previously for this specific user agent
 	const cacheHit = userAgentToBrowserslistCache.get(useragent);
 	if (cacheHit != null) return cacheHit;
@@ -1355,7 +1195,7 @@ export function generateBrowserslistFromUseragent (useragent: string): string[] 
  * @param {string[]} browserslist
  * @returns {string[]}
  */
-export function matchBrowserslistOnUserAgent (useragent: string, browserslist: string[]): boolean {
+export function matchBrowserslistOnUserAgent(useragent: string, browserslist: string[]): boolean {
 	const useragentBrowserslist = generateBrowserslistFromUseragent(useragent);
 
 	// Pipe the input browserslist through Browserslist to normalize it
@@ -1370,7 +1210,7 @@ export function matchBrowserslistOnUserAgent (useragent: string, browserslist: s
  * @param {string} useragent
  * @param {string[]} features
  */
-function userAgentWithFeaturesCacheKey (useragent: string, features: string[]): string {
+function userAgentWithFeaturesCacheKey(useragent: string, features: string[]): string {
 	return `${useragent}.${features.join(",")}`;
 }
 
@@ -1380,7 +1220,7 @@ function userAgentWithFeaturesCacheKey (useragent: string, features: string[]): 
  * @param {string[]} features
  * @returns {string[]}
  */
-export function userAgentSupportsFeatures (useragent: string, ...features: string[]): boolean {
+export function userAgentSupportsFeatures(useragent: string, ...features: string[]): boolean {
 	// Check if these features has been computed previously for the given user agent
 	const cacheKey = userAgentWithFeaturesCacheKey(useragent, features);
 	const cacheHit = userAgentWithFeaturesToSupportCache.get(cacheKey);

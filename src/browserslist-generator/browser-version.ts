@@ -9,7 +9,7 @@ import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-rege
  * @param {CaniuseBrowser} browser
  * @returns {string}
  */
-export function getSortedBrowserVersions (browser: CaniuseBrowser): string[] {
+export function getSortedBrowserVersions(browser: CaniuseBrowser): string[] {
 	const queryResultsMapped: Map<CaniuseBrowser, string[]> = new Map();
 
 	// Generate the Browserslist query
@@ -17,7 +17,7 @@ export function getSortedBrowserVersions (browser: CaniuseBrowser): string[] {
 
 	// First, organize the different versions of the browsers inside the Map
 	queryResult.forEach(part => {
-		const [currentBrowser, version] = <[CaniuseBrowser, string]> part.split(" ");
+		const [currentBrowser, version] = <[CaniuseBrowser, string]>part.split(" ");
 		let versions = queryResultsMapped.get(currentBrowser);
 
 		if (versions == null) {
@@ -30,8 +30,7 @@ export function getSortedBrowserVersions (browser: CaniuseBrowser): string[] {
 
 		versions.push(normalizedVersion);
 	});
-	return queryResultsMapped.get(browser)!
-		.sort(compareVersions);
+	return queryResultsMapped.get(browser)!.sort(compareVersions);
 }
 
 /**
@@ -39,7 +38,7 @@ export function getSortedBrowserVersions (browser: CaniuseBrowser): string[] {
  * @param {CaniuseBrowser} browser
  * @returns {string}
  */
-export function getLatestVersionOfBrowser (browser: CaniuseBrowser): string {
+export function getLatestVersionOfBrowser(browser: CaniuseBrowser): string {
 	const versions = getSortedBrowserVersions(browser);
 	return versions[versions.length - 1];
 }
@@ -49,7 +48,7 @@ export function getLatestVersionOfBrowser (browser: CaniuseBrowser): string {
  * @param {CaniuseBrowser} browser
  * @returns {string}
  */
-export function getOldestVersionOfBrowser (browser: CaniuseBrowser): string {
+export function getOldestVersionOfBrowser(browser: CaniuseBrowser): string {
 	const versions = getSortedBrowserVersions(browser);
 	return versions[0];
 }
@@ -60,7 +59,7 @@ export function getOldestVersionOfBrowser (browser: CaniuseBrowser): string {
  * @param {string} version
  * @returns {string | undefined}
  */
-export function getPreviousVersionOfBrowser (browser: CaniuseBrowser, version: string): string|undefined {
+export function getPreviousVersionOfBrowser(browser: CaniuseBrowser, version: string): string | undefined {
 	const versions = getSortedBrowserVersions(browser);
 	const indexOfVersion = versions.indexOf(version);
 	// If the version isn't included, or if it is the first version of it, return undefined
@@ -74,7 +73,7 @@ export function getPreviousVersionOfBrowser (browser: CaniuseBrowser, version: s
  * @param {string} version
  * @returns {string | undefined}
  */
-export function getNextVersionOfBrowser (browser: CaniuseBrowser, version: string): string|undefined {
+export function getNextVersionOfBrowser(browser: CaniuseBrowser, version: string): string | undefined {
 	const versions = getSortedBrowserVersions(browser);
 	const indexOfVersion = versions.indexOf(version);
 	// If the version isn't included, or if it is the first version of it, return undefined

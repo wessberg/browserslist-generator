@@ -1,4 +1,22 @@
-export declare type CaniuseBrowser = "and_chr"|"and_ff"|"and_qq"|"and_uc"|"android"|"baidu"|"bb"|"chrome"|"edge"|"firefox"|"ie"|"ie_mob"|"ios_saf"|"op_mini"|"op_mob"|"opera"|"safari"|"samsung";
+export declare type CaniuseBrowser =
+	| "and_chr"
+	| "and_ff"
+	| "and_qq"
+	| "and_uc"
+	| "android"
+	| "baidu"
+	| "bb"
+	| "chrome"
+	| "edge"
+	| "firefox"
+	| "ie"
+	| "ie_mob"
+	| "ios_saf"
+	| "op_mini"
+	| "op_mob"
+	| "opera"
+	| "safari"
+	| "samsung";
 
 export enum CaniuseSupportKind {
 	AVAILABLE = "AVAILABLE",
@@ -7,17 +25,11 @@ export enum CaniuseSupportKind {
 	PREFIXED = "PREFIXED"
 }
 
-export declare type CaniuseStats = {
-	[Key in CaniuseBrowser]: {[key: string]: string};
-};
+export declare type CaniuseStats = {[Key in CaniuseBrowser]: {[key: string]: string}};
 
-export declare type CaniuseStatsNormalized = {
-	[Key in CaniuseBrowser]: {[key: string]: CaniuseSupportKind};
-};
+export declare type CaniuseStatsNormalized = {[Key in CaniuseBrowser]: {[key: string]: CaniuseSupportKind}};
 
-export interface ICaniuseAgents {
-
-}
+export interface ICaniuseAgents {}
 
 export interface ICaniuseAgent {
 	usage_global: {[key: string]: number};
@@ -41,6 +53,4 @@ export interface ICaniuseDataCorrection {
 	version: string;
 }
 
-export declare type ICaniuseBrowserCorrection = {
-	[Key in CaniuseBrowser]?: ICaniuseDataCorrection[];
-};
+export declare type ICaniuseBrowserCorrection = {[Key in CaniuseBrowser]?: ICaniuseDataCorrection[]};

@@ -4,7 +4,7 @@
  * @param {string} b
  * @returns {number}
  */
-export function compareVersions (a: string, b: string): number {
+export function compareVersions(a: string, b: string): number {
 	const normalizedA = isNaN(parseFloat(a)) ? a : parseFloat(a);
 	const normalizedB = isNaN(parseFloat(b)) ? b : parseFloat(b);
 

@@ -3,7 +3,6 @@ import {UseragentOS} from "./useragent-os";
 import {UseragentVendor} from "./useragent-vendor";
 
 export interface IUseragentBrowser {
-
 	name: UseragentBrowser | undefined;
 
 	/**
@@ -28,7 +27,6 @@ export interface IUseragentDevice {
 }
 
 export interface IUseragentOS {
-
 	name: UseragentOS | undefined;
 	/**
 	 * Determined dynamically

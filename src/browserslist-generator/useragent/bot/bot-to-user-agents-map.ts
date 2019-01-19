@@ -1,8 +1,6 @@
 import {UseragentBot} from "./useragent-bot";
 
-export type BotToUserAgentsMap = {
-	[Key in UseragentBot]: (agent: string) => boolean;
-};
+export type BotToUserAgentsMap = {[Key in UseragentBot]: (agent: string) => boolean};
 
 export const BOT_TO_USER_AGENTS_MAP: BotToUserAgentsMap = {
 	GoogleBot: agent => agent.includes("http://www.google.com/bot.htm"),

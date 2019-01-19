@@ -1,7 +1,8 @@
 import {UseragentBot} from "./bot/useragent-bot";
 
-export type UseragentBrowser = UseragentBot |
-	"Amaya"
+export type UseragentBrowser =
+	| UseragentBot
+	| "Amaya"
 	| "Android Browser"
 	| "Arora"
 	| "Avant"

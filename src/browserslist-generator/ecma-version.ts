@@ -1,14 +1,6 @@
-export type EcmaVersion =
-	"es3"
-	| "es5"
-	| "es2015"
-	| "es2016"
-	| "es2017"
-	| "es2018";
+export type EcmaVersion = "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018";
 
-export const ES5_FEATURES: string[] = [
-	"es5"
-];
+export const ES5_FEATURES: string[] = ["es5"];
 
 export const ES2015_FEATURES: string[] = [
 	"es6-class",
@@ -26,10 +18,7 @@ export const ES2015_FEATURES: string[] = [
 	"javascript.operators.object_initializer.shorthand_method_names"
 ];
 
-export const ES2016_FEATURES: string[] = [
-	"javascript.operators.arithmetic.exponentiation",
-	"javascript.builtins.Array.includes"
-];
+export const ES2016_FEATURES: string[] = ["javascript.operators.arithmetic.exponentiation", "javascript.builtins.Array.includes"];
 
 export const ES2017_FEATURES: string[] = [
 	"async-functions",
@@ -40,7 +29,4 @@ export const ES2017_FEATURES: string[] = [
 	"javascript.builtins.String.padEnd"
 ];
 
-export const ES2018_FEATURES: string[] = [
-	"javascript.operators.spread.spread_in_object_literals",
-	"javascript.builtins.Promise.finally"
-];
+export const ES2018_FEATURES: string[] = ["javascript.operators.spread.spread_in_object_literals", "javascript.builtins.Promise.finally"];

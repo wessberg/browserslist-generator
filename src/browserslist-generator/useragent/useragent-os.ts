@@ -1,5 +1,5 @@
 export declare type UseragentOS =
-	"AIX"
+	| "AIX"
 	| "Amiga OS"
 	| "Android"
 	| "Arch"
