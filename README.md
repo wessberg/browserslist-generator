@@ -1,3 +1,4 @@
+<img alt="Logo for @wessberg/polyfiller" src="https://raw.githubusercontent.com/wessberg/Polyfiller/master/documentation/asset/logo-color-text.png" height="80"></img><br>
 <a href="https://npmcharts.com/compare/@wessberg/browserslist-generator?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/%40wessberg%2Fbrowserslist-generator.svg" height="20"></img></a>
 <a href="https://david-dm.org/wessberg/browserslist-generator"><img alt="Dependencies" src="https://img.shields.io/david/wessberg/browserslist-generator.svg" height="20"></img></a>
 <a href="https://www.npmjs.com/package/@wessberg/browserslist-generator"><img alt="NPM Version" src="https://badge.fury.io/js/%40wessberg%2Fbrowserslist-generator.svg" height="20"></img></a>
@@ -42,11 +43,7 @@ Instead, simply declare the features that should be available:
 ```typescript
 import {browsersWithSupportForFeatures} from "@wessberg/browserslist-generator";
 // Generate a browserslist for browsers that support all of the given features
-const browserslist = browsersWithSupportForFeatures(
-  "es6-module",
-  "shadowdomv1",
-  "custom-elementsv1"
-);
+const browserslist = browsersWithSupportForFeatures("es6-module", "shadowdomv1", "custom-elementsv1");
 ```
 
 ### Checking if a User Agent supports a specific feature
@@ -57,9 +54,9 @@ This could be useful, among other things, for conditional bundle serving:
 ```typescript
 import {userAgentSupportsFeatures} from "@wessberg/browserslist-generator";
 if (userAgentSupportsFeatures(userAgentString, "javascript.builtins.Promise.finally")) {
-  doA();
+	doA();
 } else {
-  doB();
+	doB();
 }
 ```
 
@@ -71,9 +68,9 @@ This could be useful, among other things, for conditional bundle serving:
 ```typescript
 import {browserslistSupportsFeatures} from "@wessberg/browserslist-generator";
 if (browserslistSupportsFeatures(browserslist, "es6-module")) {
-  useModernBundle();
+	useModernBundle();
 } else {
-  useLegacyBundle();
+	useLegacyBundle();
 }
 ```
 
@@ -97,9 +94,9 @@ This could be useful, among other things, for conditional bundle serving:
 ```typescript
 import {browserslistSupportsEcmaVersion} from "@wessberg/browserslist-generator";
 if (browserslistSupportsEcmaVersion(browserslist, "es2015")) {
-  useModernBundle();
+	useModernBundle();
 } else {
-  useLegacyBundle();
+	useLegacyBundle();
 }
 ```
 
@@ -112,8 +109,8 @@ This could be useful, for example, when using the Typescript compiler based on a
 import {getAppropriateEcmaVersionForBrowserslist} from "@wessberg/browserslist-generator";
 
 const typescriptOptions = {
-  // ...
-  target: getAppropriateEcmaVersionForBrowserslist(browserslist)
+	// ...
+	target: getAppropriateEcmaVersionForBrowserslist(browserslist)
 };
 ```
 

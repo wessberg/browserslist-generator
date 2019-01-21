@@ -34,7 +34,7 @@
 		"build": "npm run tsc:cjs & npm run tsc:esm",
 		"validate": "npm run lint && npm run test",
 		"prepare": "npm run build",
-		"publish:before": "NODE_ENV=production npm run lint && NODE_ENV=production npm run prepare && npm run generate:all && git add . && git commit -am \"Bumped version\" || true",
+		"publish:before": "NODE_ENV=production npm run lint && NODE_ENV=production npm run prepare && npm run generate:all && git add . && ((git commit -am \"Bumped version\") || true) && ((git push) || true)",
 		"publish:after": "git push && npm publish",
 		"publish:patch": "npm run publish:before && npm version patch && npm run publish:after",
 		"publish:minor": "npm run publish:before && npm version minor && npm run publish:after",
@@ -89,6 +89,7 @@
 	},
 	"scaffold": {
 		"patreonUserId": "11315442",
+		"logo": "https://raw.githubusercontent.com/wessberg/browserslist-generator/master/documentation/asset/logo.png",
 		"contributorMeta": {
 			"Frederik Wessberg": {
 				"imageUrl": "https://avatars2.githubusercontent.com/u/20454213?s=460&v=4",
