@@ -1,3 +1,12 @@
+## [1.0.4](https://github.com/wessberg/browserslist-generator/compare/v1.0.3...v1.0.4) (2019-01-21)
+
+### Bug Fixes
+
+- **documentation:** adds a logo ([8fd5091](https://github.com/wessberg/browserslist-generator/commit/8fd5091))
+- **format:** adds Prettier to the project including commit hooks ([4954096](https://github.com/wessberg/browserslist-generator/commit/4954096))
+- **format:** adds Prettier to the project including commit hooks ([5433f98](https://github.com/wessberg/browserslist-generator/commit/5433f98))
+- **package.json:** adds files array rather than .npmignore to package.json ([1faeb6d](https://github.com/wessberg/browserslist-generator/commit/1faeb6d))
+
 ## [1.0.3](https://github.com/wessberg/browserslist-generator/compare/v1.0.2...v1.0.3) (2019-01-11)
 
 ## [1.0.2](https://github.com/wessberg/browserslist-generator/compare/v1.0.1...v1.0.2) (2019-01-07)
