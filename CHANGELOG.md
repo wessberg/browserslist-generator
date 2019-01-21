@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/wessberg/browserslist-generator/compare/v1.0.4...v1.0.5) (2019-01-21)
+
+### Bug Fixes
+
+- **documentation:** fix logo dimensions ([362b71b](https://github.com/wessberg/browserslist-generator/commit/362b71b))
+- **documentation:** fix logo dimensions ([cf35fea](https://github.com/wessberg/browserslist-generator/commit/cf35fea))
+
 ## [1.0.4](https://github.com/wessberg/browserslist-generator/compare/v1.0.3...v1.0.4) (2019-01-21)
 
 ### Bug Fixes
