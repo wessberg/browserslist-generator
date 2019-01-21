@@ -55,7 +55,7 @@
 	},
 	"license": "MIT",
 	"devDependencies": {
-		"@wessberg/scaffold": "^1.0.5",
+		"@wessberg/scaffold": "^1.0.8",
 		"@wessberg/ts-config": "0.0.38",
 		"ava": "^1.1.0",
 		"tslint": "^5.12.1",
