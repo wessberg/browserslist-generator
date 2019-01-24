@@ -23,7 +23,7 @@
 		"clean:compiled": "rm -rf compiled",
 		"clean": "npm run clean:dist && npm run clean:compiled",
 		"lint": "tsc --noEmit && tslint -c tslint.json --project tsconfig.json",
-		"prettier": "pretty-quick",
+		"prettier": "prettier --write '{src,test,documentation}/**/*.{js,ts,json,html,xml,css,md}'",
 		"tsc:test": "tsc --module commonjs",
 		"pretest": "npm run clean:compiled && npm run tsc:test",
 		"test": "NODE_ENV=TEST ava",
