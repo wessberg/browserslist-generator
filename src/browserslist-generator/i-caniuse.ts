@@ -18,7 +18,7 @@ export declare type CaniuseBrowser =
 	| "safari"
 	| "samsung";
 
-export enum CaniuseSupportKind {
+export const enum CaniuseSupportKind {
 	AVAILABLE = "AVAILABLE",
 	UNAVAILABLE = "UNAVAILABLE",
 	PARTIAL_SUPPORT = "PARTIAL_SUPPORT",
