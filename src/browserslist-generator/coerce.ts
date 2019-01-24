@@ -24,5 +24,5 @@ export function coerce(browser: CaniuseBrowser | undefined, version: string): Se
  * @returns {string}
  */
 export function coerceToString(browser: CaniuseBrowser, version: string): string {
-	return coerce(browser, version)!.toString();
+	return coerce(browser, version).toString();
 }

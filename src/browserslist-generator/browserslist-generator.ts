@@ -1088,7 +1088,7 @@ function getCaniuseVersionForUseragentVersion(browser: CaniuseBrowser, version: 
 			else {
 				if (useragentOS.version == null) throw new ReferenceError(`Could not detect OS version of iOS for ${useragentBrowser.name} on iOS`);
 				// Decide the Semver version
-				const osSemver = coerce(undefined, useragentOS.version)!;
+				const osSemver = coerce(undefined, useragentOS.version);
 
 				// Use only the main version
 				return `${osSemver.major}`;
