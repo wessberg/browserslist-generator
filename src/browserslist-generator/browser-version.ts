@@ -39,14 +39,14 @@ export function normalizeBrowserVersion(browser: CaniuseBrowser, givenVersion: s
  * @param {string[]} versions
  */
 export function getClosestMatchingBrowserVersion(browser: CaniuseBrowser, version: string, versions: string[] = getSortedBrowserVersions(browser)): string {
+	const coerced = coerce(browser, version);
+
 	if (browser === "op_mini" && version === "all") return "all";
 	if (browser === "safari") {
 		if (version === "TP") return "TP";
 		// If the given version is greater than or equal to the latest non-technical preview version of Safari, the closest match IS TP.
-		else if (gt(coerce(browser, version), coerce(browser, versions.slice(-2)[0]))) return "TP";
+		else if (gt(coerce(browser, `${coerced.major}.${coerced.minor}`), coerce(browser, versions.slice(-2)[0]))) return "TP";
 	}
-
-	const coerced = coerce(browser, version);
 
 	const offsets = versions.map(currentVersion => {
 		const currentCoerced = coerce(browser, currentVersion);

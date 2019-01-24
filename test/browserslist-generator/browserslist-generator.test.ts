@@ -209,8 +209,8 @@ test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 support
 	t.true(userAgentSupportsFeatures(chrome("70"), "web-animation"));
 });
 
-test("userAgentSupportsFeatures() => Correctly determines that Safari 12 doesn't support Web Animations #1", t => {
-	t.false(userAgentSupportsFeatures(safari("12"), "web-animation"));
+test("userAgentSupportsFeatures() => Correctly determines that Safari 12.0.2 doesn't support Web Animations #1", t => {
+	t.false(userAgentSupportsFeatures(safari("12.0.2"), "web-animation"));
 });
 
 test("userAgentSupportsFeatures() => Correctly determines that Safari TP *does* support Web Animations #1", t => {
