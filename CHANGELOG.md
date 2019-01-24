@@ -1,3 +1,12 @@
+## [1.0.8](https://github.com/wessberg/browserslist-generator/compare/v1.0.7...v1.0.8) (2019-01-24)
+
+### Bug Fixes
+
+- **build:** updates build scripts ([a047643](https://github.com/wessberg/browserslist-generator/commit/a047643))
+- **package.json:** updated prettier configuration ([ea31ab8](https://github.com/wessberg/browserslist-generator/commit/ea31ab8))
+- **project:** ran prettier ([406b371](https://github.com/wessberg/browserslist-generator/commit/406b371))
+- **safari:** fixes an issue where patch versions of safari 12 would incorrectly translate to safari TP ([8398d13](https://github.com/wessberg/browserslist-generator/commit/8398d13))
+
 ## [1.0.7](https://github.com/wessberg/browserslist-generator/compare/v1.0.6...v1.0.7) (2019-01-24)
 
 ### Bug Fixes
