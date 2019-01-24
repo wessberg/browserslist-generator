@@ -20,8 +20,8 @@
 		"generate:changelog": "standard-changelog --first-release",
 		"generate:all": "npm run generate:license & npm run generate:contributing & npm run generate:coc & npm run generate:readme  & npm run generate:changelog",
 		"clean:dist": "rm -rf dist",
-		"clean:test": "rm -rf compiled",
-		"clean": "npm run clean:dist && npm run clean:test",
+		"clean:compiled": "rm -rf compiled",
+		"clean": "npm run clean:dist && npm run clean:compiled",
 		"lint": "tsc --noEmit && tslint -c tslint.json --project tsconfig.json",
 		"tsc:test": "tsc --module commonjs",
 		"pretest": "npm run clean:compiled && npm run tsc:test",
@@ -30,8 +30,8 @@
 		"prebuild": "npm run clean:dist",
 		"build": "npm run rollup",
 		"rollup": "rollup -c rollup.config.js",
-		"preversion": "npm run generate:all && npm run lint",
-		"release": "np --no-publish"
+		"preversion": "npm run generate:all && npm run lint && NODE_ENV=production npm run build",
+		"release": "np --no-cleanup --no-yarn"
 	},
 	"keywords": [
 		"browserslist",
