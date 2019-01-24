@@ -5,8 +5,9 @@ import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-li
 // @ts-ignore
 import MdnBrowserCompatData from "mdn-browser-compat-data";
 import {get} from "object-path";
-import {coerce, gt, gte, lte} from "semver";
-import {getLatestVersionOfBrowser, getNextVersionOfBrowser, getOldestVersionOfBrowser, getPreviousVersionOfBrowser, getSortedBrowserVersions} from "./browser-version";
+import {gt, gte, lte} from "semver";
+import {getNextVersionOfBrowser, getOldestVersionOfBrowser, getPreviousVersionOfBrowser, getSortedBrowserVersions, normalizeBrowserVersion} from "./browser-version";
+import {coerce, coerceToString} from "./coerce";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
 import {EcmaVersion, ES2015_FEATURES, ES2016_FEATURES, ES2017_FEATURES, ES2018_FEATURES, ES5_FEATURES} from "./ecma-version";
@@ -79,7 +80,7 @@ function rangeCorrection(browser: CaniuseBrowser, supportKind: CaniuseSupportKin
 			} else if (version === "all") {
 				shouldSet = true;
 			} else {
-				shouldSet = gte(coerceVersion(version), coerceVersion(start));
+				shouldSet = gte(coerceToString(browser, version), coerceToString(browser, start));
 			}
 		} else if (start == null && end != null) {
 			if (version === "TP") {
@@ -87,7 +88,7 @@ function rangeCorrection(browser: CaniuseBrowser, supportKind: CaniuseSupportKin
 			} else if (version === "all") {
 				shouldSet = true;
 			} else {
-				shouldSet = lte(coerceVersion(version), coerceVersion(end));
+				shouldSet = lte(coerceToString(browser, version), coerceToString(browser, end));
 			}
 		} else if (start != null && end != null) {
 			if (version === "TP") {
@@ -95,7 +96,7 @@ function rangeCorrection(browser: CaniuseBrowser, supportKind: CaniuseSupportKin
 			} else if (version === "all") {
 				shouldSet = true;
 			} else {
-				shouldSet = gte(coerceVersion(version), coerceVersion(start)) && lte(coerceVersion(version), coerceVersion(end));
+				shouldSet = gte(coerceToString(browser, version), coerceToString(browser, start)) && lte(coerceToString(browser, version), coerceToString(browser, end));
 			}
 		}
 
@@ -518,15 +519,6 @@ export function browsersWithoutSupportForFeatures(...features: string[]): string
 }
 
 /**
- * Coerces the given version
- * @param {string} version
- * @returns {string}
- */
-function coerceVersion(version: string): string {
-	return coerce(version)!.toString();
-}
-
-/**
  * Returns true if the given browser should be ignored. The data reported from Caniuse is a bit lacking.
  * For example, only the latest version of and_ff, and_qq, and_uc and baidu is reported, and since
  * android went to use Chromium for the WebView, it has only reported the latest Chromium version
@@ -535,7 +527,11 @@ function coerceVersion(version: string): string {
  * @returns {boolean}
  */
 function shouldIgnoreBrowser(browser: CaniuseBrowser, version: string): boolean {
-	return (browser === "android" && gt(coerceVersion(version), coerceVersion("4.4.4"))) || (browser === "op_mob" && gt(coerceVersion(version), coerceVersion("12.1"))) || IGNORED_BROWSERS.has(browser);
+	return (
+		(browser === "android" && gt(coerceToString(browser, version), coerceToString(browser, "4.4.4"))) ||
+		(browser === "op_mob" && gt(coerceToString(browser, version), coerceToString(browser, "12.1"))) ||
+		IGNORED_BROWSERS.has(browser)
+	);
 }
 
 /**
@@ -691,7 +687,10 @@ function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
 			if (supportedSince == null) {
 				dict[version] = CaniuseSupportKind.UNAVAILABLE;
 			} else {
-				dict[version] = version === "TP" || version === "all" || gte(coerceVersion(version), coerceVersion(supportedSince)) ? CaniuseSupportKind.AVAILABLE : CaniuseSupportKind.UNAVAILABLE;
+				dict[version] =
+					version === "TP" || version === "all" || gte(coerceToString(caniuseBrowser, version), coerceToString(caniuseBrowser, supportedSince))
+						? CaniuseSupportKind.AVAILABLE
+						: CaniuseSupportKind.UNAVAILABLE;
 			}
 		});
 		return dict;
@@ -1016,30 +1015,6 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseB
 }
 
 /**
- * Ensures that for any given version of a browser, if it is newer than the latest known version, the last known version will be used as a fallback
- * @param {CaniuseBrowser} browser
- * @param {string} givenVersion
- */
-function takeVersionOfBrowserWithFallbackToLatestKnownVersion(browser: Exclude<CaniuseBrowser, "op_mini">, givenVersion: string): string {
-	const givenVersionCoerced = coerce(givenVersion);
-	const latestVersion = getLatestVersionOfBrowser(browser);
-	const latestVersionCoerced = coerce(latestVersion);
-
-	if (givenVersionCoerced == null || latestVersionCoerced == null) {
-		throw new TypeError(`Could not detect the version of: '${givenVersion}' for browser: ${browser}`);
-	}
-
-	if (
-		givenVersionCoerced.major > latestVersionCoerced.major ||
-		(givenVersionCoerced.major === latestVersionCoerced.major && givenVersionCoerced.minor > latestVersionCoerced.minor) ||
-		(givenVersionCoerced.major === latestVersionCoerced.major && givenVersionCoerced.minor === latestVersionCoerced.minor && givenVersionCoerced.patch > latestVersionCoerced.patch)
-	) {
-		return latestVersion;
-	}
-	return givenVersion;
-}
-
-/**
  * Normalizes the version of the browser such that it plays well with Caniuse
  * @param {CaniuseBrowser} browser
  * @param {string} version
@@ -1048,6 +1023,9 @@ function takeVersionOfBrowserWithFallbackToLatestKnownVersion(browser: Exclude<C
  * @returns {string}
  */
 function getCaniuseVersionForUseragentVersion(browser: CaniuseBrowser, version: string, useragentBrowser: IUseragentBrowser, useragentOS: IUseragentOS): string {
+	// Ensure that we have a normalized version to work with
+	version = normalizeBrowserVersion(browser, version);
+
 	// Always use 'all' with Opera Mini
 	if (browser === "op_mini") {
 		return "all";
@@ -1061,7 +1039,7 @@ function getCaniuseVersionForUseragentVersion(browser: CaniuseBrowser, version: 
 		}
 	}
 
-	const coerced = coerce(takeVersionOfBrowserWithFallbackToLatestKnownVersion(browser, version));
+	const coerced = coerce(browser, version);
 
 	// Make sure that we have a proper Semver version to work with
 	if (coerced == null) throw new TypeError(`Could not detect the version of: '${version}' for browser: ${browser}`);
@@ -1110,7 +1088,7 @@ function getCaniuseVersionForUseragentVersion(browser: CaniuseBrowser, version: 
 			else {
 				if (useragentOS.version == null) throw new ReferenceError(`Could not detect OS version of iOS for ${useragentBrowser.name} on iOS`);
 				// Decide the Semver version
-				const osSemver = coerce(useragentOS.version)!;
+				const osSemver = coerce(undefined, useragentOS.version)!;
 
 				// Use only the main version
 				return `${osSemver.major}`;
