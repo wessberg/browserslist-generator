@@ -1,3 +1,17 @@
+## [1.0.7](https://github.com/wessberg/browserslist-generator/compare/v1.0.6...v1.0.7) (2019-01-24)
+
+### Bug Fixes
+
+- **build:** updates build scripts ([06f8e32](https://github.com/wessberg/browserslist-generator/commit/06f8e32))
+
+## [1.0.6](https://github.com/wessberg/browserslist-generator/compare/v1.0.5...v1.0.6) (2019-01-24)
+
+### Bug Fixes
+
+- **bug:** fixes some issues with detecting safari vs safari TP ([25c1b17](https://github.com/wessberg/browserslist-generator/commit/25c1b17))
+- **build:** adds Rollup to the build pipeline to produce simple, flat output ([4218de0](https://github.com/wessberg/browserslist-generator/commit/4218de0))
+- **build:** updates build scripts ([dd9f8ab](https://github.com/wessberg/browserslist-generator/commit/dd9f8ab))
+
 ## [1.0.5](https://github.com/wessberg/browserslist-generator/compare/v1.0.4...v1.0.5) (2019-01-21)
 
 ### Bug Fixes

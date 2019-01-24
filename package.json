@@ -31,7 +31,7 @@
 		"build": "npm run rollup",
 		"rollup": "rollup -c rollup.config.js",
 		"preversion": "npm run lint && NODE_ENV=production npm run build",
-		"version": "npm run generate:all",
+		"version": "npm run generate:all && git add .",
 		"release": "np --no-cleanup --no-yarn"
 	},
 	"keywords": [
