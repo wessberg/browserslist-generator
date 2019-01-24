@@ -209,6 +209,14 @@ test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 support
 	t.true(userAgentSupportsFeatures(chrome("70"), "web-animation"));
 });
 
+test("userAgentSupportsFeatures() => Correctly determines that Safari 12 doesn't support Web Animations #1", t => {
+	t.false(userAgentSupportsFeatures(safari("12"), "web-animation"));
+});
+
+test("userAgentSupportsFeatures() => Correctly determines that Safari TP *does* support Web Animations #1", t => {
+	t.true(userAgentSupportsFeatures(safari("12.1"), "web-animation"));
+});
+
 test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES3 doesn't support ES5 features #1", t => {
 	t.false(browserslistSupportsFeatures(browsersWithSupportForEcmaVersion("es3"), "es5"));
 });
