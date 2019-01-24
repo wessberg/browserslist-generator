@@ -30,7 +30,8 @@
 		"prebuild": "npm run clean:dist",
 		"build": "npm run rollup",
 		"rollup": "rollup -c rollup.config.js",
-		"preversion": "npm run generate:all && npm run lint && NODE_ENV=production npm run build",
+		"preversion": "npm run lint && NODE_ENV=production npm run build",
+		"version": "npm run generate:all",
 		"release": "np --no-cleanup --no-yarn"
 	},
 	"keywords": [
