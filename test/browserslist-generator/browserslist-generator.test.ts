@@ -77,11 +77,11 @@ test("matchBrowserslistOnUserAgent() => Will match Safari TP", t => {
 });
 
 test("matchBrowserslistOnUserAgent() => Will match iOS Safari v11", t => {
-	t.true(matchBrowserslistOnUserAgent(safari.iOS("11"), ["ios_saf 11", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(safari.iOS("11.2"), ["ios_saf 11", UNRELEASED_VERSIONS]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match iOS Safari in a WebView v11", t => {
-	t.true(matchBrowserslistOnUserAgent(safari.iOSWebview("11"), ["ios_saf 11", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(safari.iOSWebview("11.2"), ["ios_saf 11", UNRELEASED_VERSIONS]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match iOS Firefox but treat it as iOS Safari", t => {
@@ -211,6 +211,10 @@ test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 support
 
 test("userAgentSupportsFeatures() => Correctly determines that Safari 12.0.2 doesn't support Web Animations #1", t => {
 	t.false(userAgentSupportsFeatures(safari("12.0.2"), "web-animation"));
+});
+
+test("userAgentSupportsFeatures() => Correctly determines that Edge 16.16299 doesn't support the URL constructor #1", t => {
+	t.false(userAgentSupportsFeatures(edge("16.16299"), "url", "urlsearchparams"));
 });
 
 test("userAgentSupportsFeatures() => Correctly determines that Safari TP *does* support Web Animations #1", t => {

@@ -1,6 +1,6 @@
 // @ts-ignore
 import Browserslist from "browserslist";
-import {gt} from "semver";
+import {gt, gte} from "semver";
 import {coerce} from "./coerce";
 import {compareVersions} from "./compare-versions";
 import {CaniuseBrowser} from "./i-caniuse";
@@ -48,21 +48,16 @@ export function getClosestMatchingBrowserVersion(browser: CaniuseBrowser, versio
 		else if (gt(coerce(browser, `${coerced.major}.${coerced.minor}`), coerce(browser, versions.slice(-2)[0]))) return "TP";
 	}
 
-	const offsets = versions.map(currentVersion => {
-		const currentCoerced = coerce(browser, currentVersion);
+	let candidate = versions[0];
 
-		return Math.abs(currentCoerced.major * 100 + currentCoerced.minor * 10 + currentCoerced.patch - (coerced.major * 100 + coerced.minor * 10 + coerced.patch));
+	versions.forEach(currentVersion => {
+		const currentCoerced = coerce(browser, currentVersion);
+		if (gte(coerced, currentCoerced)) {
+			candidate = currentVersion;
+		}
 	});
 
-	const minOffset = Math.min.apply(null, offsets);
-	const match = versions[offsets.indexOf(minOffset)];
-
-	// Fall back to the very first browser version if no version could be matched
-	if (match == null) {
-		return versions[0];
-	}
-
-	return match;
+	return candidate;
 }
 
 /**
