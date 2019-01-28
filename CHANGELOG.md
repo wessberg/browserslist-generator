@@ -1,3 +1,9 @@
+## [1.0.9](https://github.com/wessberg/browserslist-generator/compare/v1.0.8...v1.0.9) (2019-01-28)
+
+### Bug Fixes
+
+- **edge:** fixes an issue where some minor versions of Edge 16 would report as Edge 18 ([a0623f6](https://github.com/wessberg/browserslist-generator/commit/a0623f6))
+
 ## [1.0.8](https://github.com/wessberg/browserslist-generator/compare/v1.0.7...v1.0.8) (2019-01-24)
 
 ### Bug Fixes
