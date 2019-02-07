@@ -13,12 +13,12 @@
 		"url": "https://github.com/wessberg/browserslist-generator/issues"
 	},
 	"scripts": {
-		"generate:readme": "scaffold readme",
-		"generate:license": "scaffold license",
-		"generate:contributing": "scaffold contributing",
-		"generate:coc": "scaffold coc",
+		"generate:readme": "scaffold readme --yes",
+		"generate:license": "scaffold license --yes",
+		"generate:contributing": "scaffold contributing --yes",
+		"generate:coc": "scaffold coc --yes",
 		"generate:changelog": "standard-changelog --first-release",
-		"generate:all": "npm run generate:license & npm run generate:contributing & npm run generate:coc & npm run generate:readme  & npm run generate:changelog",
+		"generate:all": "npm run generate:license & npm run generate:contributing & npm run generate:coc & npm run generate:readme && npm run generate:changelog",
 		"clean:dist": "rm -rf dist",
 		"clean:compiled": "rm -rf compiled",
 		"clean": "npm run clean:dist && npm run clean:compiled",
@@ -43,22 +43,27 @@
 		"babel-preset-env",
 		"util"
 	],
-	"author": {
-		"name": "Frederik Wessberg",
-		"email": "frederikwessberg@hotmail.com",
-		"url": "https://github.com/wessberg"
-	},
+	"contributors": [
+		{
+			"name": "Frederik Wessberg",
+			"email": "frederikwessberg@hotmail.com",
+			"url": "https://github.com/wessberg",
+			"imageUrl": "https://avatars2.githubusercontent.com/u/20454213?s=460&v=4",
+			"role": "Lead Developer",
+			"twitter": "FredWessberg"
+		}
+	],
 	"license": "MIT",
 	"devDependencies": {
-		"@wessberg/scaffold": "^1.0.8",
-		"@wessberg/ts-config": "0.0.38",
-		"@wessberg/rollup-plugin-ts": "^1.1.18",
+		"@wessberg/scaffold": "^1.0.14",
+		"@wessberg/ts-config": "0.0.39",
+		"@wessberg/rollup-plugin-ts": "^1.1.28",
 		"rollup": "^1.1.2",
-		"ava": "^1.1.0",
+		"ava": "^1.2.1",
 		"tslint": "^5.12.1",
-		"typescript": "^3.2.4",
+		"typescript": "^3.3.1",
 		"standard-changelog": "^2.0.6",
-		"prettier": "^1.16.1",
+		"prettier": "^1.16.4",
 		"pretty-quick": "^1.10.0",
 		"husky": "^1.3.1",
 		"useragent-generator": "^1.1.0",
@@ -69,8 +74,8 @@
 		"@types/semver": "^5.5.0",
 		"@types/ua-parser-js": "^0.7.32",
 		"browserslist": "^4.4.1",
-		"caniuse-lite": "^1.0.30000930",
-		"mdn-browser-compat-data": "0.0.64",
+		"caniuse-lite": "^1.0.30000935",
+		"mdn-browser-compat-data": "0.0.65",
 		"object-path": "^0.11.4",
 		"semver": "^5.6.0",
 		"ua-parser-js": "^0.7.19"
@@ -83,19 +88,6 @@
 	"es2015": "./dist/esm/index.js",
 	"engines": {
 		"node": ">=9.0.0"
-	},
-	"scaffold": {
-		"patreonUserId": "11315442",
-		"logo": "https://raw.githubusercontent.com/wessberg/browserslist-generator/master/documentation/asset/logo.png",
-		"contributorMeta": {
-			"Frederik Wessberg": {
-				"imageUrl": "https://avatars2.githubusercontent.com/u/20454213?s=460&v=4",
-				"role": "Maintainer",
-				"twitterHandle": "FredWessberg",
-				"isCocEnforcer": true
-			}
-		},
-		"backers": []
 	},
 	"husky": {
 		"hooks": {

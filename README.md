@@ -1,21 +1,84 @@
-<img alt="Logo for @wessberg/polyfiller" src="https://raw.githubusercontent.com/wessberg/browserslist-generator/master/documentation/asset/logo.png" height="200"></img><br>
-<a href="https://npmcharts.com/compare/@wessberg/browserslist-generator?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/%40wessberg%2Fbrowserslist-generator.svg" height="20"></img></a>
-<a href="https://david-dm.org/wessberg/browserslist-generator"><img alt="Dependencies" src="https://img.shields.io/david/wessberg/browserslist-generator.svg" height="20"></img></a>
-<a href="https://www.npmjs.com/package/@wessberg/browserslist-generator"><img alt="NPM Version" src="https://badge.fury.io/js/%40wessberg%2Fbrowserslist-generator.svg" height="20"></img></a>
-<a href="https://github.com/wessberg/browserslist-generator/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/wessberg%2Fbrowserslist-generator.svg" height="20"></img></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-yellow.svg" height="20"></img></a>
-<a href="https://www.patreon.com/bePatron?u=11315442"><img alt="Support on Patreon" src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" height="20"></img></a>
+<!-- SHADOW_SECTION_LOGO_START -->
 
-# `@wessberg/browserslist-generator`
+<div><img alt="Logo" src="https://raw.githubusercontent.com/wessberg/browserslist-generator/master/documentation/asset/logo.png" height="150"   /></div>
+
+<!-- SHADOW_SECTION_LOGO_END -->
+
+<!-- SHADOW_SECTION_DESCRIPTION_SHORT_START -->
 
 > A library that makes generating and validating Browserslists a breeze!
 
+<!-- SHADOW_SECTION_DESCRIPTION_SHORT_END -->
+
+<!-- SHADOW_SECTION_BADGES_START -->
+
+<a href="https://npmcharts.com/compare/%40wessberg%2Fbrowserslist-generator?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/%40wessberg%2Fbrowserslist-generator.svg"    /></a>
+<a href="https://david-dm.org/wessberg/browserslist-generator"><img alt="Dependencies" src="https://img.shields.io/david/wessberg%2Fbrowserslist-generator.svg"    /></a>
+<a href="https://github.com/wessberg/browserslist-generator/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/wessberg%2Fbrowserslist-generator.svg"    /></a>
+<a href="https://github.com/prettier/prettier"><img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square"    /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"    /></a>
+<a href="https://www.patreon.com/bePatron?u=11315442"><img alt="Support on Patreon" src="https://img.shields.io/badge/patreon-donate-green.svg"    /></a>
+
+<!-- SHADOW_SECTION_BADGES_END -->
+
+<!-- SHADOW_SECTION_DESCRIPTION_LONG_START -->
+
 ## Description
+
+<!-- SHADOW_SECTION_DESCRIPTION_LONG_END -->
 
 This is a library that makes it easier to work with [browserslists](https://github.com/browserslist/browserslist).
 It can do things like generating a Browserslist that targets only browsers that support - _or don't support_ - specific required features, or even generate a Browserslist from a User Agent string!
 It can also do the same in reverse - match a Browserslist on a user agent.
 A _Feature_ is anything that can be found on [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data).
+
+<!-- SHADOW_SECTION_FEATURES_START -->
+
+### Features
+
+<!-- SHADOW_SECTION_FEATURES_END -->
+
+- Generating a Browserslist based on features
+- Generating a Browserslist based on an ECMA version
+- Generating a browserslist based on a User Agent string
+- Checking if a User Agent string supports specific features
+- Checking if a browserslist supports specific features
+- Checking if a browserslist supports a specific ECMA version
+- Getting the most appropriate ECMA version for a browserslist
+
+<!-- SHADOW_SECTION_FEATURE_IMAGE_START -->
+
+<!-- SHADOW_SECTION_FEATURE_IMAGE_END -->
+
+<!-- SHADOW_SECTION_TOC_START -->
+
+## Table of Contents
+
+- [Description](#description)
+  - [Features](#features)
+- [Table of Contents](#table-of-contents)
+- [Install](#install)
+  - [NPM](#npm)
+  - [Yarn](#yarn)
+- [Usage](#usage)
+  - [Generating a Browserslist based on features](#generating-a-browserslist-based-on-features)
+  - [Checking if a User Agent supports a specific feature](#checking-if-a-user-agent-supports-a-specific-feature)
+  - [Checking if a Browserslist supports a specific feature](#checking-if-a-browserslist-supports-a-specific-feature)
+  - [Generating a Browserslist based on a ECMAScript version](#generating-a-browserslist-based-on-a-ecmascript-version)
+    - [Checking if a Browserslist supports a specific ECMAScript version](#checking-if-a-browserslist-supports-a-specific-ecmascript-version)
+    - [Getting the most appropriate ECMAScript version for a Browserslist](#getting-the-most-appropriate-ecmascript-version-for-a-browserslist)
+    - [Possible ECMAScript versions](#possible-ecmascript-versions)
+- [Contributing](#contributing)
+- [Maintainers](#maintainers)
+- [Backers](#backers)
+  - [Patreon](#patreon)
+  - [FAQ](#faq)
+  - [What is some cool example of a use case for this library?](#what-is-some-cool-example-of-a-use-case-for-this-library)
+- [License](#license)
+
+<!-- SHADOW_SECTION_TOC_END -->
+
+<!-- SHADOW_SECTION_INSTALL_START -->
 
 ## Install
 
@@ -31,7 +94,13 @@ $ npm install @wessberg/browserslist-generator
 $ yarn add @wessberg/browserslist-generator
 ```
 
+<!-- SHADOW_SECTION_INSTALL_END -->
+
+<!-- SHADOW_SECTION_USAGE_START -->
+
 ## Usage
+
+<!-- SHADOW_SECTION_USAGE_END -->
 
 ### Generating a Browserslist based on features
 
@@ -125,15 +194,41 @@ All of the possible ECMAScript versions are:
 - `es2017`
 - `es2018`
 
+<!-- SHADOW_SECTION_CONTRIBUTING_START -->
+
 ## Contributing
 
 Do you want to contribute? Awesome! Please follow [these recommendations](./CONTRIBUTING.md).
 
+<!-- SHADOW_SECTION_CONTRIBUTING_END -->
+
+<!-- SHADOW_SECTION_MAINTAINERS_START -->
+
 ## Maintainers
 
-- <a href="https://github.com/wessberg"><img alt="Frederik Wessberg" src="https://avatars2.githubusercontent.com/u/20454213?s=460&v=4" height="11"></img></a> [Frederik Wessberg](https://github.com/wessberg): _Maintainer_
+| <img alt="Frederik Wessberg" src="https://avatars2.githubusercontent.com/u/20454213?s=460&v=4" height="70"   />                   |
+| --------------------------------------------------------------------------------------------------------------------------------- |
+| [Frederik Wessberg](mailto:frederikwessberg@hotmail.com)<br>[@FredWessberg](https://twitter.com/FredWessberg)<br>_Lead Developer_ |
 
-## FAQ
+<!-- SHADOW_SECTION_MAINTAINERS_END -->
+
+<!-- SHADOW_SECTION_BACKERS_START -->
+
+## Backers
+
+### Patreon
+
+[Become a backer](https://www.patreon.com/bePatron?u=11315442) and get your name, avatar, and Twitter handle listed here.
+
+<a href="https://www.patreon.com/bePatron?u=11315442"><img alt="Backers on Patreon" src="https://patreon-badge.herokuapp.com/11315442.png"  width="500"  /></a>
+
+<!-- SHADOW_SECTION_BACKERS_END -->
+
+<!-- SHADOW_SECTION_FAQ_START -->
+
+### FAQ
+
+<!-- SHADOW_SECTION_FAQ_END -->
 
 ### What is some cool example of a use case for this library?
 
@@ -150,51 +245,10 @@ browsersWithoutSupportForFeatures("es6-module");
 Now, you can then pass each one into tools like `@babel/preset-env` and `postcss`.
 On the server, you can use the function `userAgentSupportsFeatures` to check if the same features are supported and respond with resources that points to the right bundle.
 
-## Backers 🏅
+<!-- SHADOW_SECTION_LICENSE_START -->
 
-[Become a backer](https://www.patreon.com/bePatron?u=11315442) and get your name, logo, and link to your site listed here.
+## License
 
-## License 📄
+MIT © [Frederik Wessberg](mailto:frederikwessberg@hotmail.com) ([@FredWessberg](https://twitter.com/FredWessberg)) ([Website](https://github.com/wessberg))
 
-MIT © [Frederik Wessberg](https://github.com/wessberg)
-
-## API Reference
-
-##### `browsersWithSupportForFeatures (...features: string[]): string[]`
-
-Takes any amount of [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features and generates a [browserslist](https://github.com/browserslist/browserslist) that targets all browsers that support these features
-
-##### `browsersWithoutSupportForFeatures (...features: string[]): string[]`
-
-Takes any amount of [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features and generates a [browserslist](https://github.com/browserslist/browserslist) that targets all browsers that _doesn't_ support these features
-
-##### `browsersWithSupportForEcmaVersion (version: EcmaVersion): string[]`
-
-Generates a [browserslist](https://github.com/browserslist/browserslist) that targets all the browsers that support the given ECMAScript version.
-See [this section](#possible-ecmascript-versions) for an overview of all supported ECMAScript versions.
-
-##### `browserslistSupportsFeatures (browserslist: string[], ...features: string[]): boolean`
-
-Returns true if the given [browserslist](https://github.com/browserslist/browserslist) supports all of the given [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features
-
-##### `browserslistSupportsEcmaVersion (browserslist: string[], version: EcmaVersion): boolean`
-
-Returns true if the given [browserslist](https://github.com/browserslist/browserslist) supports the given ECMAScript version.
-See [this section](#possible-ecmascript-versions) for an overview of all supported ECMAScript versions.
-
-##### `getAppropriateEcmaVersionForBrowserslist (browserslist: string[]): EcmaVersion`
-
-Gets the ECMAScript version that is most appropriate for the given [browserslist](https://github.com/browserslist/browserslist).
-See [this section](#possible-ecmascript-versions) for an overview of all supported ECMAScript versions.
-
-##### `matchBrowserslistOnUserAgent (userAgent: string, browserslist: string[]): boolean`
-
-Will check if the given user agent string matches the given browserslist and return true if so.
-
-##### `userAgentSupportsFeatures (useragent: string, ...features: string[]): boolean`
-
-Checks if the given user agent string supports all of the given [caniuse](https://caniuse.com/) or [MDN](https://github.com/mdn/browser-compat-data) features.
-
-##### `normalizeBrowserslist (browserslist: string[]|string): string[]`
-
-Generates a normalized Browserslist from the given one.
+<!-- SHADOW_SECTION_LICENSE_END -->
