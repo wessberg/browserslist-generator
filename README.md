@@ -13,6 +13,7 @@
 <!-- SHADOW_SECTION_BADGES_START -->
 
 <a href="https://npmcharts.com/compare/%40wessberg%2Fbrowserslist-generator?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/%40wessberg%2Fbrowserslist-generator.svg"    /></a>
+<a href="https://www.npmjs.com/package/%40wessberg%2Fbrowserslist-generator"><img alt="NPM version" src="https://badge.fury.io/js/%40wessberg%2Fbrowserslist-generator.svg"    /></a>
 <a href="https://david-dm.org/wessberg/browserslist-generator"><img alt="Dependencies" src="https://img.shields.io/david/wessberg%2Fbrowserslist-generator.svg"    /></a>
 <a href="https://github.com/wessberg/browserslist-generator/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/wessberg%2Fbrowserslist-generator.svg"    /></a>
 <a href="https://github.com/prettier/prettier"><img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square"    /></a>
@@ -72,7 +73,7 @@ A _Feature_ is anything that can be found on [caniuse](https://caniuse.com/) or 
 - [Maintainers](#maintainers)
 - [Backers](#backers)
   - [Patreon](#patreon)
-  - [FAQ](#faq)
+- [FAQ](#faq)
   - [What is some cool example of a use case for this library?](#what-is-some-cool-example-of-a-use-case-for-this-library)
 - [License](#license)
 

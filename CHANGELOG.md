@@ -1,3 +1,9 @@
+## [1.0.11](https://github.com/wessberg/browserslist-generator/compare/v1.0.10...v1.0.11) (2019-02-16)
+
+### Bug Fixes
+
+- **tests:** fixes a test that would crash ([9584632](https://github.com/wessberg/browserslist-generator/commit/9584632))
+
 ## [1.0.10](https://github.com/wessberg/browserslist-generator/compare/v1.0.9...v1.0.10) (2019-02-07)
 
 ## [1.0.9](https://github.com/wessberg/browserslist-generator/compare/v1.0.8...v1.0.9) (2019-01-28)
