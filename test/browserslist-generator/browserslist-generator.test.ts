@@ -28,10 +28,6 @@ test("browsersWithSupportForFeatures() => Will skip 'Android' in the generated b
 	t.true(!browsersWithSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME).some(part => part.includes("android")));
 });
 
-test("browsersWithSupportForFeatures() => Won't include Samsung 6.2 for es6-modules", t => {
-	t.true(!browsersWithSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME).some(part => part.toLowerCase().includes("samsung")));
-});
-
 test("browsersWithoutSupportForFeatures() => Will include all browsers that simply has no support for the given features at all", t => {
 	t.true(browsersWithoutSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME).some(part => part.includes("ie")));
 });
