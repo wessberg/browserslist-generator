@@ -64,6 +64,15 @@ test("matchBrowserslistOnUserAgent() => Will match iOS Chrome but treat it as iO
 	t.true(matchBrowserslistOnUserAgent(chrome.iOS("10.3"), ["ios_saf >= 10", UNRELEASED_VERSIONS]));
 });
 
+test("matchBrowserslistOnUserAgent() => Supports Samsung Browser 8.2 (e.g. Samsung Internet)", t => {
+	t.true(
+		matchBrowserslistOnUserAgent(
+			"Mozilla/5.0 (Linux; Android 7.0; SAMSUNG SM-A510F Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/8.2 Chrome/63.0.3239.111 Mobile Safari/537.36",
+			["samsung >= 8.2", UNRELEASED_VERSIONS]
+		)
+	);
+});
+
 test("matchBrowserslistOnUserAgent() => Will match Safari v11", t => {
 	t.true(matchBrowserslistOnUserAgent(safari("11"), ["safari 11", UNRELEASED_VERSIONS]));
 });

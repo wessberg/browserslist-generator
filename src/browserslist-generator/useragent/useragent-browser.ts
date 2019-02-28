@@ -49,6 +49,7 @@ export type UseragentBrowser =
 	| "Minimo"
 	| "MIUI Browser"
 	| "Safari"
+	| "Samsung Browser"
 	| "Mobile Safari"
 	| "MobileSafari"
 	| "SafariMobile"

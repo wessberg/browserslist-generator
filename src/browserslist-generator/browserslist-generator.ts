@@ -922,6 +922,9 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseB
 	}
 
 	switch (browser.name) {
+		case "Samsung Browser":
+			return "samsung";
+
 		case "Android Browser": {
 			// If the vendor is Samsung, the default browser is Samsung Internet
 			if (device.vendor === "Samsung") {
