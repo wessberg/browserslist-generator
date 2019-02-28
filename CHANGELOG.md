@@ -1,3 +1,9 @@
+## [1.0.12](https://github.com/wessberg/browserslist-generator/compare/v1.0.11...v1.0.12) (2019-02-28)
+
+### Bug Fixes
+
+- **browsers:** adds support for parsing SamsungBrowser 8.2 ([a6b3217](https://github.com/wessberg/browserslist-generator/commit/a6b3217))
+
 ## [1.0.11](https://github.com/wessberg/browserslist-generator/compare/v1.0.10...v1.0.11) (2019-02-16)
 
 ### Bug Fixes
