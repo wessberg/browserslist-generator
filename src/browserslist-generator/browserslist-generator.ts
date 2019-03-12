@@ -2,8 +2,7 @@
 import Browserslist from "browserslist";
 // @ts-ignore
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
-// @ts-ignore
-import MdnBrowserCompatData from "mdn-browser-compat-data";
+import compatData from "mdn-browser-compat-data";
 import {get} from "object-path";
 import {gt, gte, lte} from "semver";
 import {getNextVersionOfBrowser, getOldestVersionOfBrowser, getPreviousVersionOfBrowser, getSortedBrowserVersions, normalizeBrowserVersion} from "./browser-version";
@@ -624,7 +623,7 @@ function isCaniuseFeature(feature: string): boolean {
  * @param feature
  */
 function isMdnFeature(feature: string): boolean {
-	return get(MdnBrowserCompatData, feature) != null;
+	return get(compatData, feature) != null;
 }
 
 /**
@@ -663,7 +662,7 @@ function getFeatureSupport(feature: string): CaniuseStatsNormalized {
  * @returns {CaniuseStatsNormalized}
  */
 function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
-	const match: IMdn = get(MdnBrowserCompatData, feature);
+	const match: IMdn = get(compatData, feature);
 	const supportMap = match.__compat.support;
 
 	const formatBrowser = (mdnBrowser: MdnBrowserName, caniuseBrowser: CaniuseBrowser): {[key: string]: CaniuseSupportKind} => {
