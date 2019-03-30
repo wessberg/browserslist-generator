@@ -38,7 +38,7 @@ export const ES2019_FEATURES: string[] = [
 	"javascript.builtins.String.trimStart",
 	"javascript.builtins.String.trimEnd",
 	"javascript.builtins.JSON.json_superset",
-	"javascript.builtins.JSON.well_formed_stringify",
+	"javascript.builtins.JSON.stringify.well_formed_stringify",
 	"javascript.builtins.Symbol.description",
-	"javascript.statements.optional_catch_binding"
+	"javascript.statements.try_catch.optional_catch_binding"
 ];

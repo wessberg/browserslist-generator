@@ -463,6 +463,7 @@ export function browserslistSupportsEcmaVersion(browserslist: string[], version:
  * @returns {EcmaVersion}
  */
 export function getAppropriateEcmaVersionForBrowserslist(browserslist: string[]): EcmaVersion {
+	if (browserslistSupportsEcmaVersion(browserslist, "es2019")) return "es2019";
 	if (browserslistSupportsEcmaVersion(browserslist, "es2018")) return "es2018";
 	else if (browserslistSupportsEcmaVersion(browserslist, "es2017")) return "es2017";
 	else if (browserslistSupportsEcmaVersion(browserslist, "es2016")) return "es2016";
