@@ -1,3 +1,9 @@
+## [1.0.15](https://github.com/wessberg/browserslist-generator/compare/v1.0.14...v1.0.15) (2019-03-30)
+
+### Bug Fixes
+
+- **bug:** fixes an issue with detecting ES2019 features ([2f55451](https://github.com/wessberg/browserslist-generator/commit/2f55451))
+
 ## [1.0.14](https://github.com/wessberg/browserslist-generator/compare/v1.0.13...v1.0.14) (2019-03-30)
 
 ### Features
