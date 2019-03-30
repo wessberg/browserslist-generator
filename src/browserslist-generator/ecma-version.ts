@@ -1,4 +1,4 @@
-export type EcmaVersion = "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018";
+export type EcmaVersion = "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019";
 
 export const ES5_FEATURES: string[] = ["es5"];
 
@@ -30,3 +30,15 @@ export const ES2017_FEATURES: string[] = [
 ];
 
 export const ES2018_FEATURES: string[] = ["javascript.operators.spread.spread_in_object_literals", "javascript.builtins.Promise.finally"];
+
+export const ES2019_FEATURES: string[] = [
+	"javascript.builtins.Array.flat",
+	"javascript.builtins.Array.flatMap",
+	"javascript.builtins.Object.fromEntries",
+	"javascript.builtins.String.trimStart",
+	"javascript.builtins.String.trimEnd",
+	"javascript.builtins.JSON.json_superset",
+	"javascript.builtins.JSON.well_formed_stringify",
+	"javascript.builtins.Symbol.description",
+	"javascript.statements.optional_catch_binding"
+];

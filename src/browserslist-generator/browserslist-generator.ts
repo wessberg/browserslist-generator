@@ -9,7 +9,7 @@ import {getNextVersionOfBrowser, getOldestVersionOfBrowser, getPreviousVersionOf
 import {coerce, coerceToString} from "./coerce";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
-import {EcmaVersion, ES2015_FEATURES, ES2016_FEATURES, ES2017_FEATURES, ES2018_FEATURES, ES5_FEATURES} from "./ecma-version";
+import {EcmaVersion, ES2015_FEATURES, ES2016_FEATURES, ES2017_FEATURES, ES2018_FEATURES, ES2019_FEATURES, ES5_FEATURES} from "./ecma-version";
 import {IBrowserSupportForFeaturesCommonResult} from "./i-browser-support-for-features-common-result";
 import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, ICaniuseBrowserCorrection, ICaniuseDataCorrection, ICaniuseFeature} from "./i-caniuse";
 import {IMdn, MdnBrowserName} from "./i-mdn";
@@ -451,6 +451,9 @@ export function browserslistSupportsEcmaVersion(browserslist: string[], version:
 
 		case "es2018":
 			return browserslistSupportsFeatures(browserslist, ...ES2018_FEATURES);
+
+		case "es2019":
+			return browserslistSupportsFeatures(browserslist, ...ES2019_FEATURES);
 	}
 }
 
@@ -487,6 +490,8 @@ export function browsersWithSupportForEcmaVersion(version: EcmaVersion): string[
 			return browsersWithSupportForFeatures(...ES2017_FEATURES);
 		case "es2018":
 			return browsersWithSupportForFeatures(...ES2018_FEATURES);
+		case "es2019":
+			return browsersWithSupportForFeatures(...ES2019_FEATURES);
 	}
 }
 
