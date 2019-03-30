@@ -1,3 +1,9 @@
+## [1.0.14](https://github.com/wessberg/browserslist-generator/compare/v1.0.13...v1.0.14) (2019-03-30)
+
+### Features
+
+- **EcmaVersion:** adds support for generating browserslists for browsers with support for ES2019 ([55e3354](https://github.com/wessberg/browserslist-generator/commit/55e3354))
+
 ## [1.0.13](https://github.com/wessberg/browserslist-generator/compare/v1.0.12...v1.0.13) (2019-03-12)
 
 ## [1.0.12](https://github.com/wessberg/browserslist-generator/compare/v1.0.11...v1.0.12) (2019-02-28)
