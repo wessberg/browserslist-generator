@@ -304,7 +304,7 @@ test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that th
 	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es2019")), "es2019");
 });
 
-test.only("playground", t => {
-	browsersWithoutSupportForFeatures("api.Window");
-	t.true(true);
-});
+// test.only("playground", t => {
+// 	browsersWithoutSupportForFeatures("api.Window");
+// 	t.true(true);
+// });
