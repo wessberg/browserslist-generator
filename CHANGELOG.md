@@ -1,3 +1,9 @@
+## [1.0.16](https://github.com/wessberg/browserslist-generator/compare/v1.0.15...v1.0.16) (2019-04-07)
+
+### Bug Fixes
+
+- **api.Window:** adds data corrections for the MDN feature api.Window ([de30bec](https://github.com/wessberg/browserslist-generator/commit/de30bec))
+
 ## [1.0.15](https://github.com/wessberg/browserslist-generator/compare/v1.0.14...v1.0.15) (2019-03-30)
 
 ### Bug Fixes
