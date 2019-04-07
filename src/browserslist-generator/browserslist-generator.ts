@@ -377,6 +377,15 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 				}
 			]
 		}
+	],
+	[
+		"api.Window",
+		{
+			chrome: rangeCorrection("chrome", CaniuseSupportKind.UNAVAILABLE, `0`, `18`),
+			safari: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `0`, `5.1`),
+			ie: rangeCorrection("ie", CaniuseSupportKind.UNAVAILABLE, `0`, `7`),
+			opera: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `0`, `11.1`)
+		}
 	]
 ];
 

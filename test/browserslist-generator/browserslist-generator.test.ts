@@ -18,6 +18,8 @@ import {
 
 // tslint:disable:no-identical-functions
 
+// tslint:disable:no-commented-code
+
 const ES_MODULE_FEATURE_NAME = "es6-module";
 const SHADOW_DOM_FEATURE_NAME = "shadowdomv1";
 const CUSTOM_ELEMENTS_FEATURE_NAME = "custom-elementsv1";
@@ -300,4 +302,9 @@ test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that th
 
 test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for a Browserslist targeting browsers only compatible with ES2019 is indeed ES2019 #1", t => {
 	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es2019")), "es2019");
+});
+
+test.only("playground", t => {
+	browsersWithoutSupportForFeatures("api.Window");
+	t.true(true);
 });
