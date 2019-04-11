@@ -1,1 +1,1 @@
-export type UseragentBot = "GoogleBot" | "BingBot" | "YahooBot";
+export type UseragentBot = "GoogleBot" | "BingBot" | "YahooBot" | "FacebookCrawler";

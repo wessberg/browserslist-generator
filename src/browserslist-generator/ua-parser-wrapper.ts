@@ -73,8 +73,8 @@ export class UaParserWrapper {
 			result.major = "41";
 		}
 
-		// BingBot and Yahoo's "Slurp" can render JavaScript, but they are very limited in what they can do. Mimic IE8 to reflect the limitations of these engines
-		if (BOT_TO_USER_AGENTS_MAP.BingBot(this.userAgent) || BOT_TO_USER_AGENTS_MAP.YahooBot(this.userAgent)) {
+		// BingBot, The Facebook Crawler, and Yahoo's "Slurp" can render JavaScript, but they are very limited in what they can do. Mimic IE8 to reflect the limitations of these engines
+		if (BOT_TO_USER_AGENTS_MAP.BingBot(this.userAgent) || BOT_TO_USER_AGENTS_MAP.YahooBot(this.userAgent) || BOT_TO_USER_AGENTS_MAP.FacebookCrawler(this.userAgent)) {
 			result.name = "IE";
 			result.version = "8";
 			// noinspection JSDeprecatedSymbols
