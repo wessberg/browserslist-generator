@@ -57,11 +57,11 @@
 	"devDependencies": {
 		"@wessberg/scaffold": "^1.0.17",
 		"@wessberg/ts-config": "0.0.39",
-		"@wessberg/rollup-plugin-ts": "^1.1.45",
-		"rollup": "^1.9.0",
+		"@wessberg/rollup-plugin-ts": "^1.1.46",
+		"rollup": "^1.10.0",
 		"ava": "^1.4.1",
 		"tslint": "^5.15.0",
-		"typescript": "^3.4.2",
+		"typescript": "^3.4.3",
 		"standard-changelog": "^2.0.7",
 		"prettier": "^1.16.4",
 		"pretty-quick": "^1.10.0",
@@ -72,10 +72,10 @@
 	"dependencies": {
 		"@types/object-path": "^0.11.0",
 		"@types/semver": "^6.0.0",
-		"@types/ua-parser-js": "^0.7.32",
+		"@types/ua-parser-js": "^0.7.33",
 		"browserslist": "^4.5.4",
 		"caniuse-lite": "^1.0.30000957",
-		"mdn-browser-compat-data": "0.0.74",
+		"mdn-browser-compat-data": "0.0.75",
 		"object-path": "^0.11.4",
 		"semver": "^6.0.0",
 		"ua-parser-js": "^0.7.19"

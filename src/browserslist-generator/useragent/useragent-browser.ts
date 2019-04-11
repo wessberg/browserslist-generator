@@ -14,6 +14,7 @@ export type UseragentBrowser =
 	| "Chrome"
 	| "Chromium"
 	| "Chrome Headless"
+	| "Chrome WebView"
 	| "Comodo Dragon"
 	| "Conkeror"
 	| "Dillo"

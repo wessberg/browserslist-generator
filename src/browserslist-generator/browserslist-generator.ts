@@ -961,6 +961,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseB
 			return "baidu";
 
 		case "Chrome Headless":
+		case "Chrome WebView":
 			return "chrome";
 
 		case "Chrome":
