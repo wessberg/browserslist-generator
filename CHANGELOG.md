@@ -1,3 +1,9 @@
+## [1.0.18](https://github.com/wessberg/browserslist-generator/compare/v1.0.17...v1.0.18) (2019-04-11)
+
+### Features
+
+- **Facebook Crawler:** adds support for detecting The Facebook Crawler (facebookexternalhit) ([3df1142](https://github.com/wessberg/browserslist-generator/commit/3df1142))
+
 ## [1.0.17](https://github.com/wessberg/browserslist-generator/compare/v1.0.16...v1.0.17) (2019-04-11)
 
 ### Features
