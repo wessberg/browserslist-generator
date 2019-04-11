@@ -1,3 +1,9 @@
+## [1.0.17](https://github.com/wessberg/browserslist-generator/compare/v1.0.16...v1.0.17) (2019-04-11)
+
+### Features
+
+- **browser support:** adds support for detecting user agents from Chrome WebView ([f5fed56](https://github.com/wessberg/browserslist-generator/commit/f5fed56))
+
 ## [1.0.16](https://github.com/wessberg/browserslist-generator/compare/v1.0.15...v1.0.16) (2019-04-07)
 
 ### Bug Fixes
