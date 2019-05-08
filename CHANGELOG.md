@@ -1,3 +1,9 @@
+## [1.0.19](https://github.com/wessberg/browserslist-generator/compare/v1.0.18...v1.0.19) (2019-05-08)
+
+### Bug Fixes
+
+- **safari 12.1:** fixes issue that would make Safari 12.1 appear as Safari TP ([ed9dbe3](https://github.com/wessberg/browserslist-generator/commit/ed9dbe3))
+
 ## [1.0.18](https://github.com/wessberg/browserslist-generator/compare/v1.0.17...v1.0.18) (2019-04-11)
 
 ### Features
