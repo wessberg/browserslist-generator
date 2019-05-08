@@ -208,6 +208,25 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 		}
 	],
 	[
+		// Caniuse reports that Safari 12.1 and iOS Safari 12.2 has partial support for Web Animations,
+		// but they do not - They require enabling it as an experimental feature
+		"web-animation",
+		{
+			safari: [
+				{
+					kind: CaniuseSupportKind.UNAVAILABLE,
+					version: "12.1"
+				}
+			],
+			ios_saf: [
+				{
+					kind: CaniuseSupportKind.UNAVAILABLE,
+					version: "12.2"
+				}
+			]
+		}
+	],
+	[
 		"es6-class",
 		{
 			edge: [

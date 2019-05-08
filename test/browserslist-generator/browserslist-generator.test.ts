@@ -1,6 +1,6 @@
 import test from "ava";
 // @ts-ignore
-import {bingBot, chrome, edge, firefox, googleBot, ie, safari, yahooBot} from "useragent-generator";
+import {bingBot, chrome, edge, firefox, googleBot, ie, safari} from "useragent-generator";
 import {
 	browserslistSupportsEcmaVersion,
 	browserslistSupportsFeatures,
@@ -13,6 +13,8 @@ import {
 	matchBrowserslistOnUserAgent,
 	userAgentSupportsFeatures
 } from "../../src/browserslist-generator/browserslist-generator";
+
+const SAFARI_TP_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.2 Safari/605.1.15";
 
 // tslint:disable:no-duplicate-string
 
@@ -80,7 +82,7 @@ test("matchBrowserslistOnUserAgent() => Will match Safari v11", t => {
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Safari TP", t => {
-	t.true(matchBrowserslistOnUserAgent(safari("12.1"), ["safari TP", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(SAFARI_TP_USER_AGENT, ["safari TP", UNRELEASED_VERSIONS]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match iOS Safari v11", t => {
@@ -220,12 +222,16 @@ test("userAgentSupportsFeatures() => Correctly determines that Safari 12.0.2 doe
 	t.false(userAgentSupportsFeatures(safari("12.0.2"), "web-animation"));
 });
 
+test("userAgentSupportsFeatures() => Correctly determines that Safari 12.1 doesn't support Web Animations #1", t => {
+	t.false(userAgentSupportsFeatures(safari("12.1"), "web-animation"));
+});
+
 test("userAgentSupportsFeatures() => Correctly determines that Edge 16.16299 doesn't support the URL constructor #1", t => {
 	t.false(userAgentSupportsFeatures(edge("16.16299"), "url", "urlsearchparams"));
 });
 
 test("userAgentSupportsFeatures() => Correctly determines that Safari TP *does* support Web Animations #1", t => {
-	t.true(userAgentSupportsFeatures(safari("12.1"), "web-animation"));
+	t.true(userAgentSupportsFeatures(SAFARI_TP_USER_AGENT, "web-animation"));
 });
 
 test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES3 doesn't support ES5 features #1", t => {
