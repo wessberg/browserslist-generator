@@ -9,7 +9,7 @@ import {getNextVersionOfBrowser, getOldestVersionOfBrowser, getPreviousVersionOf
 import {coerce, coerceToString} from "./coerce";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
-import {EcmaVersion, ES2015_FEATURES, ES2016_FEATURES, ES2017_FEATURES, ES2018_FEATURES, ES2019_FEATURES, ES5_FEATURES} from "./ecma-version";
+import {EcmaVersion, ES2015_FEATURES, ES2016_FEATURES, ES2017_FEATURES, ES2018_FEATURES, ES2019_FEATURES, ES2020_FEATURES, ES5_FEATURES} from "./ecma-version";
 import {IBrowserSupportForFeaturesCommonResult} from "./i-browser-support-for-features-common-result";
 import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, ICaniuseBrowserCorrection, ICaniuseDataCorrection, ICaniuseFeature} from "./i-caniuse";
 import {IMdn, MdnBrowserName} from "./i-mdn";
@@ -405,6 +405,12 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 			ie: rangeCorrection("ie", CaniuseSupportKind.UNAVAILABLE, `0`, `7`),
 			opera: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `0`, `11.1`)
 		}
+	],
+	[
+		"javascript.builtins.String.matchAll",
+		{
+			samsung: rangeCorrection("samsung", CaniuseSupportKind.UNAVAILABLE, `0`, `9.4`)
+		}
 	]
 ];
 
@@ -482,6 +488,9 @@ export function browserslistSupportsEcmaVersion(browserslist: string[], version:
 
 		case "es2019":
 			return browserslistSupportsFeatures(browserslist, ...ES2019_FEATURES);
+
+		case "es2020":
+			return browserslistSupportsFeatures(browserslist, ...ES2020_FEATURES);
 	}
 }
 
@@ -491,6 +500,7 @@ export function browserslistSupportsEcmaVersion(browserslist: string[], version:
  * @returns {EcmaVersion}
  */
 export function getAppropriateEcmaVersionForBrowserslist(browserslist: string[]): EcmaVersion {
+	if (browserslistSupportsEcmaVersion(browserslist, "es2020")) return "es2020";
 	if (browserslistSupportsEcmaVersion(browserslist, "es2019")) return "es2019";
 	if (browserslistSupportsEcmaVersion(browserslist, "es2018")) return "es2018";
 	else if (browserslistSupportsEcmaVersion(browserslist, "es2017")) return "es2017";
@@ -521,6 +531,8 @@ export function browsersWithSupportForEcmaVersion(version: EcmaVersion): string[
 			return browsersWithSupportForFeatures(...ES2018_FEATURES);
 		case "es2019":
 			return browsersWithSupportForFeatures(...ES2019_FEATURES);
+		case "es2020":
+			return browsersWithSupportForFeatures(...ES2020_FEATURES);
 	}
 }
 

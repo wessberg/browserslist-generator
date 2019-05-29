@@ -1,4 +1,4 @@
-export type EcmaVersion = "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019";
+export type EcmaVersion = "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019" | "es2020";
 
 export const ES5_FEATURES: string[] = ["es5"];
 
@@ -42,3 +42,5 @@ export const ES2019_FEATURES: string[] = [
 	"javascript.builtins.Symbol.description",
 	"javascript.statements.try_catch.optional_catch_binding"
 ];
+
+export const ES2020_FEATURES: string[] = ["javascript.builtins.String.matchAll"];

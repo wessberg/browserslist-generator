@@ -310,6 +310,10 @@ test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that th
 	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es2019")), "es2019");
 });
 
+test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for a Browserslist targeting browsers only compatible with ES2020 is indeed ES2020 #1", t => {
+	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es2020")), "es2020");
+});
+
 // test.only("playground", t => {
 // 	browsersWithoutSupportForFeatures("api.Window");
 // 	t.true(true);
