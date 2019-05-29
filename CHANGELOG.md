@@ -1,3 +1,9 @@
+## [1.0.20](https://github.com/wessberg/browserslist-generator/compare/v1.0.19...v1.0.20) (2019-05-29)
+
+### Features
+
+- **es2020:** adds support for EcmaScript 2020 features and generating a browserslist for it ([b6e598e](https://github.com/wessberg/browserslist-generator/commit/b6e598e))
+
 ## [1.0.19](https://github.com/wessberg/browserslist-generator/compare/v1.0.18...v1.0.19) (2019-05-08)
 
 ### Bug Fixes
