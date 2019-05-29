@@ -53,7 +53,7 @@
 	"devDependencies": {
 		"@wessberg/scaffold": "^1.0.17",
 		"@wessberg/ts-config": "0.0.39",
-		"@wessberg/rollup-plugin-ts": "^1.1.53",
+		"@wessberg/rollup-plugin-ts": "^1.1.54",
 		"rollup": "^1.12.4",
 		"ava": "^1.4.1",
 		"tslint": "^5.16.0",
