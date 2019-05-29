@@ -1,3 +1,5 @@
+## [1.0.21](https://github.com/wessberg/browserslist-generator/compare/v1.0.20...v1.0.21) (2019-05-29)
+
 ## [1.0.20](https://github.com/wessberg/browserslist-generator/compare/v1.0.19...v1.0.20) (2019-05-29)
 
 ### Features
