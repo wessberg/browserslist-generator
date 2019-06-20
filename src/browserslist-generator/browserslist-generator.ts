@@ -5,13 +5,36 @@ import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-li
 import compatData from "mdn-browser-compat-data";
 import {get} from "object-path";
 import {gt, gte, lte} from "semver";
-import {getNextVersionOfBrowser, getOldestVersionOfBrowser, getPreviousVersionOfBrowser, getSortedBrowserVersions, normalizeBrowserVersion} from "./browser-version";
+import {
+	getNextVersionOfBrowser,
+	getOldestVersionOfBrowser,
+	getPreviousVersionOfBrowser,
+	getSortedBrowserVersions,
+	normalizeBrowserVersion
+} from "./browser-version";
 import {coerce, coerceToString} from "./coerce";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
-import {EcmaVersion, ES2015_FEATURES, ES2016_FEATURES, ES2017_FEATURES, ES2018_FEATURES, ES2019_FEATURES, ES2020_FEATURES, ES5_FEATURES} from "./ecma-version";
+import {
+	EcmaVersion,
+	ES2015_FEATURES,
+	ES2016_FEATURES,
+	ES2017_FEATURES,
+	ES2018_FEATURES,
+	ES2019_FEATURES,
+	ES2020_FEATURES,
+	ES5_FEATURES
+} from "./ecma-version";
 import {IBrowserSupportForFeaturesCommonResult} from "./i-browser-support-for-features-common-result";
-import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, ICaniuseBrowserCorrection, ICaniuseDataCorrection, ICaniuseFeature} from "./i-caniuse";
+import {
+	CaniuseBrowser,
+	CaniuseStats,
+	CaniuseStatsNormalized,
+	CaniuseSupportKind,
+	ICaniuseBrowserCorrection,
+	ICaniuseDataCorrection,
+	ICaniuseFeature
+} from "./i-caniuse";
 import {IMdn, MdnBrowserName} from "./i-mdn";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
 import {UaParserWrapper} from "./ua-parser-wrapper";
@@ -47,7 +70,9 @@ const userAgentWithFeaturesToSupportCache: Map<string, boolean> = new Map();
  * A Map between features and browsers that has partial support for them but should be allowed anyway
  * @type {Map<string, string[]>}
  */
-const PARTIAL_SUPPORT_ALLOWANCES = <Map<string, CaniuseBrowser[] | "*">>new Map([["shadowdomv1", "*"], ["custom-elementsv1", "*"], ["web-animation", "*"]]);
+const PARTIAL_SUPPORT_ALLOWANCES = <Map<string, CaniuseBrowser[] | "*">>(
+	new Map([["shadowdomv1", "*"], ["custom-elementsv1", "*"], ["web-animation", "*"]])
+);
 
 /**
  * These browsers will be ignored all-together since they only report the latest
@@ -95,7 +120,9 @@ function rangeCorrection(browser: CaniuseBrowser, supportKind: CaniuseSupportKin
 			} else if (version === "all") {
 				shouldSet = true;
 			} else {
-				shouldSet = gte(coerceToString(browser, version), coerceToString(browser, start)) && lte(coerceToString(browser, version), coerceToString(browser, end));
+				shouldSet =
+					gte(coerceToString(browser, version), coerceToString(browser, start)) &&
+					lte(coerceToString(browser, version), coerceToString(browser, end));
 			}
 		}
 
@@ -573,7 +600,7 @@ export function browsersWithoutSupportForFeatures(...features: string[]): string
  */
 function shouldIgnoreBrowser(browser: CaniuseBrowser, version: string): boolean {
 	return (
-		(browser === "android" && version !== "all" && gt(coerceToString(browser, version), coerceToString(browser, "4.4.4"))) ||
+		(browser === "android" && gt(coerceToString(browser, version), coerceToString(browser, "4.4.4"))) ||
 		(browser === "op_mob" && gt(coerceToString(browser, version), coerceToString(browser, "12.1"))) ||
 		IGNORED_BROWSERS.has(browser)
 	);
@@ -596,7 +623,12 @@ function getCaniuseLiteFeatureNormalized(stats: CaniuseStats, featureName: strin
 			const normalizedVersion = versionMatch == null ? version : versionMatch[1];
 			let supportKind: CaniuseSupportKind;
 
-			if (support === CaniuseSupportKind.AVAILABLE || support === CaniuseSupportKind.UNAVAILABLE || support === CaniuseSupportKind.PARTIAL_SUPPORT || support === CaniuseSupportKind.PREFIXED) {
+			if (
+				support === CaniuseSupportKind.AVAILABLE ||
+				support === CaniuseSupportKind.UNAVAILABLE ||
+				support === CaniuseSupportKind.PARTIAL_SUPPORT ||
+				support === CaniuseSupportKind.PREFIXED
+			) {
 				supportKind = support;
 			} else if (support.startsWith("y")) {
 				supportKind = CaniuseSupportKind.AVAILABLE;
@@ -725,7 +757,8 @@ function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
 				: versionMap.version_added;
 
 		const dict: {[key: string]: CaniuseSupportKind} = {};
-		const supportedSince: string | null = versionAdded === false ? null : versionAdded === true ? getOldestVersionOfBrowser(caniuseBrowser) : versionAdded;
+		const supportedSince: string | null =
+			versionAdded === false ? null : versionAdded === true ? getOldestVersionOfBrowser(caniuseBrowser) : versionAdded;
 
 		getSortedBrowserVersions(caniuseBrowser).forEach(version => {
 			// If the features has never been supported, mark the feature as unavailable
@@ -862,7 +895,8 @@ function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator,
 				// Check if partial support exists for the browser. // If no full supported version exists or if the partial supported version has a lower version number than the full supported one, use that one instead
 				if (
 					partialSupportMatch != null &&
-					((partialSupportMatch === "*" || partialSupportMatch.includes(browser)) && (fullSupportVersion == null || compareVersions(partialSupportVersion, fullSupportVersion) < 0))
+					((partialSupportMatch === "*" || partialSupportMatch.includes(browser)) &&
+						(fullSupportVersion == null || compareVersions(partialSupportVersion, fullSupportVersion) < 0))
 				) {
 					versionToSet = partialSupportVersion;
 				}
@@ -982,7 +1016,13 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseB
 
 		case "WebKit":
 			// This will be the case if we're in an iOS Safari WebView
-			if (device.type === "mobile" || device.type === "tablet" || device.type === "smarttv" || device.type === "wearable" || device.type === "embedded") {
+			if (
+				device.type === "mobile" ||
+				device.type === "tablet" ||
+				device.type === "smarttv" ||
+				device.type === "wearable" ||
+				device.type === "embedded"
+			) {
 				return "ios_saf";
 			}
 			// Otherwise, fall back to Safari
@@ -1071,7 +1111,12 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseB
  * @param {IUseragentOS} useragentOS
  * @returns {string}
  */
-function getCaniuseVersionForUseragentVersion(browser: CaniuseBrowser, version: string, useragentBrowser: IUseragentBrowser, useragentOS: IUseragentOS): string {
+function getCaniuseVersionForUseragentVersion(
+	browser: CaniuseBrowser,
+	version: string,
+	useragentBrowser: IUseragentBrowser,
+	useragentOS: IUseragentOS
+): string {
 	// Ensure that we have a normalized version to work with
 	version = normalizeBrowserVersion(browser, version);
 
@@ -1098,7 +1143,9 @@ function getCaniuseVersionForUseragentVersion(browser: CaniuseBrowser, version: 
 
 	// Generates a Semver version
 	const buildSemverVersion = (majorVersion: number, minorVersion?: number, patchVersion?: number): string => {
-		return `${majorVersion}${minorVersion == null || minorVersion === 0 ? "" : `.${minorVersion}`}${patchVersion == null || patchVersion === 0 ? "" : `.${patchVersion}`}`;
+		return `${majorVersion}${minorVersion == null || minorVersion === 0 ? "" : `.${minorVersion}`}${
+			patchVersion == null || patchVersion === 0 ? "" : `.${patchVersion}`
+		}`;
 	};
 
 	switch (browser) {
