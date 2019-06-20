@@ -573,7 +573,7 @@ export function browsersWithoutSupportForFeatures(...features: string[]): string
  */
 function shouldIgnoreBrowser(browser: CaniuseBrowser, version: string): boolean {
 	return (
-		(browser === "android" && gt(coerceToString(browser, version), coerceToString(browser, "4.4.4"))) ||
+		(browser === "android" && version !== "all" && gt(coerceToString(browser, version), coerceToString(browser, "4.4.4"))) ||
 		(browser === "op_mob" && gt(coerceToString(browser, version), coerceToString(browser, "12.1"))) ||
 		IGNORED_BROWSERS.has(browser)
 	);
