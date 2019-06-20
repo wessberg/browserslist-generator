@@ -1,3 +1,9 @@
+## [1.0.23](https://github.com/wessberg/browserslist-generator/compare/v1.0.22...v1.0.23) (2019-06-20)
+
+### Bug Fixes
+
+- **bug:** rollback on Caniuse version to 4.6.2 which doesn't include a dependency on the bad version of caniuse-lite ([3f61c38](https://github.com/wessberg/browserslist-generator/commit/3f61c38))
+
 ## [1.0.22](https://github.com/wessberg/browserslist-generator/compare/v1.0.21...v1.0.22) (2019-06-20)
 
 ### Bug Fixes
