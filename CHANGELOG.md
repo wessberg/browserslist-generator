@@ -1,3 +1,11 @@
+## [1.0.22](https://github.com/wessberg/browserslist-generator/compare/v1.0.21...v1.0.22) (2019-06-20)
+
+### Bug Fixes
+
+- **bug:** fixes bug where Android version 'all' could lead to crashes ([009f868](https://github.com/wessberg/browserslist-generator/commit/009f868))
+- **bug:** fixes bug where Android version 'all' could lead to crashes ([886569b](https://github.com/wessberg/browserslist-generator/commit/886569b))
+- **bug:** rollback of update to broken version of caniuse-lite ([f64533a](https://github.com/wessberg/browserslist-generator/commit/f64533a))
+
 ## [1.0.21](https://github.com/wessberg/browserslist-generator/compare/v1.0.20...v1.0.21) (2019-05-29)
 
 ## [1.0.20](https://github.com/wessberg/browserslist-generator/compare/v1.0.19...v1.0.20) (2019-05-29)
