@@ -14,7 +14,7 @@ import {
 	userAgentSupportsFeatures
 } from "../../src/browserslist-generator/browserslist-generator";
 
-const SAFARI_TP_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.2 Safari/605.1.15";
+const SAFARI_TP_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15";
 
 // tslint:disable:no-duplicate-string
 
@@ -54,7 +54,7 @@ test("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox v6
 	t.true(userAgentSupportsFeatures(firefox(63), "javascript.builtins.Map.@@iterator"));
 });
 
-test.only("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox v63 supports custom-elementsv1", t => {
+test("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox v63 supports custom-elementsv1", t => {
 	t.true(userAgentSupportsFeatures(firefox(63), CUSTOM_ELEMENTS_FEATURE_NAME));
 });
 
@@ -240,6 +240,10 @@ test("userAgentSupportsFeatures() => Correctly determines that Safari 12.0.2 doe
 
 test("userAgentSupportsFeatures() => Correctly determines that Safari 12.1 doesn't support Web Animations #1", t => {
 	t.false(userAgentSupportsFeatures(safari("12.1"), "web-animation"));
+});
+
+test("userAgentSupportsFeatures() => Correctly determines that Safari 12.1.1 doesn't support Web Animations #1", t => {
+	t.false(userAgentSupportsFeatures(safari("12.1.1"), "web-animation"));
 });
 
 test("userAgentSupportsFeatures() => Correctly determines that Edge 16.16299 doesn't support the URL constructor #1", t => {
