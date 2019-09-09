@@ -1,3 +1,9 @@
+## [1.0.24](https://github.com/wessberg/browserslist-generator/compare/v1.0.23...v1.0.24) (2019-09-09)
+
+### Bug Fixes
+
+- **caniuse:** fix caniuse data that were broken for some time ([f8babd7](https://github.com/wessberg/browserslist-generator/commit/f8babd7))
+
 ## [1.0.23](https://github.com/wessberg/browserslist-generator/compare/v1.0.22...v1.0.23) (2019-06-20)
 
 ### Bug Fixes
