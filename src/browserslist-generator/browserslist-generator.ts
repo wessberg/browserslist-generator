@@ -438,6 +438,12 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 		{
 			samsung: rangeCorrection("samsung", CaniuseSupportKind.UNAVAILABLE, `0`, `9.4`)
 		}
+	],
+	[
+		"resizeobserver",
+		{
+			safari: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `13`, `13.1`)
+		}
 	]
 ];
 
