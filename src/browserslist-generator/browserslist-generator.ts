@@ -442,7 +442,7 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 	[
 		"resizeobserver",
 		{
-			safari: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `13`, `13.1`)
+			safari: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `0`)
 		}
 	]
 ];

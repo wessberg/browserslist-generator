@@ -254,6 +254,10 @@ test("userAgentSupportsFeatures() => Correctly determines that Safari TP *does* 
 	t.true(userAgentSupportsFeatures(SAFARI_TP_USER_AGENT, "web-animation"));
 });
 
+test("userAgentSupportsFeatures() => Correctly determines that Safari TP *doesn't* support ResizeObserver #1", t => {
+	t.false(userAgentSupportsFeatures(SAFARI_TP_USER_AGENT, "resizeobserver"));
+});
+
 test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES3 doesn't support ES5 features #1", t => {
 	t.false(browserslistSupportsFeatures(browsersWithSupportForEcmaVersion("es3"), "es5"));
 });
