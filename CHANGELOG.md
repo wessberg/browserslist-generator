@@ -1,3 +1,9 @@
+## [1.0.26](https://github.com/wessberg/browserslist-generator/compare/v1.0.25...v1.0.26) (2019-09-25)
+
+### Bug Fixes
+
+- **safari:** fix an issue where ResizeObserver is detected as supported by Safari (it is an experimental opt-in feature) ([6492c07](https://github.com/wessberg/browserslist-generator/commit/6492c07))
+
 ## [1.0.25](https://github.com/wessberg/browserslist-generator/compare/v1.0.24...v1.0.25) (2019-09-25)
 
 ### Bug Fixes
