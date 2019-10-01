@@ -1,3 +1,9 @@
+## [1.0.27](https://github.com/wessberg/browserslist-generator/compare/v1.0.26...v1.0.27) (2019-10-01)
+
+### Bug Fixes
+
+- **bug:** mark Safari as not supporting Web Animations by default ([9c77715](https://github.com/wessberg/browserslist-generator/commit/9c77715))
+
 ## [1.0.26](https://github.com/wessberg/browserslist-generator/compare/v1.0.25...v1.0.26) (2019-09-25)
 
 ### Bug Fixes
