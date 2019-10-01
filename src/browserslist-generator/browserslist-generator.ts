@@ -239,18 +239,8 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 		// but they do not - They require enabling it as an experimental feature
 		"web-animation",
 		{
-			safari: [
-				{
-					kind: CaniuseSupportKind.UNAVAILABLE,
-					version: "12.1"
-				}
-			],
-			ios_saf: [
-				{
-					kind: CaniuseSupportKind.UNAVAILABLE,
-					version: "12.2"
-				}
-			]
+			safari: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `0`),
+			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.UNAVAILABLE, `0`)
 		}
 	],
 	[

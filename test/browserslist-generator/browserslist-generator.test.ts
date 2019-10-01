@@ -246,16 +246,20 @@ test("userAgentSupportsFeatures() => Correctly determines that Safari 12.1.1 doe
 	t.false(userAgentSupportsFeatures(safari("12.1.1"), "web-animation"));
 });
 
+test("userAgentSupportsFeatures() => Correctly determines that Safari 13.0 doesn't support Web Animations #1", t => {
+	t.false(userAgentSupportsFeatures(safari("13.0"), "web-animation"));
+});
+
 test("userAgentSupportsFeatures() => Correctly determines that Edge 16.16299 doesn't support the URL constructor #1", t => {
 	t.false(userAgentSupportsFeatures(edge("16.16299"), "url", "urlsearchparams"));
 });
 
-test("userAgentSupportsFeatures() => Correctly determines that Safari TP *does* support Web Animations #1", t => {
-	t.true(userAgentSupportsFeatures(SAFARI_TP_USER_AGENT, "web-animation"));
-});
-
 test("userAgentSupportsFeatures() => Correctly determines that Safari TP *doesn't* support ResizeObserver #1", t => {
 	t.false(userAgentSupportsFeatures(SAFARI_TP_USER_AGENT, "resizeobserver"));
+});
+
+test("userAgentSupportsFeatures() => Correctly determines that Safari 13 *doesn't* support ResizeObserver #1", t => {
+	t.false(userAgentSupportsFeatures(safari("13.0"), "resizeobserver"));
 });
 
 test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES3 doesn't support ES5 features #1", t => {
