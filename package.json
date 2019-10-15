@@ -53,17 +53,17 @@
 	"devDependencies": {
 		"@wessberg/scaffold": "^1.0.19",
 		"@wessberg/ts-config": "0.0.41",
-		"@wessberg/rollup-plugin-ts": "^1.1.65",
-		"rollup": "^1.22.0",
+		"@wessberg/rollup-plugin-ts": "^1.1.68",
+		"rollup": "^1.24.0",
 		"ava": "^2.4.0",
 		"tslint": "^5.20.0",
-		"typescript": "^3.6.3",
-		"standard-changelog": "^2.0.13",
+		"typescript": "^3.6.4",
+		"standard-changelog": "^2.0.15",
 		"prettier": "^1.18.2",
-		"pretty-quick": "^1.11.1",
-		"husky": "^3.0.7",
+		"pretty-quick": "^2.0.0",
+		"husky": "^3.0.9",
 		"useragent-generator": "^1.1.1-amkt-22079-finish.0",
-		"np": "^5.1.0",
+		"np": "^5.1.1",
 		"ts-node": "^8.4.1"
 	},
 	"dependencies": {
@@ -71,8 +71,8 @@
 		"@types/semver": "^6.0.2",
 		"@types/ua-parser-js": "^0.7.33",
 		"browserslist": "4.7.0",
-		"caniuse-lite": "^1.0.30000997",
-		"mdn-browser-compat-data": "0.0.94",
+		"caniuse-lite": "^1.0.30000999",
+		"mdn-browser-compat-data": "0.0.96",
 		"object-path": "^0.11.4",
 		"semver": "^6.3.0",
 		"ua-parser-js": "^0.7.20"
@@ -84,7 +84,7 @@
 	"typings": "./dist/esm/index.d.ts",
 	"es2015": "./dist/esm/index.js",
 	"engines": {
-		"node": ">=9.0.0"
+		"node": ">=8.0.0"
 	},
 	"ava": {
 		"compileEnhancements": false,
