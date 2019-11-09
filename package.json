@@ -13,12 +13,9 @@
 		"url": "https://github.com/wessberg/browserslist-generator/issues"
 	},
 	"scripts": {
-		"generate:readme": "scaffold readme --yes",
-		"generate:license": "scaffold license --yes",
-		"generate:contributing": "scaffold contributing --yes",
-		"generate:coc": "scaffold coc --yes",
+		"generate:scaffold": "scaffold all --yes",
 		"generate:changelog": "standard-changelog --first-release",
-		"generate:all": "npm run generate:license & npm run generate:contributing & npm run generate:coc & npm run generate:readme && npm run generate:changelog",
+		"generate:all": "npm run generate:scaffold && npm run generate:changelog",
 		"clean:dist": "rm -rf dist",
 		"clean": "npm run clean:dist",
 		"lint": "tsc --noEmit && tslint -c tslint.json --project tsconfig.json",
@@ -46,7 +43,8 @@
 			"url": "https://github.com/wessberg",
 			"imageUrl": "https://avatars2.githubusercontent.com/u/20454213?s=460&v=4",
 			"role": "Lead Developer",
-			"twitter": "FredWessberg"
+			"twitter": "FredWessberg",
+			"github": "wessberg"
 		}
 	],
 	"license": "MIT",
