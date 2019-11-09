@@ -1,3 +1,9 @@
+## [1.0.30](https://github.com/wessberg/browserslist-generator/compare/v1.0.29...v1.0.30) (2019-11-09)
+
+### Bug Fixes
+
+- **and_chr:** fix issue with detecting ECMA version support for and_chr. Closes [#3](https://github.com/wessberg/browserslist-generator/issues/3) ([e04fe9b](https://github.com/wessberg/browserslist-generator/commit/e04fe9bd5768b1176d9e5059db0d4f3612bce2c3))
+
 ## [1.0.29](https://github.com/wessberg/browserslist-generator/compare/v1.0.28...v1.0.29) (2019-10-15)
 
 ## [1.0.28](https://github.com/wessberg/browserslist-generator/compare/v1.0.27...v1.0.28) (2019-10-15)
