@@ -1,10 +1,21 @@
 // @ts-ignore
 import Browserslist from "browserslist";
-import {gt, gte} from "semver";
-import {coerce} from "./coerce";
+import {coerce as _coerce, gt, gte} from "semver";
+import {ensureSemver} from "./ensure-semver";
 import {compareVersions} from "./compare-versions";
 import {CaniuseBrowser} from "./i-caniuse";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
+
+export const SAFARI_TP_MAJOR_VERSION = (() => {
+	const versions = getSortedBrowserVersions("safari");
+	const lastVersionBeforeTP = versions[versions.length - 2];
+	const coerced = _coerce(lastVersionBeforeTP)!;
+	if (coerced.minor === 9) {
+		return _coerce(coerced.major + 1)!;
+	} else {
+		return _coerce(`${coerced.major}.${coerced.minor + 1}.0`)!;
+	}
+})();
 
 /**
  * Ensures that for any given version of a browser, if it is newer than the latest known version, the last known version will be used as a fallback
@@ -12,10 +23,14 @@ import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-rege
  * @param {string} givenVersion
  * @param {string[]} [versions]
  */
-export function normalizeBrowserVersion(browser: CaniuseBrowser, givenVersion: string, versions: string[] = getSortedBrowserVersions(browser)): string {
-	const givenVersionCoerced = coerce(browser, givenVersion);
+export function normalizeBrowserVersion(
+	browser: CaniuseBrowser,
+	givenVersion: string,
+	versions: string[] = getSortedBrowserVersions(browser)
+): string {
+	const givenVersionCoerced = ensureSemver(browser, givenVersion);
 	const latestVersion = getLatestVersionOfBrowser(browser);
-	const latestVersionCoerced = coerce(browser, latestVersion);
+	const latestVersionCoerced = ensureSemver(browser, latestVersion);
 
 	if (givenVersionCoerced == null || latestVersionCoerced == null) {
 		throw new TypeError(`Could not detect the version of: '${givenVersion}' for browser: ${browser}`);
@@ -24,7 +39,9 @@ export function normalizeBrowserVersion(browser: CaniuseBrowser, givenVersion: s
 	if (
 		givenVersionCoerced.major > latestVersionCoerced.major ||
 		(givenVersionCoerced.major === latestVersionCoerced.major && givenVersionCoerced.minor > latestVersionCoerced.minor) ||
-		(givenVersionCoerced.major === latestVersionCoerced.major && givenVersionCoerced.minor === latestVersionCoerced.minor && givenVersionCoerced.patch > latestVersionCoerced.patch)
+		(givenVersionCoerced.major === latestVersionCoerced.major &&
+			givenVersionCoerced.minor === latestVersionCoerced.minor &&
+			givenVersionCoerced.patch > latestVersionCoerced.patch)
 	) {
 		return latestVersion;
 	}
@@ -38,20 +55,24 @@ export function normalizeBrowserVersion(browser: CaniuseBrowser, givenVersion: s
  * @param {string} version
  * @param {string[]} versions
  */
-export function getClosestMatchingBrowserVersion(browser: CaniuseBrowser, version: string, versions: string[] = getSortedBrowserVersions(browser)): string {
-	const coerced = coerce(browser, version);
+export function getClosestMatchingBrowserVersion(
+	browser: CaniuseBrowser,
+	version: string,
+	versions: string[] = getSortedBrowserVersions(browser)
+): string {
+	const coerced = ensureSemver(browser, version);
 
 	if (browser === "op_mini" && version === "all") return "all";
 	if (browser === "safari") {
 		if (version === "TP") return "TP";
 		// If the given version is greater than or equal to the latest non-technical preview version of Safari, the closest match IS TP.
-		else if (gt(coerce(browser, `${coerced.major}.${coerced.minor}`), coerce(browser, versions.slice(-2)[0]))) return "TP";
+		else if (gt(ensureSemver(browser, `${coerced.major}.${coerced.minor}`), ensureSemver(browser, versions.slice(-2)[0]))) return "TP";
 	}
 
 	let candidate = versions[0];
 
 	versions.forEach(currentVersion => {
-		const currentCoerced = coerce(browser, currentVersion);
+		const currentCoerced = ensureSemver(browser, currentVersion);
 		if (gte(coerced, currentCoerced)) {
 			candidate = currentVersion;
 		}
@@ -60,33 +81,49 @@ export function getClosestMatchingBrowserVersion(browser: CaniuseBrowser, versio
 	return candidate;
 }
 
+export function getSortedBrowserVersionsWithLeadingVersion(browser: CaniuseBrowser, inputVersion?: string): string[] {
+	const versions: string[] = getSortedBrowserVersions(browser);
+	const [firstVersion] = versions;
+
+	if (firstVersion != null && inputVersion != null) {
+		const firstVersionSemver = ensureSemver(browser, firstVersion);
+		let nextInputVersion = inputVersion;
+		while (true) {
+			const nextInputSemver = ensureSemver(browser, nextInputVersion);
+			if (gt(firstVersionSemver, nextInputSemver)) {
+				versions.unshift(nextInputVersion);
+				nextInputVersion = String(nextInputSemver.major + 1);
+			} else {
+				break;
+			}
+		}
+	}
+	return versions;
+}
+
 /**
  * Gets all versions of the given browser, sorted
  * @param {CaniuseBrowser} browser
+ * @param {string} [inputVersion]
  * @returns {string}
  */
 export function getSortedBrowserVersions(browser: CaniuseBrowser): string[] {
-	const queryResultsMapped: Map<CaniuseBrowser, string[]> = new Map();
-
 	// Generate the Browserslist query
 	const queryResult: string[] = Browserslist([`>= 0%`, `unreleased versions`]);
+	const versions: string[] = [];
 
 	// First, organize the different versions of the browsers inside the Map
 	queryResult.forEach(part => {
 		const [currentBrowser, version] = <[CaniuseBrowser, string]>part.split(" ");
-		let versions = queryResultsMapped.get(currentBrowser);
-
-		if (versions == null) {
-			versions = [];
-			queryResultsMapped.set(currentBrowser, versions);
-		}
+		if (currentBrowser !== browser) return;
 
 		const versionMatch = version.match(NORMALIZE_BROWSER_VERSION_REGEXP);
 		const normalizedVersion = versionMatch == null ? version : versionMatch[1];
 
 		versions.push(normalizedVersion);
 	});
-	return queryResultsMapped.get(browser)!.sort(compareVersions);
+
+	return versions.sort(compareVersions);
 }
 
 /**
