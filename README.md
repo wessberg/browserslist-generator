@@ -59,8 +59,9 @@ A _Feature_ is anything that can be found on [caniuse](https://caniuse.com/) or 
   - [Features](#features)
 - [Table of Contents](#table-of-contents)
 - [Install](#install)
-  - [NPM](#npm)
+  - [npm](#npm)
   - [Yarn](#yarn)
+  - [pnpm](#pnpm)
 - [Usage](#usage)
   - [Generating a Browserslist based on features](#generating-a-browserslist-based-on-features)
   - [Checking if a User Agent supports a specific feature](#checking-if-a-user-agent-supports-a-specific-feature)
@@ -83,7 +84,7 @@ A _Feature_ is anything that can be found on [caniuse](https://caniuse.com/) or 
 
 ## Install
 
-### NPM
+### npm
 
 ```
 $ npm install @wessberg/browserslist-generator
@@ -93,6 +94,12 @@ $ npm install @wessberg/browserslist-generator
 
 ```
 $ yarn add @wessberg/browserslist-generator
+```
+
+### pnpm
+
+```
+$ pnpm add @wessberg/browserslist-generator
 ```
 
 <!-- SHADOW_SECTION_INSTALL_END -->
