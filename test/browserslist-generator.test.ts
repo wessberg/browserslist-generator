@@ -12,7 +12,7 @@ import {
 	getFirstVersionsWithFullSupport,
 	matchBrowserslistOnUserAgent,
 	userAgentSupportsFeatures
-} from "../../src/browserslist-generator/browserslist-generator";
+} from "../src/browserslist-generator/browserslist-generator";
 
 const SAFARI_TP_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15";
 

@@ -1,8 +1,5 @@
 /**
  * Compares two versions, a and b
- * @param {string} a
- * @param {string} b
- * @returns {number}
  */
 export function compareVersions(a: string, b: string): number {
 	const normalizedA = isNaN(parseFloat(a)) ? a : parseFloat(a);

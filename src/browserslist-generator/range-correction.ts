@@ -5,17 +5,13 @@ import {CaniuseBrowser, CaniuseSupportKind, ICaniuseDataCorrection} from "./i-ca
 
 /**
  * Applies the given correction within the given version range
- * @param browser
- * @param start
- * @param end
- * @param supportKind
  */
 export function rangeCorrection(browser: CaniuseBrowser, supportKind: CaniuseSupportKind, start?: string, end?: string): ICaniuseDataCorrection[] {
 	const versions = getSortedBrowserVersions(browser);
 	const corrections: ICaniuseDataCorrection[] = [];
 
 	versions.forEach(version => {
-		let shouldSet: boolean = false;
+		let shouldSet = false;
 
 		if (start == null && end == null) {
 			shouldSet = true;

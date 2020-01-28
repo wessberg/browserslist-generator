@@ -4,6 +4,9 @@ import packageJson from "./package.json";
 import {builtinModules} from "module";
 
 export default {
+	watch: {
+		clearScreen: false
+	},
 	input: "src/index.ts",
 	output: [
 		{
@@ -19,7 +22,8 @@ export default {
 	],
 	plugins: [
 		ts({
-			tsconfig: process.env.NODE_ENV === "production" ? "tsconfig.dist.json" : "tsconfig.json"
+			tsconfig: "tsconfig.build.json",
+			transpileOnly: true
 		})
 	],
 	external: [...builtinModules, ...Object.keys(packageJson.dependencies), ...Object.keys(packageJson.devDependencies)]

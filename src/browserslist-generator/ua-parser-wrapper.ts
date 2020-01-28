@@ -13,53 +13,49 @@ export class UaParserWrapper {
 	 */
 	private readonly parser: InstanceType<typeof UAParser>;
 
-	constructor(private userAgent: string) {
+	constructor(private readonly userAgent: string) {
 		this.parser = new UAParser(userAgent);
 	}
 
 	/**
 	 * Gets the IUserAgentBrowser based on the UAParser
-	 * @returns {IUseragentBrowser}
 	 */
-	public getBrowser(): IUseragentBrowser {
+	getBrowser(): IUseragentBrowser {
 		return this.extendGetBrowserResult(this.parser.getBrowser() as IUseragentBrowser);
 	}
 
 	/**
 	 * Gets the IUserAgentOS based on the UAParser
-	 * @returns {IUseragentOS}
 	 */
-	public getOS(): IUseragentOS {
+	getOS(): IUseragentOS {
 		return this.parser.getOS() as IUseragentOS;
 	}
 
 	/**
 	 * Gets the IUserAgentDevice based on the UAParser
-	 * @returns {IUseragentDevice}
+	 *
+	 * @returns
 	 */
-	public getDevice(): IUseragentDevice {
+	getDevice(): IUseragentDevice {
 		return this.parser.getDevice() as IUseragentDevice;
 	}
 
 	/**
 	 * Gets the IEngine based on the UAParser
-	 * @returns {*}
 	 */
-	public getEngine(): ReturnType<InstanceType<typeof UAParser>["getEngine"]> {
+	getEngine(): ReturnType<InstanceType<typeof UAParser>["getEngine"]> {
 		return this.parser.getEngine();
 	}
 
 	/**
 	 * Gets the ICPU based on the UAParser
-	 * @returns {*}
 	 */
-	public getCPU(): ReturnType<InstanceType<typeof UAParser>["getCPU"]> {
+	getCPU(): ReturnType<InstanceType<typeof UAParser>["getCPU"]> {
 		return this.parser.getCPU();
 	}
 
 	/**
 	 * Extends the result of calling 'getBrowser' on the UAParser and always takes bots into account
-	 * @param {IUseragentBrowser} result
 	 */
 	private extendGetBrowserResult(result: IUseragentBrowser): IUseragentBrowser {
 		// If the parse result already includes a Browser, use it as-is
@@ -74,7 +70,11 @@ export class UaParserWrapper {
 		}
 
 		// BingBot, The Facebook Crawler, and Yahoo's "Slurp" can render JavaScript, but they are very limited in what they can do. Mimic IE8 to reflect the limitations of these engines
-		if (BOT_TO_USER_AGENTS_MAP.BingBot(this.userAgent) || BOT_TO_USER_AGENTS_MAP.YahooBot(this.userAgent) || BOT_TO_USER_AGENTS_MAP.FacebookCrawler(this.userAgent)) {
+		if (
+			BOT_TO_USER_AGENTS_MAP.BingBot(this.userAgent) ||
+			BOT_TO_USER_AGENTS_MAP.YahooBot(this.userAgent) ||
+			BOT_TO_USER_AGENTS_MAP.FacebookCrawler(this.userAgent)
+		) {
 			result.name = "IE";
 			result.version = "8";
 			// noinspection JSDeprecatedSymbols

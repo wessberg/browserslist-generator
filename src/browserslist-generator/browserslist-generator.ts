@@ -1,6 +1,4 @@
-// @ts-ignore
 import Browserslist from "browserslist";
-// @ts-ignore
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
 import compatData from "mdn-browser-compat-data";
 import {get} from "object-path";
@@ -35,7 +33,6 @@ import {IUseragentBrowser, IUseragentOS} from "./useragent/useragent-typed";
 
 /**
  * A Cache between user agent names and generated Browserslists
- * @type {Map<string, string[]>}
  */
 const userAgentToBrowserslistCache: Map<string, string[]> = new Map();
 
@@ -63,11 +60,11 @@ const userAgentWithFeaturesToSupportCache: Map<string, boolean> = new Map();
  * A Map between features and browsers that has partial support for them but should be allowed anyway
  * @type {Map<string, string[]>}
  */
-const PARTIAL_SUPPORT_ALLOWANCES = <Map<string, CaniuseBrowser[] | "*">>new Map([
+const PARTIAL_SUPPORT_ALLOWANCES = new Map([
 	["shadowdomv1", "*"],
 	["custom-elementsv1", "*"],
 	["web-animation", "*"]
-]);
+]) as Map<string, CaniuseBrowser[] | "*">;
 
 /**
  * These browsers will be ignored all-together since they only report the latest
@@ -386,9 +383,6 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_MAP: Map<string, ICaniuseBrowserCorrec
 
 /**
  * Returns the input query, but extended with the given options
- * @param {string[]} query
- * @param {string|string[]} extendWith
- * @returns {string[]}
  */
 function extendQueryWith(query: string[], extendWith: string | string[]): string[] {
 	const normalizedExtendWith = Array.isArray(extendWith) ? extendWith : [extendWith];
@@ -397,8 +391,6 @@ function extendQueryWith(query: string[], extendWith: string | string[]): string
 
 /**
  * Normalizes the given Browserslist
- * @param {string | string[]} browserslist
- * @returns {string[]}
  */
 export function normalizeBrowserslist(browserslist: string | string[]): string[] {
 	return Browserslist(browserslist);
@@ -406,9 +398,10 @@ export function normalizeBrowserslist(browserslist: string | string[]): string[]
 
 /**
  * Returns the input query, but extended with 'unreleased versions'
- * @param {string[]} query
- * @param {Iterable<CaniuseBrowser>} browsers
- * @returns {string[]}
+ *
+ * @param query
+ * @param browsers
+ * @returns
  */
 function extendQueryWithUnreleasedVersions(query: string[], browsers: Iterable<CaniuseBrowser>): string[] {
 	return extendQueryWith(
@@ -419,8 +412,9 @@ function extendQueryWithUnreleasedVersions(query: string[], browsers: Iterable<C
 
 /**
  * Generates a Browserslist based on browser support for the given features
- * @param {string[]} features
- * @returns {string}
+ *
+ * @param features
+ * @returns
  */
 export function browsersWithSupportForFeatures(...features: string[]): string[] {
 	const {query, browsers} = browserSupportForFeaturesCommon(">=", ...features);
@@ -463,8 +457,9 @@ export function browserslistSupportsEcmaVersion(browserslist: string[], version:
 
 /**
  * Returns the appropriate Ecma version for the given Browserslist
- * @param {string[]} browserslist
- * @returns {EcmaVersion}
+ *
+ * @param browserslist
+ * @returns
  */
 export function getAppropriateEcmaVersionForBrowserslist(browserslist: string[]): EcmaVersion {
 	if (browserslistSupportsEcmaVersion(browserslist, "es2020")) return "es2020";
@@ -479,8 +474,9 @@ export function getAppropriateEcmaVersionForBrowserslist(browserslist: string[])
 
 /**
  * Generates a Browserslist based on browser support for the given ECMA version
- * @param {EcmaVersion} version
- * @returns {string[]}
+ *
+ * @param version
+ * @returns
  */
 export function browsersWithSupportForEcmaVersion(version: EcmaVersion): string[] {
 	switch (version) {
@@ -505,9 +501,10 @@ export function browsersWithSupportForEcmaVersion(version: EcmaVersion): string[
 
 /**
  * Returns true if the given browserslist support all of the given features
- * @param {string[]} browserslist
- * @param {string} features
- * @returns {boolean}
+ *
+ * @param browserslist
+ * @param features
+ * @returns
  */
 export function browserslistSupportsFeatures(browserslist: string[], ...features: string[]): boolean {
 	// First, generate an ideal browserslist that would target the given features exactly
@@ -523,8 +520,9 @@ export function browserslistSupportsFeatures(browserslist: string[], ...features
 
 /**
  * Generates a Browserslist based on browsers that *doesn't* support the given features
- * @param {string[]} features
- * @returns {string}
+ *
+ * @param features
+ * @returns
  */
 export function browsersWithoutSupportForFeatures(...features: string[]): string[] {
 	return browserSupportForFeaturesCommon("<", ...features).query;
@@ -534,9 +532,10 @@ export function browsersWithoutSupportForFeatures(...features: string[]): string
  * Returns true if the given browser should be ignored. The data reported from Caniuse is a bit lacking.
  * For example, only the latest version of and_ff, and_qq, and_uc and baidu is reported, and since
  * android went to use Chromium for the WebView, it has only reported the latest Chromium version
- * @param {CaniuseBrowser} browser
- * @param {string} version
- * @returns {boolean}
+ *
+ * @param browser
+ * @param version
+ * @returns
  */
 function shouldIgnoreBrowser(browser: CaniuseBrowser, version: string): boolean {
 	return (
@@ -548,9 +547,10 @@ function shouldIgnoreBrowser(browser: CaniuseBrowser, version: string): boolean 
 
 /**
  * Normalizes the given ICaniuseLiteFeature
- * @param {CaniuseStats} stats
- * @param {string} featureName
- * @returns {CaniuseStatsNormalized}
+ *
+ * @param stats
+ * @param featureName
+ * @returns
  */
 function getCaniuseLiteFeatureNormalized(stats: CaniuseStats, featureName: string): CaniuseStatsNormalized {
 	// Check if a correction exists for this browser
@@ -607,8 +607,9 @@ function getCaniuseLiteFeatureNormalized(stats: CaniuseStats, featureName: strin
 
 /**
  * Gets the support from caniuse for the given feature
- * @param {string} feature
- * @returns {CaniuseStatsNormalized}
+ *
+ * @param feature
+ * @returns
  */
 function getCaniuseFeatureSupport(feature: string): CaniuseStatsNormalized {
 	const rawStats = (caniuseFeature(caniuseFeatures[feature]) as ICaniuseFeature).stats;
@@ -645,7 +646,8 @@ function isMdnFeature(feature: string): boolean {
 
 /**
  * Asserts that the given feature is a valid Caniuse or MDN feature name
- * @param {string} feature
+ *
+ * @param feature
  */
 function assertKnownFeature(feature: string): void {
 	if (!isCaniuseFeature(feature) && !isMdnFeature(feature)) {
@@ -655,8 +657,9 @@ function assertKnownFeature(feature: string): void {
 
 /**
  * Gets the feature support for the given feature
- * @param {string} feature
- * @returns {CaniuseStatsNormalized}
+ *
+ * @param feature
+ * @returns
  */
 function getFeatureSupport(feature: string): CaniuseStatsNormalized {
 	// First check if the cache has a match and return it if so
@@ -675,8 +678,9 @@ function getFeatureSupport(feature: string): CaniuseStatsNormalized {
 
 /**
  * Gets the support from caniuse for the given feature
- * @param {string} feature
- * @returns {CaniuseStatsNormalized}
+ *
+ * @param feature
+ * @returns
  */
 function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
 	const match: IMdn = get(compatData, feature);
@@ -740,9 +744,10 @@ function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
 
 /**
  * Gets the first version that matches the given CaniuseSupportKind
- * @param {CaniuseSupportKind} kind
- * @param {object} stats
- * @returns {string | undefined}
+ *
+ * @param kind
+ * @param stats
+ * @returns
  */
 function getFirstVersionWithSupportKind(kind: CaniuseSupportKind, stats: {[key: string]: CaniuseSupportKind}): string | undefined {
 	// Sort all keys of the object
@@ -759,9 +764,10 @@ function getFirstVersionWithSupportKind(kind: CaniuseSupportKind, stats: {[key: 
 
 /**
  * Sorts the given browserslist. Ensures that 'not' expressions come last
- * @param {string} a
- * @param {string} b
- * @returns {number}
+ *
+ * @param a
+ * @param b
+ * @returns
  */
 function sortBrowserslist(a: string, b: string): number {
 	if (a.startsWith("not") && !b.startsWith("not")) return 1;
@@ -771,8 +777,9 @@ function sortBrowserslist(a: string, b: string): number {
 
 /**
  * Gets a Map between browser names and the first version of them that supported the given feature
- * @param {string} feature
- * @returns {Map<CaniuseBrowser, string>}
+ *
+ * @param feature
+ * @returns
  */
 export function getFirstVersionsWithFullSupport(feature: string): Map<CaniuseBrowser, string> {
 	const support = getFeatureSupport(feature);
@@ -789,8 +796,9 @@ export function getFirstVersionsWithFullSupport(feature: string): Map<CaniuseBro
 
 /**
  * Gets the Cache key for the given combination of a comparison operator and any amount of features
- * @param {ComparisonOperator} comparisonOperator
- * @param {string[]} features
+ *
+ * @param comparisonOperator
+ * @param features
  */
 function getBrowserSupportForFeaturesCacheKey(comparisonOperator: ComparisonOperator, features: string[]): string {
 	return `${comparisonOperator}.${features.sort().join(",")}`;
@@ -798,9 +806,10 @@ function getBrowserSupportForFeaturesCacheKey(comparisonOperator: ComparisonOper
 
 /**
  * Common logic for the functions that generate browserslists based on feature support
- * @param {ComparisonOperator} comparisonOperator
- * @param {string} features
- * @returns {IBrowserSupportForFeaturesCommonResult}
+ *
+ * @param comparisonOperator
+ * @param features
+ * @returns
  */
 function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator, ...features: string[]): IBrowserSupportForFeaturesCommonResult {
 	const cacheKey = getBrowserSupportForFeaturesCacheKey(comparisonOperator, features);
@@ -837,7 +846,7 @@ function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator,
 				if (
 					partialSupportMatch != null &&
 					(partialSupportMatch === "*" || partialSupportMatch.includes(browser)) &&
-						(fullSupportVersion == null || compareVersions(partialSupportVersion, fullSupportVersion) < 0)
+					(fullSupportVersion == null || compareVersions(partialSupportVersion, fullSupportVersion) < 0)
 				) {
 					versionToSet = partialSupportVersion;
 				}
@@ -898,13 +907,15 @@ function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator,
 				if (isNaN(parseFloat(version))) {
 					switch (comparisonOperator) {
 						case "<":
-						case "<=":
+						case "<=": {
 							const previousVersion = getPreviousVersionOfBrowser(browser, version);
 							return [`not ${browser} ${version}`, ...(previousVersion == null ? [] : [`${browser} ${comparisonOperator} ${previousVersion}`])];
+						}
 						case ">":
-						case ">=":
+						case ">=": {
 							const nextVersion = getNextVersionOfBrowser(browser, version);
 							return [`${browser} ${version}`, ...(nextVersion == null ? [] : [`${browser} ${comparisonOperator} ${nextVersion}`])];
+						}
 					}
 				}
 				return parseInt(version) === -1
@@ -928,8 +939,9 @@ function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator,
 
 /**
  * Gets the matching CaniuseBrowser for the given UseragentBrowser. Not all are supported, so it may return undefined
- * @param {UaParserWrapper} parser
- * @returns {CaniuseBrowser}
+ *
+ * @param parser
+ * @returns
  */
 function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseBrowser | undefined {
 	const browser = parser.getBrowser();
@@ -1046,11 +1058,12 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseB
 
 /**
  * Normalizes the version of the browser such that it plays well with Caniuse
- * @param {CaniuseBrowser} browser
- * @param {string} version
- * @param {IUseragentBrowser} useragentBrowser
- * @param {IUseragentOS} useragentOS
- * @returns {string}
+ *
+ * @param browser
+ * @param version
+ * @param useragentBrowser
+ * @param useragentOS
+ * @returns
  */
 function getCaniuseVersionForUseragentVersion(
 	browser: CaniuseBrowser,
@@ -1083,11 +1096,10 @@ function getCaniuseVersionForUseragentVersion(
 	const {major, minor, patch} = coerced;
 
 	// Generates a Semver version
-	const buildSemverVersion = (majorVersion: number, minorVersion?: number, patchVersion?: number): string => {
-		return `${majorVersion}${minorVersion == null || minorVersion === 0 ? "" : `.${minorVersion}`}${
+	const buildSemverVersion = (majorVersion: number, minorVersion?: number, patchVersion?: number): string =>
+		`${majorVersion}${minorVersion == null || minorVersion === 0 ? "" : `.${minorVersion}`}${
 			patchVersion == null || patchVersion === 0 ? "" : `.${patchVersion}`
 		}`;
-	};
 
 	switch (browser) {
 		case "chrome":
@@ -1163,8 +1175,9 @@ function getCaniuseVersionForUseragentVersion(
 
 /**
  * Generates a browserslist from the provided useragent string
- * @param {string} useragent
- * @returns {string[]}
+ *
+ * @param useragent
+ * @returns
  */
 export function generateBrowserslistFromUseragent(useragent: string): string[] {
 	// Check if a user agent has been generated previously for this specific user agent
@@ -1206,9 +1219,10 @@ export function generateBrowserslistFromUseragent(useragent: string): string[] {
 /**
  * Generates a browserslist from the provided useragent string and checks if it matches
  * the given browserslist
- * @param {string} useragent
- * @param {string[]} browserslist
- * @returns {string[]}
+ *
+ * @param useragent
+ * @param browserslist
+ * @returns
  */
 export function matchBrowserslistOnUserAgent(useragent: string, browserslist: string[]): boolean {
 	const useragentBrowserslist = generateBrowserslistFromUseragent(useragent);
@@ -1222,8 +1236,9 @@ export function matchBrowserslistOnUserAgent(useragent: string, browserslist: st
 
 /**
  * Returns a key to use for the cache between user agents with feature names and whether or not the user agent supports them
- * @param {string} useragent
- * @param {string[]} features
+ *
+ * @param useragent
+ * @param features
  */
 function userAgentWithFeaturesCacheKey(useragent: string, features: string[]): string {
 	return `${useragent}.${features.join(",")}`;
@@ -1231,9 +1246,10 @@ function userAgentWithFeaturesCacheKey(useragent: string, features: string[]): s
 
 /**
  * Returns true if the given user agent supports the given features
- * @param {string} useragent
- * @param {string[]} features
- * @returns {string[]}
+ *
+ * @param useragent
+ * @param features
+ * @returns
  */
 export function userAgentSupportsFeatures(useragent: string, ...features: string[]): boolean {
 	// Check if these features has been computed previously for the given user agent
