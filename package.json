@@ -102,7 +102,7 @@
 			"ts"
 		],
 		"require": [
-			"ts-node/register"
+			"ts-node/register/transpile-only"
 		]
 	},
 	"husky": {
