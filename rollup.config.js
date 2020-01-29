@@ -22,8 +22,7 @@ export default {
 	],
 	plugins: [
 		ts({
-			tsconfig: "tsconfig.build.json",
-			transpileOnly: true
+			tsconfig: "tsconfig.build.json"
 		})
 	],
 	external: [...builtinModules, ...Object.keys(packageJson.dependencies), ...Object.keys(packageJson.devDependencies)]

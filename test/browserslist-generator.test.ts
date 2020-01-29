@@ -347,6 +347,5 @@ test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that th
 });
 
 // test.only("playground", t => {
-// 	browsersWithoutSupportForFeatures("api.Window");
-// 	t.true(true);
+//   t.true(true);
 // });
