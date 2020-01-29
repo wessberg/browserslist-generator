@@ -1,3 +1,9 @@
+## [1.0.32](https://github.com/wessberg/browserslist-generator/compare/v1.0.31...v1.0.32) (2020-01-29)
+
+### Bug Fixes
+
+- add a workaround for a Browserslist regression ([c8531ab](https://github.com/wessberg/browserslist-generator/commit/c8531abcd94b2a78bcfd5ddea14ce11cbd66fe83))
+
 ## [1.0.31](https://github.com/wessberg/browserslist-generator/compare/v1.0.30...v1.0.31) (2020-01-28)
 
 ## [1.0.30](https://github.com/wessberg/browserslist-generator/compare/v1.0.29...v1.0.30) (2019-11-09)
