@@ -1,3 +1,9 @@
+## [1.0.33](https://github.com/wessberg/browserslist-generator/compare/v1.0.32...v1.0.33) (2020-02-13)
+
+### Bug Fixes
+
+- remove temporary workaround now that an external issue in the Browserslist repository has been fixed ([7573be5](https://github.com/wessberg/browserslist-generator/commit/7573be554d2ec54421bc91e2cd2d53c73d4c305f))
+
 ## [1.0.32](https://github.com/wessberg/browserslist-generator/compare/v1.0.31...v1.0.32) (2020-01-29)
 
 ### Bug Fixes
