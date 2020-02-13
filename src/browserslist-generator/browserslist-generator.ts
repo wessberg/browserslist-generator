@@ -393,18 +393,7 @@ function extendQueryWith(query: string[], extendWith: string | string[]): string
  * Normalizes the given Browserslist
  */
 export function normalizeBrowserslist(browserslist: string | string[]): string[] {
-	return temporary443Workaround(Browserslist(browserslist));
-}
-
-/**
- * TODO: Remove this wrapper when this issue: https://github.com/browserslist/browserslist/issues/443
- *       has been resolved
- */
-function temporary443Workaround(browserslist: string[]): string[] {
-	const opMob10Index = browserslist.indexOf("op_mob 10");
-	if (opMob10Index < 0) return browserslist;
-
-	return [...browserslist.slice(0, opMob10Index), ...browserslist.slice(opMob10Index + 1)];
+	return Browserslist(browserslist);
 }
 
 /**
