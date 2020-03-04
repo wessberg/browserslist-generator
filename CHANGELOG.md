@@ -1,3 +1,9 @@
+## [1.0.34](https://github.com/wessberg/browserslist-generator/compare/v1.0.33...v1.0.34) (2020-03-04)
+
+### Bug Fixes
+
+- add support for FBAN (Facebook in-app browser) on iOS and Android ([0be9eea](https://github.com/wessberg/browserslist-generator/commit/0be9eeaff980c0cca8d9bd39877154174d802c1b))
+
 ## [1.0.33](https://github.com/wessberg/browserslist-generator/compare/v1.0.32...v1.0.33) (2020-02-13)
 
 ### Bug Fixes
