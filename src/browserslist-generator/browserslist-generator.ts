@@ -988,6 +988,15 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseB
 		case "Chrome WebView":
 			return "chrome";
 
+		case "Facebook":
+			// If the OS is iOS, it is actually Safari that drives the WebView
+			if (os.name === "iOS") {
+				return "ios_saf";
+			}
+
+			// Otherwise, we're on Android and inside of a WebView
+			return "chrome";
+
 		case "Chrome":
 			// Check if the OS is Android, in which case this is actually Chrome for Android. Make it report as regular Chrome
 			if (os.name === "Android") {

@@ -22,6 +22,7 @@ export type UseragentBrowser =
 	| "Doris"
 	| "Edge"
 	| "Epiphany"
+	| "Facebook"
 	| "Fennec"
 	| "Firebird"
 	| "Firefox"

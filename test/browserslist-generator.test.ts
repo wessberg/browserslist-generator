@@ -15,12 +15,8 @@ import {
 } from "../src/browserslist-generator/browserslist-generator";
 
 const SAFARI_TP_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15";
-
-// tslint:disable:no-duplicate-string
-
-// tslint:disable:no-identical-functions
-
-// tslint:disable:no-commented-code
+const FBAN_SAFARI_13_3_USER_AGENT =
+	"Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 LightSpeed [FBAN/MessengerLiteForiOS;FBAV/253.1.0.43.116;FBBV/200174216;FBDV/iPhone11,6;FBMD/iPhone;FBSN/iOS;FBSV/13.3.1;FBSS/3;FBCR/;FBID/phone;FBLC/en_US;FBOP/0]";
 
 const ES_MODULE_FEATURE_NAME = "es6-module";
 const SHADOW_DOM_FEATURE_NAME = "shadowdomv1";
@@ -260,6 +256,10 @@ test("userAgentSupportsFeatures() => Correctly determines that Safari TP *doesn'
 
 test("userAgentSupportsFeatures() => Correctly determines that Safari 13 *doesn't* support ResizeObserver #1", t => {
 	t.false(userAgentSupportsFeatures(safari("13.0"), "resizeobserver"));
+});
+
+test("userAgentSupportsFeatures() => Correctly determines that Safari 13.3 *doesn't* support ResizeObserver #1", t => {
+	t.false(userAgentSupportsFeatures(FBAN_SAFARI_13_3_USER_AGENT, "resizeobserver"));
 });
 
 test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES3 doesn't support ES5 features #1", t => {
