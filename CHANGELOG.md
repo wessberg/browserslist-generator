@@ -1,3 +1,9 @@
+## [1.0.35](https://github.com/wessberg/browserslist-generator/compare/v1.0.34...v1.0.35) (2020-03-30)
+
+### Bug Fixes
+
+- **Android on Firefox:** stop treating and_ff as firefox ([fb645f4](https://github.com/wessberg/browserslist-generator/commit/fb645f4b2ec2e71c44076b8c76a63d4018248c76))
+
 ## [1.0.34](https://github.com/wessberg/browserslist-generator/compare/v1.0.33...v1.0.34) (2020-03-04)
 
 ### Bug Fixes
