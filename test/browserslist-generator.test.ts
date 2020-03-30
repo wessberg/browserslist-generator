@@ -50,6 +50,10 @@ test("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox v6
 	t.true(userAgentSupportsFeatures(firefox(63), "javascript.builtins.Map.@@iterator"));
 });
 
+test("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox on Android v68 doesn't support `pointer`", t => {
+	t.false(userAgentSupportsFeatures(`Mozilla/5.0 (Android 8.0.0; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0`, "pointer"));
+});
+
 test("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox v63 supports custom-elementsv1", t => {
 	t.true(userAgentSupportsFeatures(firefox(63), CUSTOM_ELEMENTS_FEATURE_NAME));
 });
@@ -134,10 +138,6 @@ test("matchBrowserslistOnUserAgent() => Will match BingBot as IE 8", t => {
 
 test("matchBrowserslistOnUserAgent() => Will match YahooBot as IE 8", t => {
 	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 8", UNRELEASED_VERSIONS]));
-});
-
-test("matchBrowserslistOnUserAgent() => Will match Android Firefox (as desktop firefox)", t => {
-	t.true(matchBrowserslistOnUserAgent(firefox.androidPhone("57"), ["firefox >= 57", UNRELEASED_VERSIONS]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Internet Explorer", t => {

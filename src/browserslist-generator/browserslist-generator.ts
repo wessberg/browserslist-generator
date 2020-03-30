@@ -1016,9 +1016,8 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseB
 
 		case "Firefox":
 			// Check if the OS is Android, in which case this is actually Firefox for Android.
-			// Make it report as regular Firefox
 			if (os.name === "Android") {
-				return "firefox";
+				return "and_ff";
 			}
 
 			// If the OS is iOS, it is actually Safari that drives the WebView
@@ -1228,10 +1227,6 @@ export function generateBrowserslistFromUseragent(useragent: string): string[] {
 /**
  * Generates a browserslist from the provided useragent string and checks if it matches
  * the given browserslist
- *
- * @param useragent
- * @param browserslist
- * @returns
  */
 export function matchBrowserslistOnUserAgent(useragent: string, browserslist: string[]): boolean {
 	const useragentBrowserslist = generateBrowserslistFromUseragent(useragent);
