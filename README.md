@@ -201,6 +201,8 @@ All of the possible ECMAScript versions are:
 - `es2016`
 - `es2017`
 - `es2018`
+- `es2019`
+- `es2020`
 
 <!-- SHADOW_SECTION_CONTRIBUTING_START -->
 
