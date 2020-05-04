@@ -29,7 +29,7 @@ import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind
 import {IMdn, MdnBrowserName} from "./i-mdn";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
 import {UaParserWrapper} from "./ua-parser-wrapper";
-import {IUseragentBrowser, IUseragentOS} from "./useragent/useragent-typed";
+import {IUseragentBrowser, IUseragentEngine, IUseragentOS} from "./useragent/useragent-typed";
 
 /**
  * A Cache between user agent names and generated Browserslists
@@ -947,6 +947,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseB
 	const browser = parser.getBrowser();
 	const device = parser.getDevice();
 	const os = parser.getOS();
+	const engine = parser.getEngine();
 
 	// First, if it is a Blackberry device, it will always be the 'bb' browser
 	if (device.vendor === "BlackBerry" || os.name === "BlackBerry") {
@@ -1060,24 +1061,33 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseB
 			return "and_uc";
 
 		default:
-			return undefined;
+			switch (engine.name) {
+				case "Blink":
+					return "chrome";
+				case "WebKit":
+					if (os.name === "iOS") {
+						return "ios_saf";
+					}
+					return "safari";
+				case "EdgeHTML":
+					return "edge";
+				case "Presto":
+					return "opera";
+			}
 	}
+
+	return undefined;
 }
 
 /**
  * Normalizes the version of the browser such that it plays well with Caniuse
- *
- * @param browser
- * @param version
- * @param useragentBrowser
- * @param useragentOS
- * @returns
  */
 function getCaniuseVersionForUseragentVersion(
 	browser: CaniuseBrowser,
 	version: string,
 	useragentBrowser: IUseragentBrowser,
-	useragentOS: IUseragentOS
+	useragentOS: IUseragentOS,
+	useragentEngine: IUseragentEngine
 ): string {
 	// Ensure that we have a normalized version to work with
 	version = normalizeBrowserVersion(browser, version);
@@ -1111,6 +1121,10 @@ function getCaniuseVersionForUseragentVersion(
 
 	switch (browser) {
 		case "chrome":
+			if (useragentEngine.name === "Blink") {
+				return buildSemverVersion(ensureSemver(browser, useragentEngine.version ?? version).major);
+			}
+			return buildSemverVersion(major);
 		case "ie":
 		case "ie_mob":
 		case "edge":
@@ -1196,6 +1210,7 @@ export function generateBrowserslistFromUseragent(useragent: string): string[] {
 	const parser = new UaParserWrapper(useragent);
 	const browser = parser.getBrowser();
 	const os = parser.getOS();
+	const engine = parser.getEngine();
 	const version = browser.version;
 
 	// Prepare a CaniuseBrowser name from the useragent string
@@ -1208,13 +1223,13 @@ export function generateBrowserslistFromUseragent(useragent: string): string[] {
 		console.log("browser:", parser.getBrowser());
 		console.log("device:", parser.getDevice());
 		console.log("cpu:", parser.getCPU());
-		console.log("browser:", parser.getEngine());
+		console.log("engine:", parser.getEngine());
 		userAgentToBrowserslistCache.set(useragent, []);
 		return [];
 	}
 
 	// Prepare a version from the useragent that plays well with caniuse
-	const browserVersion = getCaniuseVersionForUseragentVersion(browserName, version, browser, os);
+	const browserVersion = getCaniuseVersionForUseragentVersion(browserName, version, browser, os, engine);
 
 	// Prepare a browserslist from the useragent itself
 	const normalizedBrowserslist = normalizeBrowserslist([`${browserName} ${browserVersion}`]);

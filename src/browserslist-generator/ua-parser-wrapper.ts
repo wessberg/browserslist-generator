@@ -1,6 +1,6 @@
 import {UAParser} from "ua-parser-js";
 import {BOT_TO_USER_AGENTS_MAP} from "./useragent/bot/bot-to-user-agents-map";
-import {IUseragentBrowser, IUseragentDevice, IUseragentOS} from "./useragent/useragent-typed";
+import {IUseragentBrowser, IUseragentDevice, IUseragentEngine, IUseragentOS} from "./useragent/useragent-typed";
 
 // tslint:disable
 
@@ -43,8 +43,8 @@ export class UaParserWrapper {
 	/**
 	 * Gets the IEngine based on the UAParser
 	 */
-	getEngine(): ReturnType<InstanceType<typeof UAParser>["getEngine"]> {
-		return this.parser.getEngine();
+	getEngine(): IUseragentEngine {
+		return this.parser.getEngine() as IUseragentEngine;
 	}
 
 	/**

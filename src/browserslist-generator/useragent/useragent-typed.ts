@@ -1,4 +1,5 @@
 import {UseragentBrowser} from "./useragent-browser";
+import {UseragentEngine} from "./useragent-engine";
 import {UseragentOS} from "./useragent-os";
 import {UseragentVendor} from "./useragent-vendor";
 
@@ -28,6 +29,14 @@ export interface IUseragentDevice {
 
 export interface IUseragentOS {
 	name: UseragentOS | undefined;
+	/**
+	 * Determined dynamically
+	 */
+	version: string | undefined;
+}
+
+export interface IUseragentEngine {
+	name: UseragentEngine | undefined;
 	/**
 	 * Determined dynamically
 	 */

@@ -14,7 +14,7 @@ import {
 	userAgentSupportsFeatures
 } from "../src/browserslist-generator/browserslist-generator";
 
-const SAFARI_TP_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15";
+const SAFARI_TP_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.2 Safari/605.1.15";
 const FBAN_SAFARI_13_3_USER_AGENT =
 	"Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 LightSpeed [FBAN/MessengerLiteForiOS;FBAV/253.1.0.43.116;FBBV/200174216;FBDV/iPhone11,6;FBMD/iPhone;FBSN/iOS;FBSV/13.3.1;FBSS/3;FBCR/;FBID/phone;FBLC/en_US;FBOP/0]";
 
@@ -232,6 +232,32 @@ test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 support
 
 test("userAgentSupportsFeatures() => Correctly determines that Safari 12.0.2 doesn't support Web Animations #1", t => {
 	t.false(userAgentSupportsFeatures(safari("12.0.2"), "web-animation"));
+});
+
+test("userAgentSupportsFeatures() => Correctly determines that Chrome 83 doesn't support :focus-visible #1", t => {
+	t.false(userAgentSupportsFeatures(chrome("83"), "css-focus-visible"));
+});
+
+test("userAgentSupportsFeatures() => Correctly determines that QQ 9 doesn't support String.prototype.padStart #1", t => {
+	t.false(
+		userAgentSupportsFeatures(
+			`Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36 QBCore/4.0.1301.400 QQBrowser/9.0.2524.400 Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2875.116 Safari/537.36 NetType/WIFI MicroMessenger/7.0.5 WindowsWechat`,
+			"javascript.builtins.String.padStart"
+		)
+	);
+});
+
+test("userAgentSupportsFeatures() => Correctly determines that Chrome 71 on Android doesn't support Intl.ListFormat #1", t => {
+	t.false(
+		userAgentSupportsFeatures(
+			`Mozilla/5.0 (Linux; U; Android 10; en-us; SM-G975F Build/QP1A.190711.020) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/71.0.3578.141 Mobile Safari/537.36 XiaoMi/MiuiBrowser/12.1.3-g`,
+			"javascript.builtins.Intl.ListFormat"
+		)
+	);
+});
+
+test("userAgentSupportsFeatures() => Correctly determines that Chrome 71 on Android doesn't support Intl.ListFormat #2", t => {
+	t.false(userAgentSupportsFeatures(chrome("71"), "javascript.builtins.Intl.ListFormat"));
 });
 
 test("userAgentSupportsFeatures() => Correctly determines that Safari 12.1 doesn't support Web Animations #1", t => {
