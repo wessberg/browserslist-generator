@@ -1,3 +1,9 @@
+## [1.0.36](https://github.com/wessberg/browserslist-generator/compare/v1.0.35...v1.0.36) (2020-05-04)
+
+### Bug Fixes
+
+- correctly detect QQ browser and MiuiBrowser. ([04f5f73](https://github.com/wessberg/browserslist-generator/commit/04f5f73bb0c9bbfc63c33d1725860ee07f803461))
+
 ## [1.0.35](https://github.com/wessberg/browserslist-generator/compare/v1.0.34...v1.0.35) (2020-03-30)
 
 ### Bug Fixes
