@@ -1,3 +1,9 @@
+## [1.0.37](https://github.com/wessberg/browserslist-generator/compare/v1.0.36...v1.0.37) (2020-06-22)
+
+### Bug Fixes
+
+- **mdn:** update mdn data structure ([b83d160](https://github.com/wessberg/browserslist-generator/commit/b83d160d36be9774b7c327cbd5f95fc504a367e8))
+
 ## [1.0.36](https://github.com/wessberg/browserslist-generator/compare/v1.0.35...v1.0.36) (2020-05-04)
 
 ### Bug Fixes
