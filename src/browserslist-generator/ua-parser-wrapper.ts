@@ -1,6 +1,6 @@
 import {UAParser} from "ua-parser-js";
 import {BOT_TO_USER_AGENTS_MAP} from "./useragent/bot/bot-to-user-agents-map";
-import {IUseragentBrowser, IUseragentDevice, IUseragentEngine, IUseragentOS} from "./useragent/useragent-typed";
+import {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from "./useragent/useragent-typed";
 
 // tslint:disable
 
@@ -20,15 +20,15 @@ export class UaParserWrapper {
 	/**
 	 * Gets the IUserAgentBrowser based on the UAParser
 	 */
-	getBrowser(): IUseragentBrowser {
-		return this.extendGetBrowserResult(this.parser.getBrowser() as IUseragentBrowser);
+	getBrowser(): UseragentBrowser {
+		return this.extendGetBrowserResult(this.parser.getBrowser() as UseragentBrowser);
 	}
 
 	/**
 	 * Gets the IUserAgentOS based on the UAParser
 	 */
-	getOS(): IUseragentOS {
-		return this.parser.getOS() as IUseragentOS;
+	getOS(): UseragentOs {
+		return this.parser.getOS() as UseragentOs;
 	}
 
 	/**
@@ -36,15 +36,15 @@ export class UaParserWrapper {
 	 *
 	 * @returns
 	 */
-	getDevice(): IUseragentDevice {
-		return this.parser.getDevice() as IUseragentDevice;
+	getDevice(): UseragentDevice {
+		return this.parser.getDevice() as UseragentDevice;
 	}
 
 	/**
 	 * Gets the IEngine based on the UAParser
 	 */
-	getEngine(): IUseragentEngine {
-		return this.parser.getEngine() as IUseragentEngine;
+	getEngine(): UseragentEngine {
+		return this.parser.getEngine() as UseragentEngine;
 	}
 
 	/**
@@ -57,7 +57,7 @@ export class UaParserWrapper {
 	/**
 	 * Extends the result of calling 'getBrowser' on the UAParser and always takes bots into account
 	 */
-	private extendGetBrowserResult(result: IUseragentBrowser): IUseragentBrowser {
+	private extendGetBrowserResult(result: UseragentBrowser): UseragentBrowser {
 		// If the parse result already includes a Browser, use it as-is
 		if (result.name != null) return result;
 
@@ -70,11 +70,7 @@ export class UaParserWrapper {
 		}
 
 		// BingBot, The Facebook Crawler, and Yahoo's "Slurp" can render JavaScript, but they are very limited in what they can do. Mimic IE8 to reflect the limitations of these engines
-		if (
-			BOT_TO_USER_AGENTS_MAP.BingBot(this.userAgent) ||
-			BOT_TO_USER_AGENTS_MAP.YahooBot(this.userAgent) ||
-			BOT_TO_USER_AGENTS_MAP.FacebookCrawler(this.userAgent)
-		) {
+		if (BOT_TO_USER_AGENTS_MAP.BingBot(this.userAgent) || BOT_TO_USER_AGENTS_MAP.YahooBot(this.userAgent) || BOT_TO_USER_AGENTS_MAP.FacebookCrawler(this.userAgent)) {
 			result.name = "IE";
 			result.version = "8";
 			// noinspection JSDeprecatedSymbols

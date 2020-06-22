@@ -1,10 +1,10 @@
-import {UseragentBrowser} from "./useragent-browser";
-import {UseragentEngine} from "./useragent-engine";
-import {UseragentOS} from "./useragent-os";
-import {UseragentVendor} from "./useragent-vendor";
+import {UseragentBrowserKind} from "./useragent-browser-kind";
+import {UseragentEngineKind} from "./useragent-engine-kind";
+import {UseragentOsKind} from "./useragent-os-kind";
+import {UseragentVendorKind} from "./useragent-vendor-kind";
 
-export interface IUseragentBrowser {
-	name: UseragentBrowser | undefined;
+export interface UseragentBrowser {
+	name: UseragentBrowserKind | undefined;
 
 	/**
 	 * Determined dynamically
@@ -18,25 +18,25 @@ export interface IUseragentBrowser {
 	major: string | undefined;
 }
 
-export interface IUseragentDevice {
+export interface UseragentDevice {
 	/**
 	 * Determined dynamically
 	 */
 	model: string | undefined;
 	type: string | undefined;
-	vendor: UseragentVendor | undefined;
+	vendor: UseragentVendorKind | undefined;
 }
 
-export interface IUseragentOS {
-	name: UseragentOS | undefined;
+export interface UseragentOs {
+	name: UseragentOsKind | undefined;
 	/**
 	 * Determined dynamically
 	 */
 	version: string | undefined;
 }
 
-export interface IUseragentEngine {
-	name: UseragentEngine | undefined;
+export interface UseragentEngine {
+	name: UseragentEngineKind | undefined;
 	/**
 	 * Determined dynamically
 	 */

@@ -7,8 +7,8 @@ import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-rege
 
 export const SAFARI_TP_MAJOR_VERSION = (() => {
 	const versions = getSortedBrowserVersions("safari");
-	const lastVersionBeforeTP = versions[versions.length - 2];
-	const coerced = _coerce(lastVersionBeforeTP)!;
+	const lastVersionBeforeTp = versions[versions.length - 2];
+	const coerced = _coerce(lastVersionBeforeTp)!;
 	if (coerced.minor === 9) {
 		return _coerce(coerced.major + 1)!;
 	} else {
@@ -19,11 +19,7 @@ export const SAFARI_TP_MAJOR_VERSION = (() => {
 /**
  * Ensures that for any given version of a browser, if it is newer than the latest known version, the last known version will be used as a fallback
  */
-export function normalizeBrowserVersion(
-	browser: CaniuseBrowser,
-	givenVersion: string,
-	versions: string[] = getSortedBrowserVersions(browser)
-): string {
+export function normalizeBrowserVersion(browser: CaniuseBrowser, givenVersion: string, versions: string[] = getSortedBrowserVersions(browser)): string {
 	const givenVersionCoerced = ensureSemver(browser, givenVersion);
 	const latestVersion = getLatestVersionOfBrowser(browser);
 	const latestVersionCoerced = ensureSemver(browser, latestVersion);
@@ -35,9 +31,7 @@ export function normalizeBrowserVersion(
 	if (
 		givenVersionCoerced.major > latestVersionCoerced.major ||
 		(givenVersionCoerced.major === latestVersionCoerced.major && givenVersionCoerced.minor > latestVersionCoerced.minor) ||
-		(givenVersionCoerced.major === latestVersionCoerced.major &&
-			givenVersionCoerced.minor === latestVersionCoerced.minor &&
-			givenVersionCoerced.patch > latestVersionCoerced.patch)
+		(givenVersionCoerced.major === latestVersionCoerced.major && givenVersionCoerced.minor === latestVersionCoerced.minor && givenVersionCoerced.patch > latestVersionCoerced.patch)
 	) {
 		return latestVersion;
 	}
@@ -48,11 +42,7 @@ export function normalizeBrowserVersion(
 /**
  * Gets the known version of the given browser that is closest to the given version
  */
-export function getClosestMatchingBrowserVersion(
-	browser: CaniuseBrowser,
-	version: string,
-	versions: string[] = getSortedBrowserVersions(browser)
-): string {
+export function getClosestMatchingBrowserVersion(browser: CaniuseBrowser, version: string, versions: string[] = getSortedBrowserVersions(browser)): string {
 	const coerced = ensureSemver(browser, version);
 
 	if (browser === "op_mini" && version === "all") return "all";

@@ -1,4 +1,4 @@
-export declare type UseragentOS =
+export declare type UseragentOsKind =
 	| "AIX"
 	| "Amiga OS"
 	| "Android"

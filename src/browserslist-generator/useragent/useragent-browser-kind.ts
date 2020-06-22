@@ -1,7 +1,7 @@
-import {UseragentBot} from "./bot/useragent-bot";
+import {UseragentBotKind} from "./bot/useragent-bot-kind";
 
-export type UseragentBrowser =
-	| UseragentBot
+export type UseragentBrowserKind =
+	| UseragentBotKind
 	| "Amaya"
 	| "Android Browser"
 	| "Arora"

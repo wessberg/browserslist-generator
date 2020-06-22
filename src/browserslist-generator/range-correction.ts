@@ -1,14 +1,14 @@
 import {gte, lte} from "semver";
 import {getSortedBrowserVersions} from "./browser-version";
 import {coerceToString} from "./ensure-semver";
-import {CaniuseBrowser, CaniuseSupportKind, ICaniuseDataCorrection} from "./i-caniuse";
+import {CaniuseBrowser, CaniuseSupportKind, CaniuseDataCorrection} from "./i-caniuse";
 
 /**
  * Applies the given correction within the given version range
  */
-export function rangeCorrection(browser: CaniuseBrowser, supportKind: CaniuseSupportKind, start?: string, end?: string): ICaniuseDataCorrection[] {
+export function rangeCorrection(browser: CaniuseBrowser, supportKind: CaniuseSupportKind, start?: string, end?: string): CaniuseDataCorrection[] {
 	const versions = getSortedBrowserVersions(browser);
-	const corrections: ICaniuseDataCorrection[] = [];
+	const corrections: CaniuseDataCorrection[] = [];
 
 	versions.forEach(version => {
 		let shouldSet = false;
@@ -37,9 +37,7 @@ export function rangeCorrection(browser: CaniuseBrowser, supportKind: CaniuseSup
 			} else if (version === "all") {
 				shouldSet = true;
 			} else {
-				shouldSet =
-					gte(coerceToString(browser, version), coerceToString(browser, start)) &&
-					lte(coerceToString(browser, version), coerceToString(browser, end));
+				shouldSet = gte(coerceToString(browser, version), coerceToString(browser, start)) && lte(coerceToString(browser, version), coerceToString(browser, end));
 			}
 		}
 

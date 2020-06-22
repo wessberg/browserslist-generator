@@ -29,28 +29,15 @@ export declare type CaniuseStats = {[Key in CaniuseBrowser]: {[key: string]: str
 
 export declare type CaniuseStatsNormalized = {[Key in CaniuseBrowser]: {[key: string]: CaniuseSupportKind}};
 
-export interface ICaniuseAgents {}
-
-export interface ICaniuseAgent {
-	usage_global: {[key: string]: number};
-	prefix: string;
-	browser: string;
-	release_date: {[key: string]: number};
-}
-
-export interface ICaniuseFeature {
+export interface CaniuseFeature {
 	title: string;
 	status: string;
 	stats: CaniuseStats;
 }
 
-export interface ICaniuseFeatureNormalized extends ICaniuseFeature {
-	stats: CaniuseStatsNormalized;
-}
-
-export interface ICaniuseDataCorrection {
+export interface CaniuseDataCorrection {
 	kind: CaniuseSupportKind;
 	version: string;
 }
 
-export declare type ICaniuseBrowserCorrection = {[Key in CaniuseBrowser]?: ICaniuseDataCorrection[]};
+export declare type CaniuseBrowserCorrection = {[Key in CaniuseBrowser]?: CaniuseDataCorrection[]};

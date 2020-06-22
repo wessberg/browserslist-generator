@@ -13,23 +13,14 @@ import {
 import {ensureSemver, coerceToString} from "./ensure-semver";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
-import {
-	EcmaVersion,
-	ES2015_FEATURES,
-	ES2016_FEATURES,
-	ES2017_FEATURES,
-	ES2018_FEATURES,
-	ES2019_FEATURES,
-	ES2020_FEATURES,
-	ES5_FEATURES
-} from "./ecma-version";
+import {EcmaVersion, ES2015_FEATURES, ES2016_FEATURES, ES2017_FEATURES, ES2018_FEATURES, ES2019_FEATURES, ES2020_FEATURES, ES5_FEATURES} from "./ecma-version";
 import {rangeCorrection} from "./range-correction";
-import {IBrowserSupportForFeaturesCommonResult} from "./i-browser-support-for-features-common-result";
-import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, ICaniuseBrowserCorrection, ICaniuseFeature} from "./i-caniuse";
-import {IMdn, MdnBrowserName} from "./i-mdn";
+import {BrowserSupportForFeaturesCommonResult} from "./browser-support-for-features-common-result";
+import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, CaniuseBrowserCorrection, CaniuseFeature} from "./i-caniuse";
+import {Mdn, MdnBrowserName} from "./mdn";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
 import {UaParserWrapper} from "./ua-parser-wrapper";
-import {IUseragentBrowser, IUseragentEngine, IUseragentOS} from "./useragent/useragent-typed";
+import {UseragentBrowser, UseragentEngine, UseragentOs} from "./useragent/useragent-typed";
 
 /**
  * A Cache between user agent names and generated Browserslists
@@ -38,9 +29,9 @@ const userAgentToBrowserslistCache: Map<string, string[]> = new Map();
 
 /**
  * A Cache for retrieving browser support for some features
- * @type {Map<string, IBrowserSupportForFeaturesCommonResult>}
+ * @type {Map<string, BrowserSupportForFeaturesCommonResult>}
  */
-const browserSupportForFeaturesCache: Map<string, IBrowserSupportForFeaturesCommonResult> = new Map();
+const browserSupportForFeaturesCache: Map<string, BrowserSupportForFeaturesCommonResult> = new Map();
 
 /**
  * A Cache between feature names and their CaniuseStats
@@ -74,7 +65,8 @@ const PARTIAL_SUPPORT_ALLOWANCES = new Map([
 const IGNORED_BROWSERS_INPUT: CaniuseBrowser[] = ["and_chr", "and_ff", "and_uc", "and_qq", "baidu", "op_mini"];
 const IGNORED_BROWSERS: Set<CaniuseBrowser> = new Set(IGNORED_BROWSERS_INPUT);
 
-const TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
+const TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT: CaniuseBrowserCorrection = {
+	/* eslint-disable @typescript-eslint/naming-convention */
 	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `4`),
 	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `7`),
 	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `7`),
@@ -92,9 +84,11 @@ const TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
 	and_uc: rangeCorrection("and_uc", CaniuseSupportKind.AVAILABLE, `11.8`),
 	and_qq: rangeCorrection("and_qq", CaniuseSupportKind.AVAILABLE, `1.2`),
 	baidu: rangeCorrection("baidu", CaniuseSupportKind.AVAILABLE, `7.12`)
+	/* eslint-enable @typescript-eslint/naming-convention */
 };
 
-const TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
+const TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT: CaniuseBrowserCorrection = {
+	/* eslint-disable @typescript-eslint/naming-convention */
 	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `45`),
 	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `45`),
 	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `45`),
@@ -108,9 +102,11 @@ const TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
 	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
 	ie: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`),
 	ie_mob: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`)
+	/* eslint-enable @typescript-eslint/naming-convention */
 };
 
-const TYPED_ARRAY_ES2016_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
+const TYPED_ARRAY_ES2016_DATA_CORRECTIONS_INPUT: CaniuseBrowserCorrection = {
+	/* eslint-disable @typescript-eslint/naming-convention */
 	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `47`),
 	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `47`),
 	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `47`),
@@ -122,9 +118,11 @@ const TYPED_ARRAY_ES2016_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
 	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `43`),
 	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
 	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`)
+	/* eslint-enable @typescript-eslint/naming-convention */
 };
 
-const TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
+const TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT: CaniuseBrowserCorrection = {
+	/* eslint-disable @typescript-eslint/naming-convention */
 	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `38`),
 	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `38`),
 	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `38`),
@@ -136,9 +134,11 @@ const TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT: ICaniuseB
 	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `37`),
 	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
 	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`)
+	/* eslint-enable @typescript-eslint/naming-convention */
 };
 
-const TYPED_ARRAY_SPECIES_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
+const TYPED_ARRAY_SPECIES_DATA_CORRECTIONS_INPUT: CaniuseBrowserCorrection = {
+	/* eslint-disable @typescript-eslint/naming-convention */
 	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `51`),
 	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `51`),
 	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `51`),
@@ -150,6 +150,7 @@ const TYPED_ARRAY_SPECIES_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
 	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `48`),
 	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
 	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`)
+	/* eslint-enable @typescript-eslint/naming-convention */
 };
 
 /**
@@ -157,9 +158,10 @@ const TYPED_ARRAY_SPECIES_DATA_CORRECTIONS_INPUT: ICaniuseBrowserCorrection = {
  * is more correct. When a Browserslist is generated based on support for specific features, it is really important
  * that it is correct, especially if the browserslist will be used as an input to tools such as @babel/preset-env.
  * This table provides some corrections to the Caniuse data that makes it align better with actual availability
- * @type {[string, ICaniuseBrowserCorrection][]}
+ * @type {[string, CaniuseBrowserCorrection][]}
  */
-const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrection][] = [
+const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, CaniuseBrowserCorrection][] = [
+	/* eslint-disable @typescript-eslint/naming-convention */
 	[
 		"xhr2",
 		{
@@ -373,13 +375,14 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, ICaniuseBrowserCorrect
 			safari: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `0`)
 		}
 	]
+	/* eslint-enable @typescript-eslint/naming-convention */
 ];
 
 /**
  * A Map between caniuse features and corrections to apply (see above)
- * @type {Map<string, ICaniuseBrowserCorrection>}
+ * @type {Map<string, CaniuseBrowserCorrection>}
  */
-const FEATURE_TO_BROWSER_DATA_CORRECTIONS_MAP: Map<string, ICaniuseBrowserCorrection> = new Map(FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT);
+const FEATURE_TO_BROWSER_DATA_CORRECTIONS_MAP: Map<string, CaniuseBrowserCorrection> = new Map(FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT);
 
 /**
  * Returns the input query, but extended with the given options
@@ -612,7 +615,7 @@ function getCaniuseLiteFeatureNormalized(stats: CaniuseStats, featureName: strin
  * @returns
  */
 function getCaniuseFeatureSupport(feature: string): CaniuseStatsNormalized {
-	const rawStats = (caniuseFeature(caniuseFeatures[feature]) as ICaniuseFeature).stats;
+	const rawStats = (caniuseFeature(caniuseFeatures[feature]) as CaniuseFeature).stats;
 
 	for (const browser of Object.keys(rawStats)) {
 		const browserDict = rawStats[browser as keyof CaniuseStatsNormalized];
@@ -683,7 +686,7 @@ function getFeatureSupport(feature: string): CaniuseStatsNormalized {
  * @returns
  */
 function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
-	const match: IMdn = get(compatData, feature);
+	const match: Mdn = get(compatData, feature);
 	const supportMap = match.__compat.support;
 
 	const formatBrowser = (mdnBrowser: MdnBrowserName, caniuseBrowser: CaniuseBrowser): {[key: string]: CaniuseSupportKind} => {
@@ -695,15 +698,12 @@ function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
 				? // If there are multiple entries, take the one that hasn't been removed yet, if any
 				  (() => {
 						const versionStillInBrowser = versionMap.filter(element => element.version_removed == null)[0];
-						return versionStillInBrowser == null || versionStillInBrowser.version_added == null
-							? false
-							: (versionStillInBrowser.version_added as string | boolean);
+						return versionStillInBrowser == null || versionStillInBrowser.version_added == null ? false : (versionStillInBrowser.version_added as string | boolean);
 				  })()
 				: versionMap.version_added;
 
 		const dict: {[key: string]: CaniuseSupportKind} = {};
-		const supportedSince: string | null =
-			versionAdded === false ? null : versionAdded === true ? getOldestVersionOfBrowser(caniuseBrowser) : versionAdded;
+		const supportedSince: string | null = versionAdded === false ? null : versionAdded === true ? getOldestVersionOfBrowser(caniuseBrowser) : versionAdded;
 
 		getSortedBrowserVersionsWithLeadingVersion(caniuseBrowser, typeof versionAdded === "string" ? versionAdded : undefined).forEach(version => {
 			// If the features has never been supported, mark the feature as unavailable
@@ -720,6 +720,7 @@ function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
 	};
 
 	const stats: CaniuseStatsNormalized = {
+		/* eslint-disable @typescript-eslint/naming-convention */
 		and_chr: formatBrowser("chrome_android", "and_chr"),
 		chrome: formatBrowser("chrome", "chrome"),
 		and_ff: formatBrowser("firefox_android", "and_ff"),
@@ -738,6 +739,7 @@ function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
 		op_mini: {},
 		op_mob: {},
 		firefox: formatBrowser("firefox", "firefox")
+		/* eslint-enable @typescript-eslint/naming-convention */
 	};
 	return getCaniuseLiteFeatureNormalized(stats, feature);
 }
@@ -811,7 +813,7 @@ function getBrowserSupportForFeaturesCacheKey(comparisonOperator: ComparisonOper
  * @param features
  * @returns
  */
-function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator, ...features: string[]): IBrowserSupportForFeaturesCommonResult {
+function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator, ...features: string[]): BrowserSupportForFeaturesCommonResult {
 	const cacheKey = getBrowserSupportForFeaturesCacheKey(comparisonOperator, features);
 
 	// First check if the cache has a hit and return it if so
@@ -970,13 +972,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseB
 
 		case "WebKit":
 			// This will be the case if we're in an iOS Safari WebView
-			if (
-				device.type === "mobile" ||
-				device.type === "tablet" ||
-				device.type === "smarttv" ||
-				device.type === "wearable" ||
-				device.type === "embedded"
-			) {
+			if (device.type === "mobile" || device.type === "tablet" || device.type === "smarttv" || device.type === "wearable" || device.type === "embedded") {
 				return "ios_saf";
 			}
 			// Otherwise, fall back to Safari
@@ -1085,9 +1081,9 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseB
 function getCaniuseVersionForUseragentVersion(
 	browser: CaniuseBrowser,
 	version: string,
-	useragentBrowser: IUseragentBrowser,
-	useragentOS: IUseragentOS,
-	useragentEngine: IUseragentEngine
+	useragentBrowser: UseragentBrowser,
+	useragentOs: UseragentOs,
+	useragentEngine: UseragentEngine
 ): string {
 	// Ensure that we have a normalized version to work with
 	version = normalizeBrowserVersion(browser, version);
@@ -1115,9 +1111,7 @@ function getCaniuseVersionForUseragentVersion(
 
 	// Generates a Semver version
 	const buildSemverVersion = (majorVersion: number, minorVersion?: number, patchVersion?: number): string =>
-		`${majorVersion}${minorVersion == null || minorVersion === 0 ? "" : `.${minorVersion}`}${
-			patchVersion == null || patchVersion === 0 ? "" : `.${patchVersion}`
-		}`;
+		`${majorVersion}${minorVersion == null || minorVersion === 0 ? "" : `.${minorVersion}`}${patchVersion == null || patchVersion === 0 ? "" : `.${patchVersion}`}`;
 
 	switch (browser) {
 		case "chrome":
@@ -1157,9 +1151,9 @@ function getCaniuseVersionForUseragentVersion(
 
 			// Otherwise, try to get the assumed Safari version from the OS version
 			else {
-				if (useragentOS.version == null) throw new ReferenceError(`Could not detect OS version of iOS for ${useragentBrowser.name} on iOS`);
+				if (useragentOs.version == null) throw new ReferenceError(`Could not detect OS version of iOS for ${useragentBrowser.name} on iOS`);
 				// Decide the Semver version
-				const osSemver = ensureSemver(undefined, useragentOS.version);
+				const osSemver = ensureSemver(undefined, useragentOs.version);
 
 				// Use only the main version
 				return `${osSemver.major}`;

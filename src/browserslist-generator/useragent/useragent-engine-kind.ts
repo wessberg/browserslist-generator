@@ -1,4 +1,4 @@
-export declare type UseragentEngine =
+export declare type UseragentEngineKind =
 	| "Amaya"
 	| "Blink"
 	| "EdgeHTML"
