@@ -48,7 +48,7 @@ export const ES2015_FEATURES: string[] = [
 	"javascript.operators.object_initializer.shorthand_method_names"
 ];
 
-export const ES2016_FEATURES: string[] = [...ES2015_FEATURES, "javascript.operators.arithmetic.exponentiation", "javascript.builtins.Array.includes"];
+export const ES2016_FEATURES: string[] = [...ES2015_FEATURES, "javascript.operators.exponentiation", "javascript.builtins.Array.includes"];
 
 export const ES2017_FEATURES: string[] = [
 	...ES2016_FEATURES,
@@ -60,11 +60,7 @@ export const ES2017_FEATURES: string[] = [
 	"javascript.builtins.String.padEnd"
 ];
 
-export const ES2018_FEATURES: string[] = [
-	...ES2017_FEATURES,
-	"javascript.operators.spread.spread_in_object_literals",
-	"javascript.builtins.Promise.finally"
-];
+export const ES2018_FEATURES: string[] = [...ES2017_FEATURES, "javascript.operators.spread.spread_in_object_literals", "javascript.builtins.Promise.finally"];
 
 export const ES2019_FEATURES: string[] = [
 	...ES2018_FEATURES,

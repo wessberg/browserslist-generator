@@ -25,17 +25,11 @@ const PROMISE_FINALLY = "javascript.builtins.Promise.finally";
 const UNRELEASED_VERSIONS = "unreleased versions";
 
 test("browsersWithSupportForFeatures() => Will skip 'Android' in the generated browserslist", t => {
-	t.true(
-		!browsersWithSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME).some(part =>
-			part.includes("android")
-		)
-	);
+	t.true(!browsersWithSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME).some(part => part.includes("android")));
 });
 
 test("browsersWithoutSupportForFeatures() => Will include all browsers that simply has no support for the given features at all", t => {
-	t.true(
-		browsersWithoutSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME).some(part => part.includes("ie"))
-	);
+	t.true(browsersWithoutSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME).some(part => part.includes("ie")));
 });
 
 test("matchBrowserslistOnUserAgent() => Will not match Firefox > 54 for a Firefox v54 user agent", t => {
@@ -121,10 +115,10 @@ test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Chromecas
 
 test("matchBrowserslistOnUserAgent() => Will match Headless Chrome as Chrome", t => {
 	t.true(
-		matchBrowserslistOnUserAgent(
-			"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/72.0.3617.0 Safari/537.36",
-			["chrome >= 72", UNRELEASED_VERSIONS]
-		)
+		matchBrowserslistOnUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/72.0.3617.0 Safari/537.36", [
+			"chrome >= 72",
+			UNRELEASED_VERSIONS
+		])
 	);
 });
 
@@ -153,21 +147,11 @@ test("matchBrowserslistOnUserAgent() => Will match Microsoft Edge", t => {
 });
 
 test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that doesn't support the given features #1", t => {
-	t.false(
-		matchBrowserslistOnUserAgent(
-			firefox("61"),
-			browsersWithSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME)
-		)
-	);
+	t.false(matchBrowserslistOnUserAgent(firefox("61"), browsersWithSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME)));
 });
 
 test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that doesn't support the given features #2", t => {
-	t.true(
-		matchBrowserslistOnUserAgent(
-			firefox("61"),
-			browsersWithoutSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME)
-		)
-	);
+	t.true(matchBrowserslistOnUserAgent(firefox("61"), browsersWithoutSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME)));
 });
 
 test("browserslistSupportsFeatures() => Will correctly determine if a browserslist support the given set of features #1", t => {
@@ -297,7 +281,7 @@ test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browser
 });
 
 test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES2015 doesn't support ES2016 features #1", t => {
-	t.false(browserslistSupportsFeatures(browsersWithSupportForEcmaVersion("es2015"), "javascript.operators.arithmetic.exponentiation"));
+	t.false(browserslistSupportsFeatures(browsersWithSupportForEcmaVersion("es2015"), "javascript.operators.exponentiation"));
 });
 
 test("browsersWithSupportForEcmaVersion() => Correctly determines that a Browserslist generated for targeting ES2016 doesn't support ES2017 features #1", t => {
