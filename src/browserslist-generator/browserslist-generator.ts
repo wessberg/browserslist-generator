@@ -559,7 +559,8 @@ function getCaniuseLiteFeatureNormalized(stats: CaniuseStats, featureName: strin
 	// Check if a correction exists for this browser
 	const featureCorrectionMatch = FEATURE_TO_BROWSER_DATA_CORRECTIONS_MAP.get(featureName);
 
-	Object.keys(stats).forEach((browser: keyof CaniuseStats) => {
+	const keys = Object.keys(stats) as (keyof CaniuseStats & string)[];
+	keys.forEach(browser => {
 		const browserDict = stats[browser];
 		Object.entries(browserDict).forEach(([version, support]: [string, string]) => {
 			const versionMatch = version.match(NORMALIZE_BROWSER_VERSION_REGEXP);
@@ -787,7 +788,8 @@ export function getFirstVersionsWithFullSupport(feature: string): Map<CaniuseBro
 	const support = getFeatureSupport(feature);
 	// A map between browser names and their required versions
 	const browserMap: Map<CaniuseBrowser, string> = new Map();
-	Object.entries(support).forEach(([browser, stats]: [CaniuseBrowser, {[key: string]: CaniuseSupportKind}]) => {
+	const entries = Object.entries(support) as [CaniuseBrowser, Record<string, CaniuseSupportKind>][];
+	entries.forEach(([browser, stats]) => {
 		const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
 		if (fullSupportVersion != null) {
 			browserMap.set(browser, fullSupportVersion);
@@ -830,7 +832,8 @@ function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator,
 
 		// A map between browser names and their required versions
 		const browserMap: Map<CaniuseBrowser, string> = new Map();
-		Object.entries(support).forEach(([browser, stats]: [CaniuseBrowser, {[key: string]: CaniuseSupportKind}]) => {
+		const entries = Object.entries(support) as [CaniuseBrowser, Record<string, CaniuseSupportKind>][];
+		entries.forEach(([browser, stats]) => {
 			const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
 			const partialSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.PARTIAL_SUPPORT, stats);
 			let versionToSet: string | undefined;
