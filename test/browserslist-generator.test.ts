@@ -14,7 +14,6 @@ import {
 	userAgentSupportsFeatures
 } from "../src/browserslist-generator/browserslist-generator";
 
-const SAFARI_TP_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.2 Safari/605.1.15";
 const FBAN_SAFARI_13_3_USER_AGENT =
 	"Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 LightSpeed [FBAN/MessengerLiteForiOS;FBAV/253.1.0.43.116;FBBV/200174216;FBDV/iPhone11,6;FBMD/iPhone;FBSN/iOS;FBSV/13.3.1;FBSS/3;FBCR/;FBID/phone;FBLC/en_US;FBOP/0]";
 
@@ -79,10 +78,6 @@ test("matchBrowserslistOnUserAgent() => Supports Samsung Browser 8.2 (e.g. Samsu
 
 test("matchBrowserslistOnUserAgent() => Will match Safari v11", t => {
 	t.true(matchBrowserslistOnUserAgent(safari("11"), ["safari 11", UNRELEASED_VERSIONS]));
-});
-
-test("matchBrowserslistOnUserAgent() => Will match Safari TP", t => {
-	t.true(matchBrowserslistOnUserAgent(SAFARI_TP_USER_AGENT, ["safari TP", UNRELEASED_VERSIONS]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match iOS Safari v11", t => {
@@ -260,8 +255,8 @@ test("userAgentSupportsFeatures() => Correctly determines that Edge 16.16299 doe
 	t.false(userAgentSupportsFeatures(edge("16.16299"), "url", "urlsearchparams"));
 });
 
-test("userAgentSupportsFeatures() => Correctly determines that Safari TP *doesn't* support ResizeObserver #1", t => {
-	t.false(userAgentSupportsFeatures(SAFARI_TP_USER_AGENT, "resizeobserver"));
+test("userAgentSupportsFeatures() => Correctly determines that Safari 14.0.1 *doesn't* support ResizeObserver #1", t => {
+	t.false(userAgentSupportsFeatures(safari("14.0.1"), "resizeobserver"));
 });
 
 test("userAgentSupportsFeatures() => Correctly determines that Safari 13 *doesn't* support ResizeObserver #1", t => {
