@@ -1,3 +1,5 @@
+## [1.0.38](https://github.com/wessberg/browserslist-generator/compare/v1.0.37...v1.0.38) (2020-09-30)
+
 ## [1.0.37](https://github.com/wessberg/browserslist-generator/compare/v1.0.36...v1.0.37) (2020-06-22)
 
 ### Bug Fixes
