@@ -1,6 +1,6 @@
 import Browserslist from "browserslist";
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
-import compatData from "mdn-browser-compat-data";
+import compatData from "@mdn/browser-compat-data";
 import {get} from "object-path";
 import {gt, gte} from "semver";
 import {
