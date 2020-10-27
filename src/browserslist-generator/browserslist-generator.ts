@@ -224,6 +224,33 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, CaniuseBrowserCorrecti
 			]
 		}
 	],
+	[
+		"api.Element.classList",
+		{
+			edge: [
+				{
+					// Caniuse reports that Microsoft Edge v15 has only partial support for class-list since it doesn't support SVG elements,
+					// but we don't want feature detections to return false for that browser
+					kind: CaniuseSupportKind.AVAILABLE,
+					version: "15"
+				}
+			],
+			ie: [
+				{
+					// Caniuse reports that IE 10 has only partial support for class-list since it doesn't support SVG elements,
+					// but we don't want feature detections to return false for that browser
+					kind: CaniuseSupportKind.AVAILABLE,
+					version: "10"
+				},
+				{
+					// Caniuse reports that IE 11 has only partial support for class-list since it doesn't support SVG elements,
+					// but we don't want feature detections to return false for that browser
+					kind: CaniuseSupportKind.AVAILABLE,
+					version: "11"
+				}
+			]
+		}
+	],
 	["javascript.builtins.TypedArray.from", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
 	["javascript.builtins.TypedArray.of", TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT],
 	["javascript.builtins.TypedArray.subarray", TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT],
