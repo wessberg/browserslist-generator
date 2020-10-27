@@ -1,3 +1,9 @@
+## [1.0.41](https://github.com/wessberg/browserslist-generator/compare/v1.0.40...v1.0.41) (2020-10-27)
+
+### Bug Fixes
+
+- fix classList detection on Edge 15 and IE 10 ([a66875b](https://github.com/wessberg/browserslist-generator/commit/a66875bde2c0f49437a7f29433f29bae4679c8ca))
+
 ## [1.0.40](https://github.com/wessberg/browserslist-generator/compare/v1.0.39...v1.0.40) (2020-10-21)
 
 ## [1.0.39](https://github.com/wessberg/browserslist-generator/compare/v1.0.38...v1.0.39) (2020-10-13)
