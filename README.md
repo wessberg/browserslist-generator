@@ -51,6 +51,22 @@ A _Feature_ is anything that can be found on [caniuse](https://caniuse.com/) or 
 
 <!-- SHADOW_SECTION_FEATURE_IMAGE_END -->
 
+<!-- SHADOW_SECTION_BACKERS_START -->
+
+## Backers
+
+[Become a sponsor/backer](https://github.com/wessberg/browserslist-generator?sponsor=1) and get your logo listed here.
+
+| <a href="https://usebubbles.com"><img alt="Bubbles" src="https://uploads-ssl.webflow.com/5d682047c28b217055606673/5e5360be16879c1d0dca6514_icon-thin-128x128%402x.png" height="70"   /></a> | <a href="https://github.com/cblanc"><img alt="Christopher Blanchard" src="https://avatars0.githubusercontent.com/u/2160685?s=400&v=4" height="70"   /></a> |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Bubbles](https://usebubbles.com)<br><strong>Twitter</strong>: [@usebubbles](https://twitter.com/usebubbles)                                                                                | [Christopher Blanchard](https://github.com/cblanc)                                                                                                         |
+
+### Patreon
+
+<a href="https://www.patreon.com/bePatron?u=11315442"><img alt="Patrons on Patreon" src="https://img.shields.io/endpoint.svg?url=https://shieldsio-patreon.herokuapp.com/wessberg"  width="200"  /></a>
+
+<!-- SHADOW_SECTION_BACKERS_END -->
+
 <!-- SHADOW_SECTION_TOC_START -->
 
 ## Table of Contents
@@ -221,22 +237,6 @@ Do you want to contribute? Awesome! Please follow [these recommendations](./CONT
 | [Frederik Wessberg](mailto:frederikwessberg@hotmail.com)<br><strong>Twitter</strong>: [@FredWessberg](https://twitter.com/FredWessberg)<br><strong>Github</strong>: [@wessberg](https://github.com/wessberg)<br>_Lead Developer_ |
 
 <!-- SHADOW_SECTION_MAINTAINERS_END -->
-
-<!-- SHADOW_SECTION_BACKERS_START -->
-
-## Backers
-
-[Become a sponsor/backer](https://github.com/wessberg/browserslist-generator?sponsor=1) and get your logo listed here.
-
-| <a href="https://usebubbles.com"><img alt="Bubbles" src="https://uploads-ssl.webflow.com/5d682047c28b217055606673/5e5360be16879c1d0dca6514_icon-thin-128x128%402x.png" height="70"   /></a> | <a href="https://github.com/cblanc"><img alt="Christopher Blanchard" src="https://avatars0.githubusercontent.com/u/2160685?s=400&v=4" height="70"   /></a> |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Bubbles](https://usebubbles.com)<br><strong>Twitter</strong>: [@usebubbles](https://twitter.com/usebubbles)                                                                                | [Christopher Blanchard](https://github.com/cblanc)                                                                                                         |
-
-### Patreon
-
-<a href="https://www.patreon.com/bePatron?u=11315442"><img alt="Patrons on Patreon" src="https://img.shields.io/endpoint.svg?url=https://shieldsio-patreon.herokuapp.com/wessberg"  width="200"  /></a>
-
-<!-- SHADOW_SECTION_BACKERS_END -->
 
 <!-- SHADOW_SECTION_FAQ_START -->
 
