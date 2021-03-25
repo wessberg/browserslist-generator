@@ -1,3 +1,7 @@
+## [1.0.46](https://github.com/wessberg/browserslist-generator/compare/v1.0.44...v1.0.46) (2021-03-25)
+
+
+
 ## [1.0.44](https://github.com/wessberg/browserslist-generator/compare/v1.0.42...v1.0.44) (2021-03-16)
 
 
