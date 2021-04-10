@@ -1,3 +1,12 @@
+## [1.0.47](https://github.com/wessberg/browserslist-generator/compare/v1.0.46...v1.0.47) (2021-04-10)
+
+
+### Bug Fixes
+
+* **edge:** work around UAParser change where EdgeHTML versions weren't being used anymore ([bba685f](https://github.com/wessberg/browserslist-generator/commit/bba685fe4dab525e1743a4c82fd44fa2c227df2b))
+
+
+
 ## [1.0.46](https://github.com/wessberg/browserslist-generator/compare/v1.0.44...v1.0.46) (2021-03-25)
 
 
