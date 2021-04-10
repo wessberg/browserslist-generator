@@ -1,3 +1,4 @@
+import {coerce} from "semver";
 import {UAParser} from "ua-parser-js";
 import {BOT_TO_USER_AGENTS_MAP} from "./useragent/bot/bot-to-user-agents-map";
 import {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from "./useragent/useragent-typed";
@@ -33,8 +34,6 @@ export class UaParserWrapper {
 
 	/**
 	 * Gets the IUserAgentDevice based on the UAParser
-	 *
-	 * @returns
 	 */
 	getDevice(): UseragentDevice {
 		return this.parser.getDevice() as UseragentDevice;
@@ -58,6 +57,15 @@ export class UaParserWrapper {
 	 * Extends the result of calling 'getBrowser' on the UAParser and always takes bots into account
 	 */
 	private extendGetBrowserResult(result: UseragentBrowser): UseragentBrowser {
+		// Ensure that the EdgeHTML version is used
+		if (result.name === "Edge") {
+			const engine = this.parser.getEngine() as UseragentEngine;
+			if (engine.name === "EdgeHTML") {
+				result.version = engine.version;
+				result.major = String(coerce(engine.version)?.major ?? result.version);
+			}
+		}
+
 		// If the parse result already includes a Browser, use it as-is
 		if (result.name != null) return result;
 
