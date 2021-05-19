@@ -1,3 +1,14 @@
+## [1.0.52](https://github.com/wessberg/browserslist-generator/compare/v1.0.51...v1.0.52) (2021-05-19)
+
+
+### Features
+
+* **ua:** add support for detecing Iceweasel as Firefox ([158eb70](https://github.com/wessberg/browserslist-generator/commit/158eb7029af465357d0e4a645d6f02426e329c97))
+* **ua:** add support for detecing Iceweasel as Firefox ([cf57061](https://github.com/wessberg/browserslist-generator/commit/cf5706130ff223eda101676591161b3eb69cbeec))
+* **ua:** add support for detecting browsers based on Gecko/Firefox like Iceweasel and IceDragon ([065c696](https://github.com/wessberg/browserslist-generator/commit/065c696572be7de741cde8f564283b4b1cb7cf44))
+
+
+
 ## [1.0.51](https://github.com/wessberg/browserslist-generator/compare/v1.0.50...v1.0.51) (2021-05-19)
 
 
