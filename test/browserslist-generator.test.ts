@@ -150,6 +150,10 @@ test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #1", t 
 	t.true(matchBrowserslistOnUserAgent("StatusCak_Pagespeed_Indev", ["ie >= 11", UNRELEASED_VERSIONS]));
 });
 
+test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #2", t => {
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (compatible; Yahoo Ad monitoring; https://help.yahoo.com/kb/yahoo-ad-monitoring-SLN24857.html)  tands-prod-eng.hlfs-prod---sieve.hlfs-desktop/1621432877-0`, ["ie >= 11", UNRELEASED_VERSIONS]));
+});
+
 test("matchBrowserslistOnUserAgent() => Will match BingBot as IE 11", t => {
 	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 11", UNRELEASED_VERSIONS]));
 });
