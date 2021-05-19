@@ -105,6 +105,10 @@ test("matchBrowserslistOnUserAgent() => Will match iOS Firefox but treat it as i
 	t.true(matchBrowserslistOnUserAgent(firefox.iOS("8.3"), ["ios_saf >= 8", UNRELEASED_VERSIONS]));
 });
 
+test("matchBrowserslistOnUserAgent() => Will match Iceweasel on Linux but treat it as Firefox", t => {
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0 Iceweasel/31.6.0`, ["firefox >= 31", UNRELEASED_VERSIONS]));
+});
+
 test("matchBrowserslistOnUserAgent() => Will match chrome as an Android WebView (as android)", t => {
 	t.true(matchBrowserslistOnUserAgent(chrome.androidWebview("4.4.4"), ["android >= 4", UNRELEASED_VERSIONS]));
 });

@@ -977,7 +977,6 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 
 	// If the OS is iOS, it is actually Safari that drives the WebView
 	if (os.name === "iOS") {
-
 		// Opera Mini with the Presto runtime actually works around
 		// the restrictions os the Safari WebView
 		if (browser.name === "Opera Mini" && engine.name === "Presto") {
@@ -1003,11 +1002,17 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 	}
 
 	switch (browser.name) {
+		// Iceweasel is the same as Firefox, but is named differently on Debian due to trademark issues.
+		case "Iceweasel":
+			return {
+				browser: "firefox",
+				version: browser.version
+			};
 		case "Samsung Browser":
 			return {
 				browser: "samsung",
 				version: browser.version
-			}
+			};
 
 		case "Android Browser": {
 			// If the vendor is Samsung, the default browser is Samsung Internet
@@ -1042,7 +1047,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 		case "Baidu":
 			return {
 				browser: "baidu",
-					version: browser.version
+				version: browser.version
 			};
 
 		case "Chrome Headless":
@@ -1053,7 +1058,6 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 			};
 
 		case "Facebook":
-
 			// We've already asserted that this isn't iOS above, so we must be on Android and inside of a WebView
 			return {
 				browser: "chrome",
@@ -1063,18 +1067,17 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 		case "Chrome": {
 			// Check if the OS is Android, in which case this is actually Chrome for Android. Make it report as regular Chrome
 			if (os.name === "Android") {
-
 				// Handle a special case on Android where the Chrome version
 				// is actually the WebKit version, and it is actually the stock
 				// Android browser.
 				if (os.version != null && browser.version != null) {
 					const browserSemver = ensureSemver("chrome", browser.version);
 					const osSemver = ensureSemver(undefined, os.version);
-					if (lte(osSemver, "4.4.4") && gte(browserSemver, "400.0.0") ) {
+					if (lte(osSemver, "4.4.4") && gte(browserSemver, "400.0.0")) {
 						return {
 							browser: "android",
 							version: os.version
-						}
+						};
 					}
 				}
 				return {
@@ -1093,13 +1096,12 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 		case "Edge": {
 			// If the Engine is Blink, it's Chrome-based
 			if (engine.name === "Blink") {
-
 				// If there is no browser version, fall back to Chrome
 				if (browser.version == null) {
 					return {
 						browser: "chrome",
 						version: engine.version
-					}
+					};
 				}
 
 				const semverVersion = ensureSemver("edge", browser.version);
@@ -1110,7 +1112,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 					return {
 						browser: "chrome",
 						version: engine.version
-					}
+					};
 				}
 			}
 
@@ -1194,7 +1196,6 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 			};
 
 		default:
-
 			switch (engine.name) {
 				// If the Engine is Blink, it's Chrome
 				case "Blink":
@@ -1232,7 +1233,6 @@ function getCaniuseVersionForUseragentVersion(
 	useragentOs: UseragentOs,
 	useragentEngine: UseragentEngine
 ): string {
-
 	// Always use 'all' with Opera Mini
 	if (browser === "op_mini") {
 		return "all";
