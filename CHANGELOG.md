@@ -1,3 +1,12 @@
+## [1.0.51](https://github.com/wessberg/browserslist-generator/compare/v1.0.50...v1.0.51) (2021-05-19)
+
+
+### Bug Fixes
+
+* **ua:** add support for Google AdsBot ([06fd644](https://github.com/wessberg/browserslist-generator/commit/06fd64462056570f3538563a5d224908e4a08934))
+
+
+
 ## [1.0.50](https://github.com/wessberg/browserslist-generator/compare/v1.0.49...v1.0.50) (2021-05-19)
 
 
