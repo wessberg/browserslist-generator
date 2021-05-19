@@ -12,8 +12,8 @@
 
 <!-- SHADOW_SECTION_BADGES_START -->
 
-<a href="https://npmcharts.com/compare/%40wessberg%2Fbrowserslist-generator?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/%40wessberg%2Fbrowserslist-generator.svg"    /></a>
-<a href="https://www.npmjs.com/package/%40wessberg%2Fbrowserslist-generator"><img alt="NPM version" src="https://badge.fury.io/js/%40wessberg%2Fbrowserslist-generator.svg"    /></a>
+<a href="https://npmcharts.com/compare/browserslist-generator?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/browserslist-generator.svg"    /></a>
+<a href="https://www.npmjs.com/package/browserslist-generator"><img alt="NPM version" src="https://badge.fury.io/js/browserslist-generator.svg"    /></a>
 <a href="https://david-dm.org/wessberg/browserslist-generator"><img alt="Dependencies" src="https://img.shields.io/david/wessberg%2Fbrowserslist-generator.svg"    /></a>
 <a href="https://github.com/wessberg/browserslist-generator/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/wessberg%2Fbrowserslist-generator.svg"    /></a>
 <a href="https://github.com/prettier/prettier"><img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg"    /></a>
@@ -103,19 +103,19 @@ A _Feature_ is anything that can be found on [caniuse](https://caniuse.com/) or 
 ### npm
 
 ```
-$ npm install @wessberg/browserslist-generator
+$ npm install browserslist-generator
 ```
 
 ### Yarn
 
 ```
-$ yarn add @wessberg/browserslist-generator
+$ yarn add browserslist-generator
 ```
 
 ### pnpm
 
 ```
-$ pnpm add @wessberg/browserslist-generator
+$ pnpm add browserslist-generator
 ```
 
 <!-- SHADOW_SECTION_INSTALL_END -->
@@ -134,7 +134,7 @@ Browser support and manually write a Browserslist, nor make sure to keep it up-t
 Instead, simply declare the features that should be available:
 
 ```typescript
-import {browsersWithSupportForFeatures} from "@wessberg/browserslist-generator";
+import {browsersWithSupportForFeatures} from "browserslist-generator";
 // Generate a browserslist for browsers that support all of the given features
 const browserslist = browsersWithSupportForFeatures("es6-module", "shadowdomv1", "custom-elementsv1");
 ```
@@ -145,7 +145,7 @@ This library offers simple ways that you can check if a given User Agent support
 This could be useful, among other things, for conditional bundle serving:
 
 ```typescript
-import {userAgentSupportsFeatures} from "@wessberg/browserslist-generator";
+import {userAgentSupportsFeatures} from "browserslist-generator";
 if (userAgentSupportsFeatures(userAgentString, "javascript.builtins.Promise.finally")) {
 	doA();
 } else {
@@ -159,7 +159,7 @@ Given an existing Browserslist, this library can check if it supports one or mor
 This could be useful, among other things, for conditional bundle serving:
 
 ```typescript
-import {browserslistSupportsFeatures} from "@wessberg/browserslist-generator";
+import {browserslistSupportsFeatures} from "browserslist-generator";
 if (browserslistSupportsFeatures(browserslist, "es6-module")) {
 	useModernBundle();
 } else {
@@ -174,7 +174,7 @@ the decision based on a specific version of ECMAScript to target. For example, w
 the `target` option takes an ECMAScript version and the Typescript Compiler then knows which transformations to apply accordingly.
 
 ```typescript
-import {browsersWithSupportForEcmaVersion} from "@wessberg/browserslist-generator";
+import {browsersWithSupportForEcmaVersion} from "browserslist-generator";
 // Generate a browserslist for browsers that support the given version of ECMAScript
 const browserslist = browsersWithSupportForEcmaVersion("es2015");
 ```
@@ -185,7 +185,7 @@ Given an existing Browserslist, this library can also check if it supports a spe
 This could be useful, among other things, for conditional bundle serving:
 
 ```typescript
-import {browserslistSupportsEcmaVersion} from "@wessberg/browserslist-generator";
+import {browserslistSupportsEcmaVersion} from "browserslist-generator";
 if (browserslistSupportsEcmaVersion(browserslist, "es2015")) {
 	useModernBundle();
 } else {
@@ -199,7 +199,7 @@ Given an existing Browserslist, this library can detect the most appropriate ECM
 This could be useful, for example, when using the Typescript compiler based on a Browserslist.
 
 ```typescript
-import {getAppropriateEcmaVersionForBrowserslist} from "@wessberg/browserslist-generator";
+import {getAppropriateEcmaVersionForBrowserslist} from "browserslist-generator";
 
 const typescriptOptions = {
 	// ...
@@ -249,7 +249,7 @@ Do you want to contribute? Awesome! Please follow [these recommendations](./CONT
 Well, here's one I think is pretty neat:
 You're building an app, and you care about serving the smallest amount of code to your users.
 You've decided to build two bundles: One for browsers _with_, and one for browsers _without_ ES-module support.
-You can now generate two Browserslists via `@wessberg/browserslist-generator`:
+You can now generate two Browserslists via `browserslist-generator`:
 
 ```typescript
 browsersWithSupportForFeatures("es6-module");

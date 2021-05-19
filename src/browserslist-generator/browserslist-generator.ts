@@ -1221,9 +1221,6 @@ function getCaniuseVersionForUseragentVersion(
 
 /**
  * Generates a browserslist from the provided useragent string
- *
- * @param useragent
- * @returns
  */
 export function generateBrowserslistFromUseragent(useragent: string): string[] {
 	// Check if a user agent has been generated previously for this specific user agent
@@ -1242,14 +1239,7 @@ export function generateBrowserslistFromUseragent(useragent: string): string[] {
 
 	// If the browser name or version couldn't be determined, return false immediately
 	if (browserName == null || version == null) {
-		console.log(`No caniuse browser and/or version could be determined for:`);
-		console.log("os:", parser.getOS());
-		console.log("browser:", parser.getBrowser());
-		console.log("device:", parser.getDevice());
-		console.log("cpu:", parser.getCPU());
-		console.log("engine:", parser.getEngine());
-		userAgentToBrowserslistCache.set(useragent, []);
-		return [];
+		throw new TypeError(`No caniuse browser and/or version could be determined for User Agent: ${useragent}`);
 	}
 
 	// Prepare a version from the useragent that plays well with caniuse
@@ -1289,10 +1279,6 @@ function userAgentWithFeaturesCacheKey(useragent: string, features: string[]): s
 
 /**
  * Returns true if the given user agent supports the given features
- *
- * @param useragent
- * @param features
- * @returns
  */
 export function userAgentSupportsFeatures(useragent: string, ...features: string[]): boolean {
 	// Check if these features has been computed previously for the given user agent
