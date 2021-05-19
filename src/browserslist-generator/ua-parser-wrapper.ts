@@ -3,7 +3,28 @@ import {UAParser} from "ua-parser-js";
 import isbot from "isbot";
 import {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from "./useragent/useragent-typed";
 
-// tslint:disable
+// These extension provide ua-parser-js with support for additional browsers
+// such as Sogou Explorer
+const PARSER_EXTENSIONS = {
+	engine: [
+		[
+			/(Chrome)\/([\d.]+)/i
+		],
+		[
+			"blink",
+			"version"
+		]
+	],
+	browser: [
+		[
+			/(MetaSr)\s*([\d.]+)/i
+		],
+		[
+			"Sogou Explorer",
+			"version"
+		]
+	]
+};
 
 /**
  * A class that wraps UAParser
@@ -15,7 +36,7 @@ export class UaParserWrapper {
 	private readonly parser: InstanceType<typeof UAParser>;
 
 	constructor(private readonly userAgent: string) {
-		this.parser = new UAParser(userAgent);
+		this.parser = new UAParser(userAgent, PARSER_EXTENSIONS);
 	}
 
 	/**
@@ -43,7 +64,7 @@ export class UaParserWrapper {
 	 * Gets the IEngine based on the UAParser
 	 */
 	getEngine(): UseragentEngine {
-		return this.parser.getEngine() as UseragentEngine;
+		return this.extendGetEngineResult(this.parser.getEngine() as UseragentEngine);
 	}
 
 	/**
@@ -60,7 +81,8 @@ export class UaParserWrapper {
 		}
 
 		// Check if it is a bot and match it if so
-		if (result.name !== "Chrome Headless" && isbot(this.userAgent)) {
+		// Also treat Dalvik/ as a bot
+		if (result.name !== "Chrome Headless" && (isbot(this.userAgent) || (result.name == null && this.userAgent.includes("Dalvik/")))) {
 			if (
 				this.userAgent.includes("http://www.google.com/bot.htm") ||
 				this.userAgent.includes("http://www.google.com/adsbot.htm")
@@ -80,6 +102,23 @@ export class UaParserWrapper {
 				// noinspection JSDeprecatedSymbols
 				result.major = "11";
 			}
+		}
+
+		if (result["Sogou Explorer"] != null) {
+			result.name = "Sogou Explorer";
+			delete result["Sogou Explorer"];
+		}
+
+		return result;
+	}
+
+	/**
+	 * Extends the result of calling 'getEngine'
+	 */
+	private extendGetEngineResult(result: UseragentEngine): UseragentEngine {
+		if (result.blink != null) {
+			result.name = "Blink";
+			delete result.blink;
 		}
 
 		return result;

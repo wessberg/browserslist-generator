@@ -2,7 +2,7 @@ import Browserslist from "browserslist";
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
 import compatData from "@mdn/browser-compat-data";
 import {get} from "object-path";
-import {gt, gte, lte} from "semver";
+import {gt, gte, lt, lte} from "semver";
 import {
 	getClosestMatchingBrowserVersion,
 	getNextVersionOfBrowser,
@@ -1002,6 +1002,49 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 		};
 	}
 
+	// Unfortunately, since Caniuse doesn't support PaleMoon,
+	// we will have to remap it to its closest equivalent Firefox
+	// version (which it is similar to and a fork of).
+	// This is less than ideal, but unfortunately a requirement for the time being
+	if (browser.name === "PaleMoon" && engine.name === "Goanna" && browser.version != null) {
+		const semver = ensureSemver(undefined, browser.version);
+
+		// The data comes from this table: https://en.wikipedia.org/wiki/Pale_Moon_(web_browser)#Releases
+		if (lte(semver, "5.0.0")) {
+			return {
+				browser: "firefox",
+				version: "2"
+			}
+		}
+
+		// Between these two versions, the version numbers followed Firefox/Gecko
+		else if (lte(semver, "24.0.0")) {
+			return {
+				browser: "firefox",
+				version: browser.version
+			}
+		}
+
+		// It kept staying at Firefox 24 for all we know
+		else if (lt(semver, "27.0.0")) {
+			return {
+				browser: "firefox",
+				version: "24.0.0"
+			}
+		}
+
+		else {
+			// Then, from v27, it was based on a re-fork of Firefox 38.
+			// Unfortunately, there has been no re-forks since, so we'll
+			// have to assume it is still equivalent to Firefox 38 for
+			// the time being
+			return {
+				browser: "firefox",
+				version: "38"
+			}
+		}
+	}
+
 	// For the MIUIBrowser, there are some rare instances for major versions 8 and 9 where they'll have no declared Chromium engine.
 	// as part of the UA. Under these circumstances, we have to rely on knowledge gathered from scraping related User Agents
 	// to determine the equivalent Chromium version
@@ -1361,8 +1404,6 @@ export function generateBrowserslistFromUseragent(useragent: string): string[] {
 	const browser = parser.getBrowser();
 	const os = parser.getOS();
 	const engine = parser.getEngine();
-
-	console.log({browser, os, engine});
 
 	// Prepare a CaniuseBrowser name from the useragent string
 	let {browser: caniuseBrowserName, version: caniuseBrowserVersion} = getCaniuseBrowserForUseragentBrowser(parser);

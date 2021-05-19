@@ -16,6 +16,9 @@ export interface UseragentBrowser {
 	 * @deprecated
 	 */
 	major: string | undefined;
+
+	// Workaround that allows for extending ua-parser-js
+	"Sogou Explorer"?: string;
 }
 
 export interface UseragentDevice {
@@ -41,4 +44,7 @@ export interface UseragentEngine {
 	 * Determined dynamically
 	 */
 	version: string | undefined;
+
+	// Workaround that allows for extending ua-parser-js
+	blink?: string;
 }

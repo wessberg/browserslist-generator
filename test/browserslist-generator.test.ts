@@ -41,15 +41,29 @@ test("userAgentSupportsFeatures() => Will correctly determine that Firefox v62 s
 });
 
 test("userAgentSupportsFeatures() => Will correctly determine that iOS 14.4.2 supports web-animation", t => {
-	t.true(userAgentSupportsFeatures(`Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [FBAN/FBIOS;FBDV/iPhone11,8;FBMD/iPhone;FBSN/iOS;FBSV/14.4.2;FBSS/2;FBID/phone;FBLC/it_IT;FBOP/5]`, "web-animation"));
+	t.true(
+		userAgentSupportsFeatures(
+			`Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [FBAN/FBIOS;FBDV/iPhone11,8;FBMD/iPhone;FBSN/iOS;FBSV/14.4.2;FBSS/2;FBID/phone;FBLC/it_IT;FBOP/5]`,
+			"web-animation"
+		)
+	);
 });
 
 test("userAgentSupportsFeatures() => Will correctly determine that Edge Mobile 45 on Android supports web-animation", t => {
-	t.true(userAgentSupportsFeatures(`Mozilla/5.0 (Linux; Android 10; SM-A315F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.116 Mobile Safari/537.36 EdgA/45.04.4.4995`, "web-animation"));
+	t.true(
+		userAgentSupportsFeatures(
+			`Mozilla/5.0 (Linux; Android 10; SM-A315F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.116 Mobile Safari/537.36 EdgA/45.04.4.4995`,
+			"web-animation"
+		)
+	);
 });
 
 test(`userAgentSupportsFeatures() => Supports the old stock Android browser. #1`, t => {
-	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Linux;U;Android 4.4.2;zh-cn;Lenovo A3300-HV Build/KOT49H) AppleWebkit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/537.306`, ["android >= 4.4"]))
+	t.true(
+		matchBrowserslistOnUserAgent(`Mozilla/5.0 (Linux;U;Android 4.4.2;zh-cn;Lenovo A3300-HV Build/KOT49H) AppleWebkit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/537.306`, [
+			"android >= 4.4"
+		])
+	);
 });
 
 test("userAgentSupportsFeatures() => Will correctly determine that Firefox v63 supports javascript.builtins.Map. #1", t => {
@@ -114,13 +128,29 @@ test("matchBrowserslistOnUserAgent() => Will match IceDragon but treat it as Fir
 });
 
 test("matchBrowserslistOnUserAgent() => Will match non-Chromium based MiuiBrowser on Android. #1", t => {
-	t.true(matchBrowserslistOnUserAgent(`Xiaomi_MDT1_TD-LTE/V1 Linux/3.1.31 Android/7.1 Release/10.10.2017 Browser/AppleWebKit537.36 Mobile Safari/537.36 System/Android 7.1 XiaoMi/MiuiBrowser/9.2.1`, ["chrome >= 53"]));
+	t.true(
+		matchBrowserslistOnUserAgent(
+			`Xiaomi_MDT1_TD-LTE/V1 Linux/3.1.31 Android/7.1 Release/10.10.2017 Browser/AppleWebKit537.36 Mobile Safari/537.36 System/Android 7.1 XiaoMi/MiuiBrowser/9.2.1`,
+			["chrome >= 53"]
+		)
+	);
 });
 
-test("matchBrowserslistOnUserAgent() => Will match Pale Moon. #1", t => {
-	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Windows NT 5.1; rv:4.8) Goanna/20210507 PaleMoon/28.10.3a1`, ["chrome >= 53"]));
+test("matchBrowserslistOnUserAgent() => Will match Pale Moon, but treat it as Firefox. #1", t => {
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Windows NT 5.1; rv:4.8) Goanna/20210507 PaleMoon/28.10.3a1`, ["firefox >= 38"]));
 });
 
+test("matchBrowserslistOnUserAgent() => Will match Sogou Explorer, but treat it as Chrome. #1", t => {
+	t.true(
+		matchBrowserslistOnUserAgent(`Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.3 (KHTML, like Gecko) Chrome/6.0.472.33 Safari/534.3 SE 2.X MetaSr 1.0`, [
+			"chrome >= 6"
+		])
+	);
+});
+
+test("matchBrowserslistOnUserAgent() => Will match Dalvik, but treat it as a bot. #1", t => {
+	t.true(matchBrowserslistOnUserAgent(`Dalvik/2.1.0 (Linux; U; Android 11; SM-N986B Build/RP1A.200720.012)`, ["ie >= 11"]));
+});
 
 test("matchBrowserslistOnUserAgent() => Will match chrome as an Android WebView (as android)", t => {
 	t.true(matchBrowserslistOnUserAgent(chrome.androidWebview("4.4.4"), ["android >= 4"]));
@@ -147,6 +177,14 @@ test("matchBrowserslistOnUserAgent() => Will match Headless Chrome as Chrome", t
 	);
 });
 
+test("matchBrowserslistOnUserAgent() => Will match Chromium as Chrome", t => {
+	t.true(
+		matchBrowserslistOnUserAgent(`Mozilla/5.0 (SMART-TV; X11; Linux armv7l) AppleWebkit/537.42 (KHTML, like Gecko) Chromium/25.0.1349.2 Chrome/25.0.1349.2 Safari/537.42`, [
+			"chrome >= 25"
+		])
+	);
+});
+
 test("matchBrowserslistOnUserAgent() => Will match GoogleBot as Chrome v74. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(googleBot(), ["chrome >= 74"]));
 });
@@ -156,7 +194,9 @@ test("matchBrowserslistOnUserAgent() => Will match GoogleBot as Chrome v74. #2",
 });
 
 test("matchBrowserslistOnUserAgent() => Will match GoogleBot as Chrome v74. #3", t => {
-	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Safari/537.36`, ["chrome >= 74"]));
+	t.true(
+		matchBrowserslistOnUserAgent(`Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Safari/537.36`, ["chrome >= 74"])
+	);
 });
 
 test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #1", t => {
@@ -164,7 +204,12 @@ test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #1", t 
 });
 
 test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #2", t => {
-	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (compatible; Yahoo Ad monitoring; https://help.yahoo.com/kb/yahoo-ad-monitoring-SLN24857.html)  tands-prod-eng.hlfs-prod---sieve.hlfs-desktop/1621432877-0`, ["ie >= 11"]));
+	t.true(
+		matchBrowserslistOnUserAgent(
+			`Mozilla/5.0 (compatible; Yahoo Ad monitoring; https://help.yahoo.com/kb/yahoo-ad-monitoring-SLN24857.html)  tands-prod-eng.hlfs-prod---sieve.hlfs-desktop/1621432877-0`,
+			["ie >= 11"]
+		)
+	);
 });
 
 test("matchBrowserslistOnUserAgent() => Will match BingBot as IE 11", t => {
@@ -264,9 +309,10 @@ test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 support
 });
 
 test("userAgentSupportsFeatures() => Correctly determines that Chromium-based Edge supports Web Animations #1", t => {
-	t.true(userAgentSupportsFeatures(`Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.74 Safari/537.36 Edg/79.0.309.43`, "web-animation"));
+	t.true(
+		userAgentSupportsFeatures(`Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.74 Safari/537.36 Edg/79.0.309.43`, "web-animation")
+	);
 });
-
 
 test("userAgentSupportsFeatures() => Correctly determines that Edge 15 supports api.Element.classList (even though support is partial) #1", t => {
 	t.true(userAgentSupportsFeatures(edge("15"), "api.Element.classList"));

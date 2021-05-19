@@ -1,7 +1,9 @@
 export type UseragentBrowserKind =
 	| "Amaya"
 	| "Android Browser"
+	| "PaleMoon"
 	| "Arora"
+	| "Sogou Explorer"
 	| "Avant"
 	| "Baidu"
 	| "Blazer"

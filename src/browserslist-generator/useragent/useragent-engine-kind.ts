@@ -2,6 +2,7 @@ export declare type UseragentEngineKind =
 	| "Amaya"
 	| "Blink"
 	| "EdgeHTML"
+	| "Goanna"
 	| "Gecko"
 	| "iCab"
 	| "KHTML"
