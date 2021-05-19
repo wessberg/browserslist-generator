@@ -1,3 +1,13 @@
+## [1.0.50](https://github.com/wessberg/browserslist-generator/compare/v1.0.49...v1.0.50) (2021-05-19)
+
+
+### Bug Fixes
+
+* **ua:** add detection for more bots ([bbffdbb](https://github.com/wessberg/browserslist-generator/commit/bbffdbb16251c8ff4e0f3c45c1e5bfb5768db543))
+* **ua:** handle special case with the old stock Android browser ([2f2847e](https://github.com/wessberg/browserslist-generator/commit/2f2847e0f4dfbca095fe169e286250b277d48728))
+
+
+
 ## [1.0.49](https://github.com/wessberg/browserslist-generator/compare/v1.0.48...v1.0.49) (2021-05-19)
 
 
