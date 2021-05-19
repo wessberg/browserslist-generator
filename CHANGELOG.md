@@ -1,3 +1,12 @@
+## [1.0.49](https://github.com/wessberg/browserslist-generator/compare/v1.0.48...v1.0.49) (2021-05-19)
+
+
+### Features
+
+* **ua:** fix detection of the Facebook browser on iOS and Edge Mobile on Android ([0a4562d](https://github.com/wessberg/browserslist-generator/commit/0a4562d2fa304fe7f18ed9e7bbe300c296e6b5e5))
+
+
+
 ## [1.0.48](https://github.com/wessberg/browserslist-generator/compare/v1.0.47...v1.0.48) (2021-05-19)
 
 
