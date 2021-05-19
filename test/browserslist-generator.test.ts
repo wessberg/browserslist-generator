@@ -35,19 +35,27 @@ test("matchBrowserslistOnUserAgent() => Will not match Firefox > 54 for a Firefo
 	t.false(matchBrowserslistOnUserAgent(firefox("54"), ["Firefox > 54"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox v62 supports es6-module", t => {
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox v62 supports es6-module", t => {
 	t.true(userAgentSupportsFeatures(firefox(63), "es6-module"));
 });
 
-test("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox v63 supports javascript.builtins.Map", t => {
+test("userAgentSupportsFeatures() => Will correctly determine that iOS 14.4.2 supports web-animation", t => {
+	t.true(userAgentSupportsFeatures(`Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [FBAN/FBIOS;FBDV/iPhone11,8;FBMD/iPhone;FBSN/iOS;FBSV/14.4.2;FBSS/2;FBID/phone;FBLC/it_IT;FBOP/5]`, "web-animation"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Edge Mobile 45 on Android supports web-animation", t => {
+	t.true(userAgentSupportsFeatures(`Mozilla/5.0 (Linux; Android 10; SM-A315F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.116 Mobile Safari/537.36 EdgA/45.04.4.4995`, "web-animation"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox v63 supports javascript.builtins.Map", t => {
 	t.true(userAgentSupportsFeatures(firefox(63), "javascript.builtins.Map.@@iterator"));
 });
 
-test("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox on Android v68 doesn't support `pointer`", t => {
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox on Android v68 doesn't support `pointer`", t => {
 	t.false(userAgentSupportsFeatures(`Mozilla/5.0 (Android 8.0.0; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0`, "pointer"));
 });
 
-test("matchBrowserslistOnUserAgent() => Will correctly determine that Firefox v63 supports custom-elementsv1", t => {
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox v63 supports custom-elementsv1", t => {
 	t.true(userAgentSupportsFeatures(firefox(63), CUSTOM_ELEMENTS_FEATURE_NAME));
 });
 
@@ -208,6 +216,11 @@ test("generateBrowserslistFromUseragent() => Will fall back to the latest known 
 test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 supports Web Animations (even though support is partial) #1", t => {
 	t.true(userAgentSupportsFeatures(chrome("70"), "web-animation"));
 });
+
+test("userAgentSupportsFeatures() => Correctly determines that Chromium-based Edge supports Web Animations #1", t => {
+	t.true(userAgentSupportsFeatures(`Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.74 Safari/537.36 Edg/79.0.309.43`, "web-animation"));
+});
+
 
 test("userAgentSupportsFeatures() => Correctly determines that Edge 15 supports api.Element.classList (even though support is partial) #1", t => {
 	t.true(userAgentSupportsFeatures(edge("15"), "api.Element.classList"));

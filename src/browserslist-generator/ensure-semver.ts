@@ -12,7 +12,7 @@ export function ensureSemver(browser: CaniuseBrowser | undefined, version: strin
 		return SAFARI_TP_MAJOR_VERSION;
 	}
 
-	return _coerce(version)!;
+	return _coerce(version, {loose: true})!;
 }
 
 /**

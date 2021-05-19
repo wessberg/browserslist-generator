@@ -16,7 +16,7 @@ import {ComparisonOperator} from "./comparison-operator";
 import {EcmaVersion, ES2015_FEATURES, ES2016_FEATURES, ES2017_FEATURES, ES2018_FEATURES, ES2019_FEATURES, ES2020_FEATURES, ES5_FEATURES} from "./ecma-version";
 import {rangeCorrection} from "./range-correction";
 import {BrowserSupportForFeaturesCommonResult} from "./browser-support-for-features-common-result";
-import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, CaniuseBrowserCorrection, CaniuseFeature} from "./i-caniuse";
+import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, CaniuseBrowserCorrection, CaniuseFeature, VersionedCaniuseBrowser} from "./i-caniuse";
 import {Mdn, MdnBrowserName} from "./mdn";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
 import {UaParserWrapper} from "./ua-parser-wrapper";
@@ -179,8 +179,8 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, CaniuseBrowserCorrecti
 		// but they do not - They require enabling it as an experimental feature
 		"web-animation",
 		{
-			safari: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `0`),
-			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.UNAVAILABLE, `0`)
+			safari: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `0`, "13.4"),
+			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.UNAVAILABLE, `0`, "13.4")
 		}
 	],
 	[
@@ -592,6 +592,7 @@ function getCaniuseLiteFeatureNormalized(stats: CaniuseStats, featureName: strin
 		Object.entries(browserDict).forEach(([version, support]: [string, string]) => {
 			const versionMatch = version.match(NORMALIZE_BROWSER_VERSION_REGEXP);
 			const normalizedVersion = versionMatch == null ? version : versionMatch[1];
+
 			let supportKind: CaniuseSupportKind;
 
 			if (
@@ -837,10 +838,6 @@ function getBrowserSupportForFeaturesCacheKey(comparisonOperator: ComparisonOper
 
 /**
  * Common logic for the functions that generate browserslists based on feature support
- *
- * @param comparisonOperator
- * @param features
- * @returns
  */
 function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator, ...features: string[]): BrowserSupportForFeaturesCommonResult {
 	const cacheKey = getBrowserSupportForFeaturesCacheKey(comparisonOperator, features);
@@ -971,152 +968,255 @@ function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator,
 
 /**
  * Gets the matching CaniuseBrowser for the given UseragentBrowser. Not all are supported, so it may return undefined
- *
- * @param parser
- * @returns
  */
-function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): CaniuseBrowser | undefined {
+function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<VersionedCaniuseBrowser> {
 	const browser = parser.getBrowser();
 	const device = parser.getDevice();
 	const os = parser.getOS();
 	const engine = parser.getEngine();
 
+	// If the OS is iOS, it is actually Safari that drives the WebView
+	if (os.name === "iOS") {
+
+		// Opera Mini with the Presto runtime actually works around
+		// the restrictions os the Safari WebView
+		if (browser.name === "Opera Mini" && engine.name === "Presto") {
+			return {
+				browser: "op_mini",
+				version: browser.version
+			};
+		}
+
+		// In all other cases, it is always Safari driving the WebView
+		return {
+			browser: "ios_saf",
+			version: os.version ?? browser.version
+		};
+	}
+
 	// First, if it is a Blackberry device, it will always be the 'bb' browser
 	if (device.vendor === "BlackBerry" || os.name === "BlackBerry") {
-		return "bb";
+		return {
+			browser: "bb",
+			version: browser.version
+		};
 	}
 
 	switch (browser.name) {
 		case "Samsung Browser":
-			return "samsung";
+			return {
+				browser: "samsung",
+				version: browser.version
+			}
 
 		case "Android Browser": {
 			// If the vendor is Samsung, the default browser is Samsung Internet
 			if (device.vendor === "Samsung") {
-				return "samsung";
+				return {
+					browser: "samsung",
+					version: browser.version
+				};
 			}
 
 			// Default to the stock android browser
-			return "android";
+			return {
+				browser: "android",
+				version: browser.version
+			};
 		}
 
 		case "WebKit":
 			// This will be the case if we're in an iOS Safari WebView
 			if (device.type === "mobile" || device.type === "tablet" || device.type === "smarttv" || device.type === "wearable" || device.type === "embedded") {
-				return "ios_saf";
+				return {
+					browser: "ios_saf",
+					version: os.version
+				};
 			}
 			// Otherwise, fall back to Safari
-			return "safari";
+			return {
+				browser: "safari",
+				version: browser.version
+			};
 
 		case "Baidu":
-			return "baidu";
+			return {
+				browser: "baidu",
+					version: browser.version
+			};
 
 		case "Chrome Headless":
 		case "Chrome WebView":
-			return "chrome";
+			return {
+				browser: "chrome",
+				version: browser.version
+			};
 
 		case "Facebook":
-			// If the OS is iOS, it is actually Safari that drives the WebView
-			if (os.name === "iOS") {
-				return "ios_saf";
-			}
 
-			// Otherwise, we're on Android and inside of a WebView
-			return "chrome";
+			// We've already asserted that this isn't iOS above, so we must be on Android and inside of a WebView
+			return {
+				browser: "chrome",
+				version: browser.version
+			};
 
 		case "Chrome":
 			// Check if the OS is Android, in which case this is actually Chrome for Android. Make it report as regular Chrome
 			if (os.name === "Android") {
-				return "chrome";
-			}
-
-			// If the OS is iOS, it is actually Safari that drives the WebView
-			else if (os.name === "iOS") {
-				return "ios_saf";
+				return {
+					browser: "chrome",
+					version: browser.version
+				};
 			}
 
 			// Otherwise, fall back to chrome
-			return "chrome";
+			return {
+				browser: "chrome",
+				version: browser.version
+			};
 
-		case "Edge":
-			return "edge";
+		case "Edge": {
+			// If the Engine is Blink, it's Chrome-based
+			if (engine.name === "Blink") {
+
+				// If there is no browser version, fall back to Chrome
+				if (browser.version == null) {
+					return {
+						browser: "chrome",
+						version: engine.version
+					}
+				}
+
+				const semverVersion = ensureSemver("edge", browser.version);
+
+				// If the Major version is in between 18 and 79, this will be Edge Mobile on Android,
+				// which is Chromium based but has no related Caniuse browser name. Treat it as Chrome
+				if (semverVersion.major > 18 && semverVersion.major < 79) {
+					return {
+						browser: "chrome",
+						version: engine.version
+					}
+				}
+			}
+
+			return {
+				browser: "edge",
+				version: browser.version
+			};
+		}
 
 		case "Firefox":
 			// Check if the OS is Android, in which case this is actually Firefox for Android.
 			if (os.name === "Android") {
-				return "and_ff";
-			}
-
-			// If the OS is iOS, it is actually Safari that drives the WebView
-			else if (os.name === "iOS") {
-				return "ios_saf";
+				return {
+					browser: "and_ff",
+					version: browser.version
+				};
 			}
 
 			// Default to Firefox
-			return "firefox";
+			return {
+				browser: "firefox",
+				version: browser.version
+			};
 
 		case "IE":
-			return "ie";
+			return {
+				browser: "ie",
+				version: browser.version
+			};
 
 		case "IE Mobile":
 		case "IEMobile":
-			return "ie_mob";
+			return {
+				browser: "ie_mob",
+				version: browser.version
+			};
 
 		case "Safari":
-			return "safari";
+			return {
+				browser: "safari",
+				version: browser.version
+			};
 
 		case "Mobile Safari":
 		case "MobileSafari":
 		case "Safari Mobile":
 		case "SafariMobile":
-			return "ios_saf";
+			return {
+				browser: "ios_saf",
+				version: os.version ?? browser.version
+			};
 
 		case "Opera":
-			return "opera";
+			return {
+				browser: "opera",
+				version: browser.version
+			};
 
 		case "Opera Mini":
-			return "op_mini";
+			return {
+				browser: "op_mini",
+				version: browser.version
+			};
 
 		case "Opera Mobi":
-			return "op_mob";
+			return {
+				browser: "op_mob",
+				version: browser.version
+			};
 
 		case "QQBrowser":
-			return "and_qq";
+			return {
+				browser: "and_qq",
+				version: browser.version
+			};
 
 		case "UCBrowser":
-			return "and_uc";
+			return {
+				browser: "and_uc",
+				version: browser.version
+			};
 
 		default:
+
 			switch (engine.name) {
+				// If the Engine is Blink, it's Chrome
 				case "Blink":
-					return "chrome";
+					return {
+						browser: "chrome",
+						version: engine.version
+					};
 				case "WebKit":
-					if (os.name === "iOS") {
-						return "ios_saf";
-					}
-					return "safari";
+					return {
+						browser: "safari",
+						version: browser.version
+					};
 				case "EdgeHTML":
-					return "edge";
+					return {
+						browser: "edge",
+						version: browser.version
+					};
 				case "Presto":
-					return "opera";
+					return {
+						browser: "opera",
+						version: browser.version
+					};
 			}
 	}
 
-	return undefined;
+	return {};
 }
 
 /**
  * Normalizes the version of the browser such that it plays well with Caniuse
  */
 function getCaniuseVersionForUseragentVersion(
-	browser: CaniuseBrowser,
-	version: string,
+	{browser, version}: VersionedCaniuseBrowser,
 	useragentBrowser: UseragentBrowser,
 	useragentOs: UseragentOs,
 	useragentEngine: UseragentEngine
 ): string {
-	// Ensure that we have a normalized version to work with
-	version = normalizeBrowserVersion(browser, version);
 
 	// Always use 'all' with Opera Mini
 	if (browser === "op_mini") {
@@ -1232,21 +1332,23 @@ export function generateBrowserslistFromUseragent(useragent: string): string[] {
 	const browser = parser.getBrowser();
 	const os = parser.getOS();
 	const engine = parser.getEngine();
-	const version = browser.version;
 
 	// Prepare a CaniuseBrowser name from the useragent string
-	const browserName = getCaniuseBrowserForUseragentBrowser(parser);
+	let {browser: caniuseBrowserName, version: caniuseBrowserVersion} = getCaniuseBrowserForUseragentBrowser(parser);
 
 	// If the browser name or version couldn't be determined, return false immediately
-	if (browserName == null || version == null) {
+	if (caniuseBrowserName == null || caniuseBrowserVersion == null) {
 		throw new TypeError(`No caniuse browser and/or version could be determined for User Agent: ${useragent}`);
 	}
 
+	caniuseBrowserVersion = normalizeBrowserVersion(caniuseBrowserName, caniuseBrowserVersion);
+	const caniuseBrowser = {browser: caniuseBrowserName, version: caniuseBrowserVersion};
+
 	// Prepare a version from the useragent that plays well with caniuse
-	const browserVersion = getCaniuseVersionForUseragentVersion(browserName, version, browser, os, engine);
+	caniuseBrowserVersion = getCaniuseVersionForUseragentVersion(caniuseBrowser, browser, os, engine);
 
 	// Prepare a browserslist from the useragent itself
-	const normalizedBrowserslist = normalizeBrowserslist([`${browserName} ${browserVersion}`]);
+	const normalizedBrowserslist = normalizeBrowserslist([`${caniuseBrowserName} ${caniuseBrowserVersion}`]);
 
 	// Store it in the cache before returning it
 	userAgentToBrowserslistCache.set(useragent, normalizedBrowserslist);
@@ -1269,9 +1371,6 @@ export function matchBrowserslistOnUserAgent(useragent: string, browserslist: st
 
 /**
  * Returns a key to use for the cache between user agents with feature names and whether or not the user agent supports them
- *
- * @param useragent
- * @param features
  */
 function userAgentWithFeaturesCacheKey(useragent: string, features: string[]): string {
 	return `${useragent}.${features.join(",")}`;

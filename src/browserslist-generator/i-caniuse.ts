@@ -18,6 +18,11 @@ export declare type CaniuseBrowser =
 	| "safari"
 	| "samsung";
 
+export interface VersionedCaniuseBrowser {
+	browser: CaniuseBrowser;
+	version: string;
+}
+
 export const enum CaniuseSupportKind {
 	AVAILABLE = "AVAILABLE",
 	UNAVAILABLE = "UNAVAILABLE",
