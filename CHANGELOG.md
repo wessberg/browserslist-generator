@@ -1,3 +1,12 @@
+## [1.0.54](https://github.com/wessberg/browserslist-generator/compare/v1.0.53...v1.0.54) (2021-05-19)
+
+
+### Features
+
+* **ua:** add better Pale Moon handling ([74b1d74](https://github.com/wessberg/browserslist-generator/commit/74b1d747c4dbbbefec65b92f94a508532525ea28))
+
+
+
 ## [1.0.53](https://github.com/wessberg/browserslist-generator/compare/v1.0.52...v1.0.53) (2021-05-19)
 
 
