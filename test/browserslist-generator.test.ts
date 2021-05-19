@@ -109,7 +109,7 @@ test("matchBrowserslistOnUserAgent() => Will match Iceweasel on Linux but treat 
 	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0 Iceweasel/31.6.0`, ["firefox >= 31", UNRELEASED_VERSIONS]));
 });
 
-test.only("matchBrowserslistOnUserAgent() => Will match IceDragon but treat it as Firefox", t => {
+test("matchBrowserslistOnUserAgent() => Will match IceDragon but treat it as Firefox", t => {
 	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0 IceDragon/65.0.2`, ["firefox >= 65", UNRELEASED_VERSIONS]));
 });
 

@@ -1002,12 +1002,6 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 	}
 
 	switch (browser.name) {
-		// Iceweasel is the same as Firefox, but is named differently on Debian due to trademark issues.
-		case "Iceweasel":
-			return {
-				browser: "firefox",
-				version: browser.version
-			};
 		case "Samsung Browser":
 			return {
 				browser: "samsung",
@@ -1213,6 +1207,11 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 						browser: "edge",
 						version: browser.version
 					};
+				case "Gecko":
+					return {
+						browser: "firefox",
+						version: browser.version
+					};
 				case "Presto":
 					return {
 						browser: "opera",
@@ -1350,8 +1349,6 @@ export function generateBrowserslistFromUseragent(useragent: string): string[] {
 
 	// Prepare a CaniuseBrowser name from the useragent string
 	let {browser: caniuseBrowserName, version: caniuseBrowserVersion} = getCaniuseBrowserForUseragentBrowser(parser);
-
-	console.log({browser, os, engine, caniuseBrowserName, caniuseBrowserVersion});
 
 	// If the browser name or version couldn't be determined, return false immediately
 	if (caniuseBrowserName == null || caniuseBrowserVersion == null) {
