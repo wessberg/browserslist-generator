@@ -64,7 +64,10 @@ export class UaParserWrapper {
 
 		// Otherwise, check if it is a bot and match it if so
 		if (isbot(this.userAgent)) {
-			if (this.userAgent.includes("http://www.google.com/bot.htm")) {
+			if (
+				this.userAgent.includes("http://www.google.com/bot.htm") ||
+				this.userAgent.includes("http://www.google.com/adsbot.htm")
+			) {
 				// As far as we know, the last reported update to Googlebot was the intent
 				// to keep it evergreen, but so far it seems 74 is the latest official version
 				result.name = "Chrome";

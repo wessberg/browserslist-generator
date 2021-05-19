@@ -130,8 +130,12 @@ test("matchBrowserslistOnUserAgent() => Will match Headless Chrome as Chrome", t
 	);
 });
 
-test("matchBrowserslistOnUserAgent() => Will match GoogleBot as Chrome v74", t => {
+test("matchBrowserslistOnUserAgent() => Will match GoogleBot as Chrome v74. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(googleBot(), ["chrome >= 74", UNRELEASED_VERSIONS]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match GoogleBot as Chrome v74. #2", t => {
+	t.true(matchBrowserslistOnUserAgent(`AdsBot-Google (+http://www.google.com/adsbot.html)`, ["chrome >= 74", UNRELEASED_VERSIONS]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #1", t => {
