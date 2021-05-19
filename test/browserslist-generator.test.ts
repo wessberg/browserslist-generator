@@ -308,6 +308,10 @@ test("generateBrowserslistFromUseragent() => Will fall back to the latest known 
 	t.notThrows(() => generateBrowserslistFromUseragent(safari("9999")));
 });
 
+test("generateBrowserslistFromUseragent() => Will fall back to the latest known version if given a version of a browser that is newer than what is known by Caniuse #4", t => {
+	t.notThrows(() => generateBrowserslistFromUseragent(`Mozilla/5.0 (iPhone; CPU iPhone OS 9999_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Instagram 187.0.0.32.120 (iPhone13,4; iOS 9999_0; en_US; en-US; scale=3.00; 1284x2778; 289678855)`));
+});
+
 test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 supports Web Animations (even though support is partial) #1", t => {
 	t.true(userAgentSupportsFeatures(chrome("70"), "web-animation"));
 });
