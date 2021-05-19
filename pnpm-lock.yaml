@@ -17,6 +17,7 @@ specifiers:
   eslint-plugin-import: ^2.23.2
   eslint-plugin-jsdoc: ^34.8.1
   husky: ^6.0.0
+  isbot: 3.0.26
   np: 7.5.0
   npm-check-updates: ^11.5.13
   object-path: ^0.11.5
@@ -41,6 +42,7 @@ dependencies:
   '@types/ua-parser-js': 0.7.36
   browserslist: 4.16.6
   caniuse-lite: 1.0.30001228
+  isbot: 3.0.26
   object-path: 0.11.5
   semver: 7.3.5
   ua-parser-js: 0.7.28
@@ -4220,6 +4222,11 @@ packages:
   /isarray/1.0.0:
     resolution: {integrity: sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=}
     dev: true
+
+  /isbot/3.0.26:
+    resolution: {integrity: sha512-y1IwTPP6pRGDmQUTrCz1bZ9ZPSmij3eWruBBIiCOARX5ueyLv58xuFxvUGg6uI0k9u1swnOmJR8DKYZbcDXLqQ==}
+    engines: {node: '>=10'}
+    dev: false
 
   /isexe/2.0.0:
     resolution: {integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=}

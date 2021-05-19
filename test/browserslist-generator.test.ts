@@ -1,4 +1,5 @@
 import test from "ava";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {bingBot, chrome, edge, firefox, googleBot, ie, safari} from "useragent-generator";
 import {
@@ -125,16 +126,20 @@ test("matchBrowserslistOnUserAgent() => Will match Headless Chrome as Chrome", t
 	);
 });
 
-test("matchBrowserslistOnUserAgent() => Will match GoogleBot as Chrome v41", t => {
-	t.true(matchBrowserslistOnUserAgent(googleBot(), ["chrome >= 41", UNRELEASED_VERSIONS]));
+test("matchBrowserslistOnUserAgent() => Will match GoogleBot as Chrome v74", t => {
+	t.true(matchBrowserslistOnUserAgent(googleBot(), ["chrome >= 74", UNRELEASED_VERSIONS]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match BingBot as IE 8", t => {
-	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 8", UNRELEASED_VERSIONS]));
+test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #1", t => {
+	t.true(matchBrowserslistOnUserAgent("StatusCak_Pagespeed_Indev", ["ie >= 11", UNRELEASED_VERSIONS]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match YahooBot as IE 8", t => {
-	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 8", UNRELEASED_VERSIONS]));
+test("matchBrowserslistOnUserAgent() => Will match BingBot as IE 11", t => {
+	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 11", UNRELEASED_VERSIONS]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match YahooBot as IE 11", t => {
+	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 11", UNRELEASED_VERSIONS]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Internet Explorer", t => {

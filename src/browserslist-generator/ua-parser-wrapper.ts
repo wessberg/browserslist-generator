@@ -1,6 +1,6 @@
 import {coerce} from "semver";
 import {UAParser} from "ua-parser-js";
-import {BOT_TO_USER_AGENTS_MAP} from "./useragent/bot/bot-to-user-agents-map";
+import isbot from "isbot";
 import {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from "./useragent/useragent-typed";
 
 // tslint:disable
@@ -47,13 +47,6 @@ export class UaParserWrapper {
 	}
 
 	/**
-	 * Gets the ICPU based on the UAParser
-	 */
-	getCPU(): ReturnType<InstanceType<typeof UAParser>["getCPU"]> {
-		return this.parser.getCPU();
-	}
-
-	/**
 	 * Extends the result of calling 'getBrowser' on the UAParser and always takes bots into account
 	 */
 	private extendGetBrowserResult(result: UseragentBrowser): UseragentBrowser {
@@ -70,19 +63,23 @@ export class UaParserWrapper {
 		if (result.name != null) return result;
 
 		// Otherwise, check if it is a bot and match it if so
-		if (BOT_TO_USER_AGENTS_MAP.GoogleBot(this.userAgent)) {
-			result.name = "Chrome";
-			result.version = "41";
-			// noinspection JSDeprecatedSymbols
-			result.major = "41";
-		}
+		if (isbot(this.userAgent)) {
+			if (this.userAgent.includes("http://www.google.com/bot.htm")) {
+				// As far as we know, the last reported update to Googlebot was the intent
+				// to keep it evergreen, but so far it seems 74 is the latest official version
+				result.name = "Chrome";
+				result.version = "74";
+				// noinspection JSDeprecatedSymbols
+				result.major = "74";
+			}
 
-		// BingBot, The Facebook Crawler, and Yahoo's "Slurp" can render JavaScript, but they are very limited in what they can do. Mimic IE8 to reflect the limitations of these engines
-		if (BOT_TO_USER_AGENTS_MAP.BingBot(this.userAgent) || BOT_TO_USER_AGENTS_MAP.YahooBot(this.userAgent) || BOT_TO_USER_AGENTS_MAP.FacebookCrawler(this.userAgent)) {
-			result.name = "IE";
-			result.version = "8";
-			// noinspection JSDeprecatedSymbols
-			result.major = "8";
+			// Treat all other bots as IE 11
+			else {
+				result.name = "IE";
+				result.version = "11";
+				// noinspection JSDeprecatedSymbols
+				result.major = "11";
+			}
 		}
 
 		return result;
