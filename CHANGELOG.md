@@ -1,3 +1,14 @@
+## [1.0.53](https://github.com/wessberg/browserslist-generator/compare/v1.0.52...v1.0.53) (2021-05-19)
+
+
+### Features
+
+* **ua:** add better support for MIUIBrowser on Android and catch more instances of Googlebot ([3836da3](https://github.com/wessberg/browserslist-generator/commit/3836da352a4bfb6a0fff22ee4b76d84d72db41e3))
+* **ua:** add better support for MIUIBrowser on Android and catch more instances of Googlebot ([1c3d1a8](https://github.com/wessberg/browserslist-generator/commit/1c3d1a8d2b528f992e3c7d1b5b4ef69c1ac27a66))
+* **ua:** add handling or Sogou Explorer, Chromium on Smart TVs, Dalvik VMs, and others ([52f9af7](https://github.com/wessberg/browserslist-generator/commit/52f9af7afd578d0f96039a069350637a9d134395))
+
+
+
 ## [1.0.52](https://github.com/wessberg/browserslist-generator/compare/v1.0.51...v1.0.52) (2021-05-19)
 
 
