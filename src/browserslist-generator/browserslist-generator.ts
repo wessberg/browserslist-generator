@@ -4,6 +4,7 @@ import compatData from "@mdn/browser-compat-data";
 import {get} from "object-path";
 import {gt, gte, lte} from "semver";
 import {
+	getClosestMatchingBrowserVersion,
 	getNextVersionOfBrowser,
 	getOldestVersionOfBrowser,
 	getPreviousVersionOfBrowser,
@@ -1001,6 +1002,20 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 		};
 	}
 
+	// For the MIUIBrowser, there are some rare instances for major versions 8 and 9 where they'll have no declared Chromium engine.
+	// as part of the UA. Under these circumstances, we have to rely on knowledge gathered from scraping related User Agents
+	// to determine the equivalent Chromium version
+	if (browser.name === "MIUI Browser" && browser.version != null && os.name === "Android" && engine.name == null) {
+		const semver = ensureSemver(undefined, browser.version);
+
+		if (semver.major === 8 || semver.major === 9) {
+			return {
+				browser: "chrome",
+				version: "53"
+			};
+		}
+	}
+
 	switch (browser.name) {
 		case "Samsung Browser":
 			return {
@@ -1260,7 +1275,7 @@ function getCaniuseVersionForUseragentVersion(
 	switch (browser) {
 		case "chrome":
 			if (useragentEngine.name === "Blink") {
-				return buildSemverVersion(ensureSemver(browser, useragentEngine.version ?? version).major);
+				return buildSemverVersion(ensureSemver(browser, getClosestMatchingBrowserVersion(browser, useragentEngine.version ?? version)).major);
 			}
 			return buildSemverVersion(major);
 		case "ie":

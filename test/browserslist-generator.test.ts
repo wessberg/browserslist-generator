@@ -69,64 +69,68 @@ test("matchBrowserslistOnUserAgent() => Will match Firefox >= 54 for a Firefox v
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Chrome 68 for a Chrome v68 user agent", t => {
-	t.true(matchBrowserslistOnUserAgent(chrome("68"), ["Chrome >= 68", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(chrome("68"), ["Chrome >= 68"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Chrome for an Android Chrome v18 user agent", t => {
-	t.true(matchBrowserslistOnUserAgent(chrome.androidPhone("18"), ["chrome >= 18", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(chrome.androidPhone("18"), ["chrome >= 18"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match iOS Chrome but treat it as iOS safari", t => {
-	t.true(matchBrowserslistOnUserAgent(chrome.iOS("10.3"), ["ios_saf >= 10", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(chrome.iOS("10.3"), ["ios_saf >= 10"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Supports Samsung Browser 8.2 (e.g. Samsung Internet)", t => {
 	t.true(
 		matchBrowserslistOnUserAgent(
 			"Mozilla/5.0 (Linux; Android 7.0; SAMSUNG SM-A510F Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/8.2 Chrome/63.0.3239.111 Mobile Safari/537.36",
-			["samsung >= 8.2", UNRELEASED_VERSIONS]
+			["samsung >= 8.2"]
 		)
 	);
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Safari v11", t => {
-	t.true(matchBrowserslistOnUserAgent(safari("11"), ["safari 11", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(safari("11"), ["safari 11"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match iOS Safari v11", t => {
-	t.true(matchBrowserslistOnUserAgent(safari.iOS("11.2"), ["ios_saf 11", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(safari.iOS("11.2"), ["ios_saf 11"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match iOS Safari in a WebView v11", t => {
-	t.true(matchBrowserslistOnUserAgent(safari.iOSWebview("11.2"), ["ios_saf 11", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(safari.iOSWebview("11.2"), ["ios_saf 11"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match iOS Firefox but treat it as iOS Safari", t => {
-	t.true(matchBrowserslistOnUserAgent(firefox.iOS("8.3"), ["ios_saf >= 8", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(firefox.iOS("8.3"), ["ios_saf >= 8"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Iceweasel on Linux but treat it as Firefox", t => {
-	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0 Iceweasel/31.6.0`, ["firefox >= 31", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0 Iceweasel/31.6.0`, ["firefox >= 31"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match IceDragon but treat it as Firefox", t => {
-	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0 IceDragon/65.0.2`, ["firefox >= 65", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0 IceDragon/65.0.2`, ["firefox >= 65"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match non-Chromium based MiuiBrowser on Android", t => {
+	t.true(matchBrowserslistOnUserAgent(`Xiaomi_MDT1_TD-LTE/V1 Linux/3.1.31 Android/7.1 Release/10.10.2017 Browser/AppleWebKit537.36 Mobile Safari/537.36 System/Android 7.1 XiaoMi/MiuiBrowser/9.2.1`, ["chrome >= 53"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match chrome as an Android WebView (as android)", t => {
-	t.true(matchBrowserslistOnUserAgent(chrome.androidWebview("4.4.4"), ["android >= 4", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(chrome.androidWebview("4.4.4"), ["android >= 4"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Phone (as regular chrome)", t => {
-	t.true(matchBrowserslistOnUserAgent(chrome.androidPhone("66"), ["chrome >= 66", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(chrome.androidPhone("66"), ["chrome >= 66"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Tablet (as regular Chrome)", t => {
-	t.true(matchBrowserslistOnUserAgent(chrome.androidTablet("66"), ["chrome >= 66", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(chrome.androidTablet("66"), ["chrome >= 66"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Android Chrome on a Chromecast (as chrome)", t => {
-	t.true(matchBrowserslistOnUserAgent(chrome.chromecast("66"), ["chrome >= 66", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(chrome.chromecast("66"), ["chrome >= 66"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Headless Chrome as Chrome", t => {
@@ -139,39 +143,43 @@ test("matchBrowserslistOnUserAgent() => Will match Headless Chrome as Chrome", t
 });
 
 test("matchBrowserslistOnUserAgent() => Will match GoogleBot as Chrome v74. #1", t => {
-	t.true(matchBrowserslistOnUserAgent(googleBot(), ["chrome >= 74", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(googleBot(), ["chrome >= 74"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match GoogleBot as Chrome v74. #2", t => {
-	t.true(matchBrowserslistOnUserAgent(`AdsBot-Google (+http://www.google.com/adsbot.html)`, ["chrome >= 74", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(`AdsBot-Google (+http://www.google.com/adsbot.html)`, ["chrome >= 74"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match GoogleBot as Chrome v74. #3", t => {
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Safari/537.36`, ["chrome >= 74"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #1", t => {
-	t.true(matchBrowserslistOnUserAgent("StatusCak_Pagespeed_Indev", ["ie >= 11", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent("StatusCak_Pagespeed_Indev", ["ie >= 11"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #2", t => {
-	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (compatible; Yahoo Ad monitoring; https://help.yahoo.com/kb/yahoo-ad-monitoring-SLN24857.html)  tands-prod-eng.hlfs-prod---sieve.hlfs-desktop/1621432877-0`, ["ie >= 11", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (compatible; Yahoo Ad monitoring; https://help.yahoo.com/kb/yahoo-ad-monitoring-SLN24857.html)  tands-prod-eng.hlfs-prod---sieve.hlfs-desktop/1621432877-0`, ["ie >= 11"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match BingBot as IE 11", t => {
-	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 11", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 11"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match YahooBot as IE 11", t => {
-	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 11", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 11"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Internet Explorer", t => {
-	t.true(matchBrowserslistOnUserAgent(ie("9"), ["ie 9", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(ie("9"), ["ie 9"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Internet Explorer Mobile", t => {
-	t.true(matchBrowserslistOnUserAgent(ie.windowsPhone("10"), ["ie_mob 10", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(ie.windowsPhone("10"), ["ie_mob 10"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Microsoft Edge", t => {
-	t.true(matchBrowserslistOnUserAgent(edge("16"), ["edge >= 16", UNRELEASED_VERSIONS]));
+	t.true(matchBrowserslistOnUserAgent(edge("16"), ["edge >= 16"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that doesn't support the given features #1", t => {
@@ -236,6 +244,14 @@ test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 support
 
 test("generateBrowserslistFromUseragent() => Will fall back to the latest known version if given a version of a browser that is newer than what is known by Caniuse #1", t => {
 	t.notThrows(() => generateBrowserslistFromUseragent(firefox("9999")));
+});
+
+test("generateBrowserslistFromUseragent() => Will fall back to the latest known version if given a version of a browser that is newer than what is known by Caniuse #2", t => {
+	t.notThrows(() => generateBrowserslistFromUseragent(chrome("9999")));
+});
+
+test("generateBrowserslistFromUseragent() => Will fall back to the latest known version if given a version of a browser that is newer than what is known by Caniuse #3", t => {
+	t.notThrows(() => generateBrowserslistFromUseragent(safari("9999")));
 });
 
 test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 supports Web Animations (even though support is partial) #1", t => {

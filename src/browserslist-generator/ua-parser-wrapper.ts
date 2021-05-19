@@ -59,11 +59,8 @@ export class UaParserWrapper {
 			}
 		}
 
-		// If the parse result already includes a Browser, use it as-is
-		if (result.name != null) return result;
-
-		// Otherwise, check if it is a bot and match it if so
-		if (isbot(this.userAgent)) {
+		// Check if it is a bot and match it if so
+		if (result.name !== "Chrome Headless" && isbot(this.userAgent)) {
 			if (
 				this.userAgent.includes("http://www.google.com/bot.htm") ||
 				this.userAgent.includes("http://www.google.com/adsbot.htm")
