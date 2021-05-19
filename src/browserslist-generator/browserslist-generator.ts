@@ -1362,6 +1362,8 @@ export function generateBrowserslistFromUseragent(useragent: string): string[] {
 	const os = parser.getOS();
 	const engine = parser.getEngine();
 
+	console.log({browser, os, engine});
+
 	// Prepare a CaniuseBrowser name from the useragent string
 	let {browser: caniuseBrowserName, version: caniuseBrowserVersion} = getCaniuseBrowserForUseragentBrowser(parser);
 

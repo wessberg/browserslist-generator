@@ -48,39 +48,39 @@ test("userAgentSupportsFeatures() => Will correctly determine that Edge Mobile 4
 	t.true(userAgentSupportsFeatures(`Mozilla/5.0 (Linux; Android 10; SM-A315F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.116 Mobile Safari/537.36 EdgA/45.04.4.4995`, "web-animation"));
 });
 
-test(`userAgentSupportsFeatures() => Supports the old stock Android browser`, t => {
+test(`userAgentSupportsFeatures() => Supports the old stock Android browser. #1`, t => {
 	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Linux;U;Android 4.4.2;zh-cn;Lenovo A3300-HV Build/KOT49H) AppleWebkit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/537.306`, ["android >= 4.4"]))
 });
 
-test("userAgentSupportsFeatures() => Will correctly determine that Firefox v63 supports javascript.builtins.Map", t => {
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox v63 supports javascript.builtins.Map. #1", t => {
 	t.true(userAgentSupportsFeatures(firefox(63), "javascript.builtins.Map.@@iterator"));
 });
 
-test("userAgentSupportsFeatures() => Will correctly determine that Firefox on Android v68 doesn't support `pointer`", t => {
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox on Android v68 doesn't support `pointer`. #1", t => {
 	t.false(userAgentSupportsFeatures(`Mozilla/5.0 (Android 8.0.0; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0`, "pointer"));
 });
 
-test("userAgentSupportsFeatures() => Will correctly determine that Firefox v63 supports custom-elementsv1", t => {
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox v63 supports custom-elementsv1. #1", t => {
 	t.true(userAgentSupportsFeatures(firefox(63), CUSTOM_ELEMENTS_FEATURE_NAME));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match Firefox >= 54 for a Firefox v54 user agent", t => {
+test("matchBrowserslistOnUserAgent() => Will match Firefox >= 54 for a Firefox v54 user agent. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(firefox("54"), ["Firefox >= 54"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match Chrome 68 for a Chrome v68 user agent", t => {
+test("matchBrowserslistOnUserAgent() => Will match Chrome 68 for a Chrome v68 user agent. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(chrome("68"), ["Chrome >= 68"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match Chrome for an Android Chrome v18 user agent", t => {
+test("matchBrowserslistOnUserAgent() => Will match Chrome for an Android Chrome v18 user agent. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(chrome.androidPhone("18"), ["chrome >= 18"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match iOS Chrome but treat it as iOS safari", t => {
+test("matchBrowserslistOnUserAgent() => Will match iOS Chrome but treat it as iOS safari. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(chrome.iOS("10.3"), ["ios_saf >= 10"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Supports Samsung Browser 8.2 (e.g. Samsung Internet)", t => {
+test("matchBrowserslistOnUserAgent() => Supports Samsung Browser 8.2 (e.g. Samsung Internet). #1", t => {
 	t.true(
 		matchBrowserslistOnUserAgent(
 			"Mozilla/5.0 (Linux; Android 7.0; SAMSUNG SM-A510F Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/8.2 Chrome/63.0.3239.111 Mobile Safari/537.36",
@@ -89,33 +89,38 @@ test("matchBrowserslistOnUserAgent() => Supports Samsung Browser 8.2 (e.g. Samsu
 	);
 });
 
-test("matchBrowserslistOnUserAgent() => Will match Safari v11", t => {
+test("matchBrowserslistOnUserAgent() => Will match Safari v11. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(safari("11"), ["safari 11"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match iOS Safari v11", t => {
+test("matchBrowserslistOnUserAgent() => Will match iOS Safari v11. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(safari.iOS("11.2"), ["ios_saf 11"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match iOS Safari in a WebView v11", t => {
+test("matchBrowserslistOnUserAgent() => Will match iOS Safari in a WebView v11. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(safari.iOSWebview("11.2"), ["ios_saf 11"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match iOS Firefox but treat it as iOS Safari", t => {
+test("matchBrowserslistOnUserAgent() => Will match iOS Firefox but treat it as iOS Safari. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(firefox.iOS("8.3"), ["ios_saf >= 8"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match Iceweasel on Linux but treat it as Firefox", t => {
+test("matchBrowserslistOnUserAgent() => Will match Iceweasel on Linux but treat it as Firefox. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (X11; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0 Iceweasel/31.6.0`, ["firefox >= 31"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match IceDragon but treat it as Firefox", t => {
+test("matchBrowserslistOnUserAgent() => Will match IceDragon but treat it as Firefox. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0 IceDragon/65.0.2`, ["firefox >= 65"]));
 });
 
-test("matchBrowserslistOnUserAgent() => Will match non-Chromium based MiuiBrowser on Android", t => {
+test("matchBrowserslistOnUserAgent() => Will match non-Chromium based MiuiBrowser on Android. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(`Xiaomi_MDT1_TD-LTE/V1 Linux/3.1.31 Android/7.1 Release/10.10.2017 Browser/AppleWebKit537.36 Mobile Safari/537.36 System/Android 7.1 XiaoMi/MiuiBrowser/9.2.1`, ["chrome >= 53"]));
 });
+
+test("matchBrowserslistOnUserAgent() => Will match Pale Moon. #1", t => {
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Windows NT 5.1; rv:4.8) Goanna/20210507 PaleMoon/28.10.3a1`, ["chrome >= 53"]));
+});
+
 
 test("matchBrowserslistOnUserAgent() => Will match chrome as an Android WebView (as android)", t => {
 	t.true(matchBrowserslistOnUserAgent(chrome.androidWebview("4.4.4"), ["android >= 4"]));
