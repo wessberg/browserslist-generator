@@ -1,3 +1,12 @@
+## [1.0.55](https://github.com/wessberg/browserslist-generator/compare/v1.0.54...v1.0.55) (2021-05-19)
+
+
+### Features
+
+* **ua:** fall back to latest known iOS Safari version ([7359201](https://github.com/wessberg/browserslist-generator/commit/73592018ae320435bfe65296b05db1bc6e573603))
+
+
+
 ## [1.0.54](https://github.com/wessberg/browserslist-generator/compare/v1.0.53...v1.0.54) (2021-05-19)
 
 
