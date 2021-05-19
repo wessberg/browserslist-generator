@@ -3,6 +3,8 @@ import {UAParser} from "ua-parser-js";
 import isbot from "isbot";
 import {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from "./useragent/useragent-typed";
 
+const FIREFOX_MATCH = /Firefox\/([\d.]+)/i;
+
 // These extension provide ua-parser-js with support for additional browsers
 // such as Sogou Explorer
 const PARSER_EXTENSIONS = {
@@ -119,6 +121,15 @@ export class UaParserWrapper {
 		if (result.blink != null) {
 			result.name = "Blink";
 			delete result.blink;
+		}
+
+		// The User Agent may hold additional information, such as the equivalent Firefox version
+		if (result.name === "Goanna") {
+			const ffMatch = this.userAgent.match(FIREFOX_MATCH);
+			if (ffMatch != null) {
+				result.name = "Gecko";
+				result.version = ffMatch[1];
+			}
 		}
 
 		return result;

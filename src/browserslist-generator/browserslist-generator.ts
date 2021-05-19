@@ -1033,14 +1033,22 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 			}
 		}
 
-		else {
 			// Then, from v27, it was based on a re-fork of Firefox 38.
-			// Unfortunately, there has been no re-forks since, so we'll
-			// have to assume it is still equivalent to Firefox 38 for
-			// the time being
+			// Unfortunately, we don't have fresh data as for the versions
+			// in between 27 and 29, so we'll have to stay at version 38 in
+			// this range
+		else if (lt(semver, "29.0.0")) {
 			return {
 				browser: "firefox",
 				version: "38"
+			}
+		}
+
+		// We know that v29 points to Firefox 68 in some of its user agents
+		else {
+			return {
+				browser: "firefox",
+				version: "68"
 			}
 		}
 	}
@@ -1268,7 +1276,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 				case "Gecko":
 					return {
 						browser: "firefox",
-						version: browser.version
+						version: engine.version
 					};
 				case "Presto":
 					return {

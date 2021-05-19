@@ -140,6 +140,10 @@ test("matchBrowserslistOnUserAgent() => Will match Pale Moon, but treat it as Fi
 	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Windows NT 5.1; rv:4.8) Goanna/20210507 PaleMoon/28.10.3a1`, ["firefox >= 38"]));
 });
 
+test("matchBrowserslistOnUserAgent() => Will match Pale Moon, but treat it as Firefox. #2", t => {
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101 Goanna/4.8 Firefox/68.0 PaleMoon/29.1.1`, ["firefox >= 68"]));
+});
+
 test("matchBrowserslistOnUserAgent() => Will match Sogou Explorer, but treat it as Chrome. #1", t => {
 	t.true(
 		matchBrowserslistOnUserAgent(`Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.3 (KHTML, like Gecko) Chrome/6.0.472.33 Safari/534.3 SE 2.X MetaSr 1.0`, [
