@@ -48,6 +48,10 @@ test("userAgentSupportsFeatures() => Will correctly determine that Edge Mobile 4
 	t.true(userAgentSupportsFeatures(`Mozilla/5.0 (Linux; Android 10; SM-A315F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.116 Mobile Safari/537.36 EdgA/45.04.4.4995`, "web-animation"));
 });
 
+test(`userAgentSupportsFeatures() => Supports the old stock Android browser`, t => {
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Linux;U;Android 4.4.2;zh-cn;Lenovo A3300-HV Build/KOT49H) AppleWebkit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/537.306`, ["android >= 4.4"]))
+});
+
 test("userAgentSupportsFeatures() => Will correctly determine that Firefox v63 supports javascript.builtins.Map", t => {
 	t.true(userAgentSupportsFeatures(firefox(63), "javascript.builtins.Map.@@iterator"));
 });

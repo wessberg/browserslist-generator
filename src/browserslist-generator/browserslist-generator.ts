@@ -2,7 +2,7 @@ import Browserslist from "browserslist";
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
 import compatData from "@mdn/browser-compat-data";
 import {get} from "object-path";
-import {gt, gte} from "semver";
+import {gt, gte, lte} from "semver";
 import {
 	getNextVersionOfBrowser,
 	getOldestVersionOfBrowser,
@@ -1060,9 +1060,23 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 				version: browser.version
 			};
 
-		case "Chrome":
+		case "Chrome": {
 			// Check if the OS is Android, in which case this is actually Chrome for Android. Make it report as regular Chrome
 			if (os.name === "Android") {
+
+				// Handle a special case on Android where the Chrome version
+				// is actually the WebKit version, and it is actually the stock
+				// Android browser.
+				if (os.version != null && browser.version != null) {
+					const browserSemver = ensureSemver("chrome", browser.version);
+					const osSemver = ensureSemver(undefined, os.version);
+					if (lte(osSemver, "4.4.4") && gte(browserSemver, "400.0.0") ) {
+						return {
+							browser: "android",
+							version: os.version
+						}
+					}
+				}
 				return {
 					browser: "chrome",
 					version: browser.version
@@ -1074,6 +1088,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 				browser: "chrome",
 				version: browser.version
 			};
+		}
 
 		case "Edge": {
 			// If the Engine is Blink, it's Chrome-based
