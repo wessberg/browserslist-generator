@@ -11,6 +11,7 @@ import {
 	getSortedBrowserVersionsWithLeadingVersion,
 	normalizeBrowserVersion
 } from "./browser-version";
+import {UNKNOWN_CANIUSE_BROWSER} from "./constant";
 import {ensureSemver, coerceToString} from "./ensure-semver";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
@@ -1284,6 +1285,12 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 						version: browser.version
 					};
 			}
+	}
+
+	// Fall back to the unknown Caniuse browser when neither an engine name
+	// nor a browser name could be parsed from the user agent
+	if (browser.name == null && engine.name == null) {
+		return UNKNOWN_CANIUSE_BROWSER;
 	}
 
 	return {};

@@ -236,6 +236,10 @@ test("matchBrowserslistOnUserAgent() => Will match Microsoft Edge", t => {
 	t.true(matchBrowserslistOnUserAgent(edge("16"), ["edge >= 16"]));
 });
 
+test.only("generateBrowserslistFromUseragent() => Will fall back to 'UNKNOWN_CANIUSE_BROWSER' when a User Agent is provided that simply cannot be parsed in any meaningful way  #1", t => {
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Macintosh; Intel Mac OS X)`, ["chrome >= 80"]));
+});
+
 test("matchBrowserslistOnUserAgent() => Won't match an unreleased version that doesn't support the given features #1", t => {
 	t.false(matchBrowserslistOnUserAgent(firefox("61"), browsersWithSupportForFeatures(ES_MODULE_FEATURE_NAME, SHADOW_DOM_FEATURE_NAME, CUSTOM_ELEMENTS_FEATURE_NAME)));
 });
