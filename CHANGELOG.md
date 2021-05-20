@@ -1,3 +1,12 @@
+## [1.0.57](https://github.com/wessberg/browserslist-generator/compare/v1.0.56...v1.0.57) (2021-05-20)
+
+
+### Features
+
+* **ua:** fall back to the unknown Caniuse browser less often to catch more bad UAs ([1c1db15](https://github.com/wessberg/browserslist-generator/commit/1c1db155c3fa843cfc556868a895e28b28893907))
+
+
+
 ## [1.0.56](https://github.com/wessberg/browserslist-generator/compare/v1.0.55...v1.0.56) (2021-05-20)
 
 
