@@ -1,9 +1,15 @@
 import {coerce} from "semver";
 import {UAParser} from "ua-parser-js";
-import isbot from "isbot";
+import isbot, {extend} from "isbot";
 import {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from "./useragent/useragent-typed";
 
 const FIREFOX_MATCH = /Firefox\/([\d.]+)/i;
+
+// Extend 'isbot' with more matches
+extend([
+	"bitdiscovery",
+	"Dalvik/"
+]);
 
 // These extension provide ua-parser-js with support for additional browsers
 // such as Sogou Explorer
@@ -84,7 +90,7 @@ export class UaParserWrapper {
 
 		// Check if it is a bot and match it if so
 		// Also treat Dalvik/ as a bot
-		if (result.name !== "Chrome Headless" && (isbot(this.userAgent) || (result.name == null && this.userAgent.includes("Dalvik/")))) {
+		if (result.name !== "Chrome Headless" && isbot(this.userAgent)) {
 			if (
 				this.userAgent.includes("http://www.google.com/bot.htm") ||
 				this.userAgent.includes("http://www.google.com/adsbot.htm")

@@ -216,6 +216,15 @@ test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #2", t 
 	);
 });
 
+test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #3", t => {
+	t.true(
+		matchBrowserslistOnUserAgent(
+			`bitdiscovery`,
+			["ie >= 11"]
+		)
+	);
+});
+
 test("matchBrowserslistOnUserAgent() => Will match BingBot as IE 11", t => {
 	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 11"]));
 });
@@ -236,7 +245,7 @@ test("matchBrowserslistOnUserAgent() => Will match Microsoft Edge", t => {
 	t.true(matchBrowserslistOnUserAgent(edge("16"), ["edge >= 16"]));
 });
 
-test.only("generateBrowserslistFromUseragent() => Will fall back to 'UNKNOWN_CANIUSE_BROWSER' when a User Agent is provided that simply cannot be parsed in any meaningful way  #1", t => {
+test("generateBrowserslistFromUseragent() => Will fall back to 'UNKNOWN_CANIUSE_BROWSER' when a User Agent is provided that simply cannot be parsed in any meaningful way  #1", t => {
 	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Macintosh; Intel Mac OS X)`, ["chrome >= 80"]));
 });
 
