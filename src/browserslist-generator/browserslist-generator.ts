@@ -1404,9 +1404,14 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 			}
 	}
 
-	// Fall back to the unknown Caniuse browser when neither an engine name
-	// nor a browser name could be parsed from the user agent
-	if (browser.name == null && engine.name == null) {
+	// Fall back to the unknown Caniuse browser when all
+	// we received was the name of the OS
+	if (
+		browser.name == null &&
+		engine.name == null &&
+		device.type == null &&
+		os.name != null
+	) {
 		return UNKNOWN_CANIUSE_BROWSER;
 	}
 
