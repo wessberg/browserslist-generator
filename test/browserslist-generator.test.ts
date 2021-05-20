@@ -127,6 +127,10 @@ test("matchBrowserslistOnUserAgent() => Will match IceDragon but treat it as Fir
 	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0 IceDragon/65.0.2`, ["firefox >= 65"]));
 });
 
+test("matchBrowserslistOnUserAgent() => Will match the Facebook browser on iOS and detect it as iOS Safari. #1", t => {
+	t.true(matchBrowserslistOnUserAgent(`[FBAN/FBIOS;FBDV/iPhone9,3;FBMD/iPhone;FBSN/iOS;FBSV/13.6.1;FBSS/2;FBID/phone;FBLC/es_LA;FBOP/5]`, ["ios_saf >= 13"]));
+});
+
 test("matchBrowserslistOnUserAgent() => Will match non-Chromium based MiuiBrowser on Android. #1", t => {
 	t.true(
 		matchBrowserslistOnUserAgent(

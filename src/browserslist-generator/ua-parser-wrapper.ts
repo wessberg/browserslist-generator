@@ -4,6 +4,8 @@ import isbot, {extend} from "isbot";
 import {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from "./useragent/useragent-typed";
 
 const FIREFOX_MATCH = /Firefox\/([\d.]+)/i;
+const IOS_REGEX = /(iPhone)|(iPad)/i;
+const FBSV_IOS_VERSION_REGEX = /FBSV\/([\d.]+)/i;
 
 // Extend 'isbot' with more matches
 extend([
@@ -67,7 +69,7 @@ export class UaParserWrapper {
 	 * Gets the IUserAgentOS based on the UAParser
 	 */
 	getOS(): UseragentOs {
-		return this.parser.getOS() as UseragentOs;
+		return this.extendGetOsResult(this.parser.getOS() as UseragentOs);
 	}
 
 	/**
@@ -149,6 +151,26 @@ export class UaParserWrapper {
 			if (ffMatch != null) {
 				result.name = "Gecko";
 				result.version = ffMatch[1];
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * Extends the result of calling 'getOS'
+	 */
+	private extendGetOsResult(result: UseragentOs): UseragentOs {
+		if (result.name == null && IOS_REGEX.test(this.userAgent)) {
+			result.name = "iOS";
+
+			if (result.version == null) {
+				// If it is the Facebook browser, the iOS version may be reported
+				// through its FBSV/{version} part
+				const fbsvMatch = this.userAgent.match(FBSV_IOS_VERSION_REGEX);
+				if (fbsvMatch != null) {
+					result.version = fbsvMatch[1];
+				}
 			}
 		}
 
