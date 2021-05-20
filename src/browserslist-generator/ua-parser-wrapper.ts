@@ -8,7 +8,8 @@ const FIREFOX_MATCH = /Firefox\/([\d.]+)/i;
 // Extend 'isbot' with more matches
 extend([
 	"bitdiscovery",
-	"Dalvik/"
+	"Dalvik/",
+	"placid.app/v1"
 ]);
 
 // These extension provide ua-parser-js with support for additional browsers

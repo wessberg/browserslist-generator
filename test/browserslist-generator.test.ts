@@ -241,6 +241,15 @@ test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #3", t 
 	);
 });
 
+test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #4", t => {
+	t.true(
+		matchBrowserslistOnUserAgent(
+			`placid.app/v1`,
+			["ie >= 11"]
+		)
+	);
+});
+
 test("matchBrowserslistOnUserAgent() => Will match BingBot as IE 11", t => {
 	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 11"]));
 });
