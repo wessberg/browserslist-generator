@@ -1,3 +1,21 @@
+## [1.0.56](https://github.com/wessberg/browserslist-generator/compare/v1.0.55...v1.0.56) (2021-05-20)
+
+
+### Bug Fixes
+
+* **ua:** add handling for WebKit-based browsers that do not support a Safari version and attempt to map back into an equivalent Safari version ([1700ca4](https://github.com/wessberg/browserslist-generator/commit/1700ca4244d68743422a46133e94d3d86b3ab4e8))
+* **ua:** detect even more bots ([1bb27f4](https://github.com/wessberg/browserslist-generator/commit/1bb27f4a4ba8dbfa779f582acf7e0bd6fda25320))
+* **ua:** detect more bots ([9cd9f80](https://github.com/wessberg/browserslist-generator/commit/9cd9f8097f843fdc18528f0061a51b0132373d07))
+
+
+### Features
+
+* **ua:** add handling with fallbacks for unparseable user agents ([33ff06a](https://github.com/wessberg/browserslist-generator/commit/33ff06a28c92173bfb5bdbecc5641e6335245169))
+* **ua:** add handling with more bots ([75e891a](https://github.com/wessberg/browserslist-generator/commit/75e891a82504efe8dfa2766d3c0811739aca866c))
+* **ua:** detect the Facebook browser on iOS more often ([a1dd77a](https://github.com/wessberg/browserslist-generator/commit/a1dd77ab1cb2c8214d90c8f8b188cf0d67ee676b))
+
+
+
 ## [1.0.55](https://github.com/wessberg/browserslist-generator/compare/v1.0.54...v1.0.55) (2021-05-19)
 
 
