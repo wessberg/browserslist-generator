@@ -9,7 +9,8 @@ const FIREFOX_MATCH = /Firefox\/([\d.]+)/i;
 extend([
 	"bitdiscovery",
 	"Dalvik/",
-	"placid.app/v1"
+	"placid.app/v1",
+	"WebsiteMetadataRetriever"
 ]);
 
 // These extension provide ua-parser-js with support for additional browsers

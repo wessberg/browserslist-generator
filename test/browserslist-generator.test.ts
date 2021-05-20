@@ -250,6 +250,15 @@ test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #4", t 
 	);
 });
 
+test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #5", t => {
+	t.true(
+		matchBrowserslistOnUserAgent(
+			`Asana/1.4.0 WebsiteMetadataRetriever`,
+			["ie >= 11"]
+		)
+	);
+});
+
 test("matchBrowserslistOnUserAgent() => Will match BingBot as IE 11", t => {
 	t.true(matchBrowserslistOnUserAgent(bingBot(), ["ie >= 11"]));
 });
