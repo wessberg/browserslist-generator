@@ -30,6 +30,13 @@ const PARSER_EXTENSIONS = {
 		[
 			"Sogou Explorer",
 			"version"
+		],
+		[
+			/(HeyTapBrowser)\/([\d.]+)/i
+		],
+		[
+			"HeyTapBrowser",
+			"version"
 		]
 	]
 };
@@ -115,6 +122,11 @@ export class UaParserWrapper {
 		if (result["Sogou Explorer"] != null) {
 			result.name = "Sogou Explorer";
 			delete result["Sogou Explorer"];
+		}
+
+		else if (result.HeyTapBrowser != null) {
+			result.name = "HeyTapBrowser";
+			delete result.HeyTapBrowser;
 		}
 
 		return result;

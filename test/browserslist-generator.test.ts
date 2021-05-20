@@ -152,6 +152,22 @@ test("matchBrowserslistOnUserAgent() => Will match Sogou Explorer, but treat it 
 	);
 });
 
+test("matchBrowserslistOnUserAgent() => Will match HeyTapBrowser, but treat it as Chrome (unless on iOS, where it will match as ios_saf). #1", t => {
+	t.true(
+		matchBrowserslistOnUserAgent(`Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36 HeyTapBrowser/45.7.7.1`, [
+			"chrome >= 70"
+		])
+	);
+});
+
+test("matchBrowserslistOnUserAgent() => Will match wkhtmltoimage. #1", t => {
+	t.true(
+		matchBrowserslistOnUserAgent(`Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.34 (KHTML, like Gecko) wkhtmltoimage Safari/534.34`, [
+			"safari >= 5"
+		])
+	);
+});
+
 test("matchBrowserslistOnUserAgent() => Will match Dalvik, but treat it as a bot. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(`Dalvik/2.1.0 (Linux; U; Android 11; SM-N986B Build/RP1A.200720.012)`, ["ie >= 11"]));
 });

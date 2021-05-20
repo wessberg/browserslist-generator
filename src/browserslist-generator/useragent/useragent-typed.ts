@@ -3,6 +3,8 @@ import {UseragentEngineKind} from "./useragent-engine-kind";
 import {UseragentOsKind} from "./useragent-os-kind";
 import {UseragentVendorKind} from "./useragent-vendor-kind";
 
+/* eslint-disable @typescript-eslint/naming-convention */
+
 export interface UseragentBrowser {
 	name: UseragentBrowserKind | undefined;
 
@@ -17,8 +19,9 @@ export interface UseragentBrowser {
 	 */
 	major: string | undefined;
 
-	// Workaround that allows for extending ua-parser-js
+	// Workarounds that allows for extending ua-parser-js with custom browser names
 	"Sogou Explorer"?: string;
+	"HeyTapBrowser"?: string;
 }
 
 export interface UseragentDevice {

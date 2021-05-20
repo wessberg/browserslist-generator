@@ -4,6 +4,7 @@ export type UseragentBrowserKind =
 	| "PaleMoon"
 	| "Arora"
 	| "Sogou Explorer"
+	| "HeyTapBrowser"
 	| "Avant"
 	| "Baidu"
 	| "Blazer"

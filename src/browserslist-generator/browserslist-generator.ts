@@ -1003,6 +1003,17 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 		};
 	}
 
+	// For platforms where the HeyTapBrowser doesn't report which Chrome version
+	// it is based on, we'll have to rely on knowledge from similar user agent strings.
+	// as far as we know, HeyTapBrowser on non-iOS is always based on Chrome 70 or 77,
+	// seemingly at random. So we'll have to assume Chrome 70 here.
+	if (browser.name === "HeyTapBrowser" && engine.name === "WebKit") {
+		return {
+			browser: "chrome",
+			version: "70"
+		}
+	}
+
 	// Unfortunately, since Caniuse doesn't support PaleMoon,
 	// we will have to remap it to its closest equivalent Firefox
 	// version (which it is similar to and a fork of).
@@ -1212,6 +1223,112 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 			};
 
 		case "Safari":
+			// If no browser version is reported, and it is based on WebKit,
+			// we will have to attempt to "guess" the Safari version with mapping the
+			// WebKit version to an equivalent Safari version based on the data
+			// here: https://en.wikipedia.org/wiki/Safari_version_history, even
+			// though this doesn't seem to map correctly to real-world data
+			if (browser.version == null && engine.name === "WebKit" && engine.version != null) {
+				const semver = ensureSemver(undefined, engine.version);
+
+				if (lt(semver, "412.0.0")) {
+					return {
+						browser: "safari",
+						version: "1.0"
+					}
+				}
+
+				if (lt(semver, "522.0.0")) {
+					return {
+						browser: "safari",
+						version: "2.0"
+					}
+				}
+
+				if (lt(semver, "526.0.0")) {
+					return {
+						browser: "safari",
+						version: "3.0"
+					}
+				}
+
+				if (lt(semver, "533.0.0")) {
+					return {
+						browser: "safari",
+						version: "4.0"
+					}
+				}
+
+				if (lt(semver, "536.0.0")) {
+					return {
+						browser: "safari",
+						version: "5.0"
+					}
+				}
+
+				if (lt(semver, "537.71.0")) {
+					return {
+						browser: "safari",
+						version: "6.0"
+					}
+				}
+
+				if (lt(semver, "600.0.0")) {
+					return {
+						browser: "safari",
+						version: "7.0"
+					}
+				}
+
+				if (lt(semver, "601.0.0")) {
+					return {
+						browser: "safari",
+						version: "8.0"
+					}
+				}
+
+				if (lt(semver, "602.0.0")) {
+					return {
+						browser: "safari",
+						version: "9.0"
+					}
+				}
+
+				if (lt(semver, "604.0.0")) {
+					return {
+						browser: "safari",
+						version: "10.0"
+					}
+				}
+
+				if (lt(semver, "606.0.0")) {
+					return {
+						browser: "safari",
+						version: "11.0"
+					}
+				}
+
+				if (lt(semver, "608.0.0")) {
+					return {
+						browser: "safari",
+						version: "12.0"
+					}
+				}
+
+				if (lt(semver, "610.0.0")) {
+					return {
+						browser: "safari",
+						version: "13.0"
+					}
+				}
+
+				// Else it is the current Safari version.
+				// Keep this updated regularly
+				return {
+					browser: "safari",
+					version: "14.0"
+				};
+			}
 			return {
 				browser: "safari",
 				version: browser.version
@@ -1422,6 +1539,8 @@ export function generateBrowserslistFromUseragent(useragent: string): string[] {
 
 	// Prepare a CaniuseBrowser name from the useragent string
 	let {browser: caniuseBrowserName, version: caniuseBrowserVersion} = getCaniuseBrowserForUseragentBrowser(parser);
+
+	// console.log({browser, os, engine, caniuseBrowserName, caniuseBrowserVersion});
 
 	// If the browser name or version couldn't be determined, return false immediately
 	if (caniuseBrowserName == null || caniuseBrowserVersion == null) {
