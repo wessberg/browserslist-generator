@@ -1,3 +1,16 @@
+## [1.0.58](https://github.com/wessberg/browserslist-generator/compare/v1.0.57...v1.0.58) (2021-05-21)
+
+
+### Features
+
+* **ua:** add support for Samsung Internet through its CrossApp feature ([3018c9b](https://github.com/wessberg/browserslist-generator/commit/3018c9be3e260b339d2d028963e93d9b8986ef8e))
+* **ua:** catch iPad on iPhone OS 3 ([cd628fe](https://github.com/wessberg/browserslist-generator/commit/cd628fe5bb8f24e6c7e07569542fca4db0ec4dd3))
+* **ua:** catch more bots ([7ec729c](https://github.com/wessberg/browserslist-generator/commit/7ec729c994c9593439bcf3f67874d49caf486899))
+* **ua:** detect Instagram browser on iOS as ios_saf ([45c9918](https://github.com/wessberg/browserslist-generator/commit/45c9918fd6b63c10390230df62e8050a546e578b))
+* **ua:** treat Nokia WAP browsers as IE 8 as that there are no equivalent browsers in Caniuse ([4aa42be](https://github.com/wessberg/browserslist-generator/commit/4aa42be132418446733aa317bc25d533b3a42706))
+
+
+
 ## [1.0.57](https://github.com/wessberg/browserslist-generator/compare/v1.0.56...v1.0.57) (2021-05-20)
 
 
