@@ -43,6 +43,12 @@ const PARSER_EXTENSIONS = {
 		[
 			"HeyTapBrowser",
 			"version"
+		],
+		[
+			/(SamsungBrowser)\/CrossApp/i
+		],
+		[
+			"Samsung Browser"
 		]
 	],
 	os: [
@@ -148,6 +154,11 @@ export class UaParserWrapper {
 		else if (result.HeyTapBrowser != null) {
 			result.name = "HeyTapBrowser";
 			delete result.HeyTapBrowser;
+		}
+
+		else if (result["Samsung Browser"] != null) {
+			result.name = "Samsung Browser";
+			delete result["Samsung Browser"];
 		}
 
 		return result;

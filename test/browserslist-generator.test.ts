@@ -103,6 +103,15 @@ test("matchBrowserslistOnUserAgent() => Supports Samsung Browser 8.2 (e.g. Samsu
 	);
 });
 
+test("matchBrowserslistOnUserAgent() => Supports Samsung Browser via Samsung Internet's CrossApp feature, but treat it as Chrome as it doesn't report a usable version. #1", t => {
+	t.true(
+		matchBrowserslistOnUserAgent(
+			`Mozilla/5.0 (Linux; Android 7.0; SM-T813 Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/90.0.4430.210 Safari/537.36 SamsungBrowser/CrossApp/0.1.136`,
+			["chrome >= 90"]
+		)
+	);
+});
+
 test("matchBrowserslistOnUserAgent() => Will match Safari v11. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(safari("11"), ["safari 11"]));
 });

@@ -1081,10 +1081,21 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 
 	switch (browser.name) {
 		case "Samsung Browser":
-			return {
-				browser: "samsung",
-				version: browser.version
-			};
+			if (browser.version != null) {
+				return {
+					browser: "samsung",
+					version: browser.version
+				};
+			}
+			else if (engine.name === "Blink" && engine.version != null) {
+				return {
+					browser: "chrome",
+					version: engine.version
+				};
+			}
+			else {
+				break;
+			}
 
 		case "Android Browser": {
 			// If the vendor is Samsung, the default browser is Samsung Internet
