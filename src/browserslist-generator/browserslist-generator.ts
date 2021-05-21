@@ -1494,8 +1494,8 @@ function getCaniuseVersionForUseragentVersion(
 				// Decide the Semver version
 				const osSemver = ensureSemver(undefined, getClosestMatchingBrowserVersion(browser, useragentOs.version));
 
-				// Use only the main version
-				return `${osSemver.major}`;
+				// iOS may have minor releases, but never patch releases, according to caniuse
+				return buildSemverVersion(osSemver.major, osSemver.minor);
 			}
 		}
 

@@ -39,6 +39,9 @@ export interface UseragentOs {
 	 * Determined dynamically
 	 */
 	version: string | undefined;
+
+	// Workarounds that allows for extending ua-parser-js with custom browser names
+	"iOS3.2"?: string;
 }
 
 export interface UseragentEngine {

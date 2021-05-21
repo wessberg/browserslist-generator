@@ -52,6 +52,12 @@ const PARSER_EXTENSIONS = {
 		[
 		"name",
 		"version"
+		],
+		[
+			/(^Mobile\/7B334b)/i
+		],
+		[
+			"iOS3.2"
 		]
 	]
 };
@@ -187,6 +193,12 @@ export class UaParserWrapper {
 					result.version = fbsvMatch[1];
 				}
 			}
+		}
+
+		if (result["iOS3.2"] != null) {
+			result.name = "iOS";
+			result.version = "3.2";
+			delete result["iOS3.2"];
 		}
 
 		return result;
