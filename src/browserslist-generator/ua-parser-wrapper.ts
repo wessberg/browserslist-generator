@@ -5,6 +5,7 @@ import {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from ".
 
 const FIREFOX_MATCH = /Firefox\/([\d.]+)/i;
 const IOS_REGEX = /(iPhone)|(iPad)/i;
+const UNDERSCORED_VERSION_REGEX = /\d+_/;
 const FBSV_IOS_VERSION_REGEX = /FBSV\/([\d.]+)/i;
 
 // Extend 'isbot' with more matches
@@ -41,6 +42,15 @@ const PARSER_EXTENSIONS = {
 		[
 			"HeyTapBrowser",
 			"version"
+		]
+	],
+	os: [
+		[
+			/(iOS)\s*([\d._]+)/i
+		],
+		[
+		"name",
+		"version"
 		]
 	]
 };
@@ -161,6 +171,10 @@ export class UaParserWrapper {
 	 * Extends the result of calling 'getOS'
 	 */
 	private extendGetOsResult(result: UseragentOs): UseragentOs {
+		if (result.version != null && UNDERSCORED_VERSION_REGEX.test(result.version)) {
+			result.version = result.version.replace(/_/g, ".");
+		}
+
 		if (result.name == null && IOS_REGEX.test(this.userAgent)) {
 			result.name = "iOS";
 

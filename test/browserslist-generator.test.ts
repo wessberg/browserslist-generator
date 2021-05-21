@@ -131,6 +131,10 @@ test("matchBrowserslistOnUserAgent() => Will match the Facebook browser on iOS a
 	t.true(matchBrowserslistOnUserAgent(`[FBAN/FBIOS;FBDV/iPhone9,3;FBMD/iPhone;FBSN/iOS;FBSV/13.6.1;FBSS/2;FBID/phone;FBLC/es_LA;FBOP/5]`, ["ios_saf >= 13"]));
 });
 
+test("matchBrowserslistOnUserAgent() => Will match the Instagram browser on iOS and detect it as iOS Safari. #1", t => {
+	t.true(matchBrowserslistOnUserAgent(`Instagram 187.0.0.32.120 (iPhone7,2; iOS 12_4_9; sv_SE; sv-SE; scale=2.00; 750x1334; 289678855) AppleWebKit/420+`, ["ios_saf >= 12"]));
+});
+
 test("matchBrowserslistOnUserAgent() => Will match non-Chromium based MiuiBrowser on Android. #1", t => {
 	t.true(
 		matchBrowserslistOnUserAgent(
