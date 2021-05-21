@@ -23,6 +23,7 @@ export interface UseragentBrowser {
 	"Sogou Explorer"?: string;
 	"HeyTapBrowser"?: string;
 	"Samsung Browser"?: string;
+	"WAP"?: string;
 }
 
 export interface UseragentDevice {
@@ -43,6 +44,7 @@ export interface UseragentOs {
 
 	// Workarounds that allows for extending ua-parser-js with custom browser names
 	"iOS3.2"?: string;
+	"iOS14.5"?: string;
 }
 
 export interface UseragentEngine {

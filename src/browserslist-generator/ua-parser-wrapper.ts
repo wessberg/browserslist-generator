@@ -49,6 +49,12 @@ const PARSER_EXTENSIONS = {
 		],
 		[
 			"Samsung Browser"
+		],
+		[
+			/(Nokia\d+\/[\d.]+.*Profile\/MIDP)/i
+		],
+		[
+			"WAP"
 		]
 	],
 	os: [
@@ -64,6 +70,12 @@ const PARSER_EXTENSIONS = {
 		],
 		[
 			"iOS3.2"
+		],
+		[
+			/(CFNetwork\/1237\s+Darwin\/20.4)/i
+		],
+		[
+			"iOS14.5"
 		]
 	]
 };
@@ -118,6 +130,7 @@ export class UaParserWrapper {
 			const engine = this.parser.getEngine() as UseragentEngine;
 			if (engine.name === "EdgeHTML") {
 				result.version = engine.version;
+				// noinspection JSDeprecatedSymbols
 				result.major = String(coerce(engine.version)?.major ?? result.version);
 			}
 		}
@@ -159,6 +172,12 @@ export class UaParserWrapper {
 		else if (result["Samsung Browser"] != null) {
 			result.name = "Samsung Browser";
 			delete result["Samsung Browser"];
+		}
+
+		else if (result.WAP != null) {
+			result.name = "IE";
+			result.version = "8";
+			delete result.WAP;
 		}
 
 		return result;
@@ -210,6 +229,12 @@ export class UaParserWrapper {
 			result.name = "iOS";
 			result.version = "3.2";
 			delete result["iOS3.2"];
+		}
+
+		else if (result["iOS14.5"] != null) {
+			result.name = "iOS";
+			result.version = "14.5";
+			delete result["iOS14.5"];
 		}
 
 		return result;

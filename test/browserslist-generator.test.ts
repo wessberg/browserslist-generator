@@ -152,6 +152,14 @@ test("matchBrowserslistOnUserAgent() => Will match Safari on iPad as iOS Safari.
 	t.true(matchBrowserslistOnUserAgent(`Mobile/7B334b Safari/531.21.10`, ["ios_saf >= 3.2"]));
 });
 
+test("matchBrowserslistOnUserAgent() => Will match CFNetwork UAs as Mac/iOS. #1", t => {
+	t.true(matchBrowserslistOnUserAgent(`CFNetwork/1237 Darwin/20.4.0`, ["ios_saf >= 14.5"]));
+});
+
+test("matchBrowserslistOnUserAgent() => Will match WAP browsers on Nokia devices as IE 8 (because Caniuse has no fitting browsers, so we'll have to pick something very old here). #1", t => {
+	t.true(matchBrowserslistOnUserAgent(`Nokia6280/2.0 (03.60) Profile/MIDP-2.0 Configuration/CLDC-1.1`, ["ie >= 8"]));
+});
+
 test("matchBrowserslistOnUserAgent() => Will match non-Chromium based MiuiBrowser on Android. #1", t => {
 	t.true(
 		matchBrowserslistOnUserAgent(
