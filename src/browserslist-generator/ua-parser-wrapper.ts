@@ -13,7 +13,8 @@ extend([
 	"bitdiscovery",
 	"Dalvik/",
 	"placid.app/v1",
-	"WebsiteMetadataRetriever"
+	"WebsiteMetadataRetriever",
+	"(compatible; aa/1.0)"
 ]);
 
 // These extension provide ua-parser-js with support for additional browsers

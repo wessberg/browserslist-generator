@@ -135,6 +135,10 @@ test("matchBrowserslistOnUserAgent() => Will match the Instagram browser on iOS 
 	t.true(matchBrowserslistOnUserAgent(`Instagram 187.0.0.32.120 (iPhone7,2; iOS 12_4_9; sv_SE; sv-SE; scale=2.00; 750x1334; 289678855) AppleWebKit/420+`, ["ios_saf >= 12"]));
 });
 
+test("matchBrowserslistOnUserAgent() => Will match the Instagram browser on iOS and detect it as iOS Safari. #2", t => {
+	t.true(matchBrowserslistOnUserAgent(`Instagram 187.0.0.32.120 (iPhone9,4; iOS 13_7; es_CO; es-ES; scale=2.61; 1080x1920; 289678855) AppleWebKit/420+`, ["ios_saf >= 13"]));
+});
+
 test("matchBrowserslistOnUserAgent() => Will match non-Chromium based MiuiBrowser on Android. #1", t => {
 	t.true(
 		matchBrowserslistOnUserAgent(
@@ -262,6 +266,15 @@ test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #5", t 
 	t.true(
 		matchBrowserslistOnUserAgent(
 			`Asana/1.4.0 WebsiteMetadataRetriever`,
+			["ie >= 11"]
+		)
+	);
+});
+
+test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #6", t => {
+	t.true(
+		matchBrowserslistOnUserAgent(
+			`Mozilla/5.0 (compatible; aa/1.0)`,
 			["ie >= 11"]
 		)
 	);
