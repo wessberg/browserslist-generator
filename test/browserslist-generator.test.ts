@@ -120,6 +120,10 @@ test("matchBrowserslistOnUserAgent() => Will match iOS Safari v11. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(safari.iOS("11.2"), ["ios_saf 11"]));
 });
 
+test("matchBrowserslistOnUserAgent() => Will match iOS Safari v14.4. #1", t => {
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 YJApp-IOS jp.co.yahoo.ios.sports.sportsnavi/1.39.6`, ["ios_saf >= 14.4"]));
+});
+
 test("matchBrowserslistOnUserAgent() => Will match iOS Safari in a WebView v11. #1", t => {
 	t.true(matchBrowserslistOnUserAgent(safari.iOSWebview("11.2"), ["ios_saf 11"]));
 });

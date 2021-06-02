@@ -4,9 +4,12 @@ import isbot, {extend} from "isbot";
 import {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from "./useragent/useragent-typed";
 
 const FIREFOX_MATCH = /Firefox\/([\d.]+)/i;
-const IOS_REGEX = /(iPhone)|(iPad)/i;
+const IOS_REGEX_1 = /(iPhone)|(iPad)/i;
+const IOS_REGEX_2 = /(iOS)\s*([\d._]+)/i;
 const UNDERSCORED_VERSION_REGEX = /\d+_/;
 const FBSV_IOS_VERSION_REGEX = /FBSV\/([\d.]+)/i;
+const IOS_14_5_UA_1 = /(CFNetwork\/1237\s+Darwin\/20.4)/i;
+const IOS_3_2_UA_1 = /(^Mobile\/7B334b)/i;
 
 // Extend 'isbot' with more matches
 extend([
@@ -55,27 +58,6 @@ const PARSER_EXTENSIONS = {
 		],
 		[
 			"WAP"
-		]
-	],
-	os: [
-		[
-			/(iOS)\s*([\d._]+)/i
-		],
-		[
-		"name",
-		"version"
-		],
-		[
-			/(^Mobile\/7B334b)/i
-		],
-		[
-			"iOS3.2"
-		],
-		[
-			/(CFNetwork\/1237\s+Darwin\/20.4)/i
-		],
-		[
-			"iOS14.5"
 		]
 	]
 };
@@ -212,7 +194,7 @@ export class UaParserWrapper {
 			result.version = result.version.replace(/_/g, ".");
 		}
 
-		if (result.name == null && IOS_REGEX.test(this.userAgent)) {
+		if ((result.name == null || result.name === "iOS") && (IOS_REGEX_1.test(this.userAgent) || IOS_REGEX_2.test(this.userAgent))) {
 			result.name = "iOS";
 
 			if (result.version == null) {
@@ -220,21 +202,26 @@ export class UaParserWrapper {
 				// through its FBSV/{version} part
 				const fbsvMatch = this.userAgent.match(FBSV_IOS_VERSION_REGEX);
 				if (fbsvMatch != null) {
-					result.version = fbsvMatch[1];
+					result.version = fbsvMatch[1].replace(/_/g, ".");
+				}
+
+				else {
+					const iosRegex2Match = this.userAgent.match(IOS_REGEX_2);
+					if (iosRegex2Match != null) {
+						result.version = iosRegex2Match[2].replace(/_/g, ".");
+					}
 				}
 			}
 		}
 
-		if (result["iOS3.2"] != null) {
-			result.name = "iOS";
-			result.version = "3.2";
-			delete result["iOS3.2"];
-		}
-
-		else if (result["iOS14.5"] != null) {
+		if ((result.name == null || result.name === "iOS") && IOS_14_5_UA_1.test(this.userAgent)) {
 			result.name = "iOS";
 			result.version = "14.5";
-			delete result["iOS14.5"];
+		}
+
+		if ((result.name == null || result.name === "iOS") && IOS_3_2_UA_1.test(this.userAgent)) {
+			result.name = "iOS";
+			result.version = "3.2";
 		}
 
 		return result;
