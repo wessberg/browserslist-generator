@@ -1,3 +1,12 @@
+## [1.0.59](https://github.com/wessberg/browserslist-generator/compare/v1.0.58...v1.0.59) (2021-06-02)
+
+
+### Bug Fixes
+
+* fix regression where iOS Safari can't always be parsed correctly ([35da2f7](https://github.com/wessberg/browserslist-generator/commit/35da2f77306604299c1426e6a19f74bdd086064c))
+
+
+
 ## [1.0.58](https://github.com/wessberg/browserslist-generator/compare/v1.0.57...v1.0.58) (2021-05-21)
 
 
