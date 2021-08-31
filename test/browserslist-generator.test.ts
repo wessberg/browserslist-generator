@@ -13,7 +13,7 @@ import {
 	getFirstVersionsWithFullSupport,
 	matchBrowserslistOnUserAgent,
 	userAgentSupportsFeatures
-} from "../src/browserslist-generator/browserslist-generator";
+} from "../src";
 
 const FBAN_SAFARI_13_3_USER_AGENT =
 	"Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 LightSpeed [FBAN/MessengerLiteForiOS;FBAV/253.1.0.43.116;FBBV/200174216;FBDV/iPhone11,6;FBMD/iPhone;FBSN/iOS;FBSV/13.3.1;FBSS/3;FBCR/;FBID/phone;FBLC/en_US;FBOP/0]";
@@ -121,7 +121,12 @@ test("matchBrowserslistOnUserAgent() => Will match iOS Safari v11. #1", t => {
 });
 
 test("matchBrowserslistOnUserAgent() => Will match iOS Safari v14.4. #1", t => {
-	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 YJApp-IOS jp.co.yahoo.ios.sports.sportsnavi/1.39.6`, ["ios_saf >= 14.4"]));
+	t.true(
+		matchBrowserslistOnUserAgent(
+			`Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 YJApp-IOS jp.co.yahoo.ios.sports.sportsnavi/1.39.6`,
+			["ios_saf >= 14.4"]
+		)
+	);
 });
 
 test("matchBrowserslistOnUserAgent() => Will match iOS Safari in a WebView v11. #1", t => {
@@ -157,7 +162,7 @@ test("matchBrowserslistOnUserAgent() => Will match Safari on iPad as iOS Safari.
 });
 
 test("matchBrowserslistOnUserAgent() => Will match CFNetwork UAs as Mac/iOS. #1", t => {
-	t.true(matchBrowserslistOnUserAgent(`CFNetwork/1237 Darwin/20.4.0`, ["ios_saf >= 14.5"]));
+	t.true(matchBrowserslistOnUserAgent(`CFNetwork/1237 Darwin/20.4.0`, ["ios_saf >= 14.4"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match WAP browsers on Nokia devices as IE 8 (because Caniuse has no fitting browsers, so we'll have to pick something very old here). #1", t => {
@@ -190,19 +195,11 @@ test("matchBrowserslistOnUserAgent() => Will match Sogou Explorer, but treat it 
 });
 
 test("matchBrowserslistOnUserAgent() => Will match HeyTapBrowser, but treat it as Chrome (unless on iOS, where it will match as ios_saf). #1", t => {
-	t.true(
-		matchBrowserslistOnUserAgent(`Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36 HeyTapBrowser/45.7.7.1`, [
-			"chrome >= 70"
-		])
-	);
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36 HeyTapBrowser/45.7.7.1`, ["chrome >= 70"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match wkhtmltoimage. #1", t => {
-	t.true(
-		matchBrowserslistOnUserAgent(`Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.34 (KHTML, like Gecko) wkhtmltoimage Safari/534.34`, [
-			"safari >= 5"
-		])
-	);
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.34 (KHTML, like Gecko) wkhtmltoimage Safari/534.34`, ["safari >= 5"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Dalvik, but treat it as a bot. #1", t => {
@@ -270,39 +267,19 @@ test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #2", t 
 });
 
 test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #3", t => {
-	t.true(
-		matchBrowserslistOnUserAgent(
-			`bitdiscovery`,
-			["ie >= 11"]
-		)
-	);
+	t.true(matchBrowserslistOnUserAgent(`bitdiscovery`, ["ie >= 11"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #4", t => {
-	t.true(
-		matchBrowserslistOnUserAgent(
-			`placid.app/v1`,
-			["ie >= 11"]
-		)
-	);
+	t.true(matchBrowserslistOnUserAgent(`placid.app/v1`, ["ie >= 11"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #5", t => {
-	t.true(
-		matchBrowserslistOnUserAgent(
-			`Asana/1.4.0 WebsiteMetadataRetriever`,
-			["ie >= 11"]
-		)
-	);
+	t.true(matchBrowserslistOnUserAgent(`Asana/1.4.0 WebsiteMetadataRetriever`, ["ie >= 11"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match random bots as IE 11. #6", t => {
-	t.true(
-		matchBrowserslistOnUserAgent(
-			`Mozilla/5.0 (compatible; aa/1.0)`,
-			["ie >= 11"]
-		)
-	);
+	t.true(matchBrowserslistOnUserAgent(`Mozilla/5.0 (compatible; aa/1.0)`, ["ie >= 11"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match BingBot as IE 11", t => {
@@ -402,7 +379,11 @@ test("generateBrowserslistFromUseragent() => Will fall back to the latest known 
 });
 
 test("generateBrowserslistFromUseragent() => Will fall back to the latest known version if given a version of a browser that is newer than what is known by Caniuse #4", t => {
-	t.notThrows(() => generateBrowserslistFromUseragent(`Mozilla/5.0 (iPhone; CPU iPhone OS 9999_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Instagram 187.0.0.32.120 (iPhone13,4; iOS 9999_0; en_US; en-US; scale=3.00; 1284x2778; 289678855)`));
+	t.notThrows(() =>
+		generateBrowserslistFromUseragent(
+			`Mozilla/5.0 (iPhone; CPU iPhone OS 9999_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Instagram 187.0.0.32.120 (iPhone13,4; iOS 9999_0; en_US; en-US; scale=3.00; 1284x2778; 289678855)`
+		)
+	);
 });
 
 test("userAgentSupportsFeatures() => Correctly determines that Chrome 70 supports Web Animations (even though support is partial) #1", t => {

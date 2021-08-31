@@ -1,6 +1,6 @@
 import {coerce} from "semver";
 import {UAParser} from "ua-parser-js";
-import isbot, {extend} from "isbot";
+import isbot from "isbot";
 import {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from "./useragent/useragent-typed";
 
 const FIREFOX_MATCH = /Firefox\/([\d.]+)/i;
@@ -12,7 +12,7 @@ const IOS_14_5_UA_1 = /(CFNetwork\/1237\s+Darwin\/20.4)/i;
 const IOS_3_2_UA_1 = /(^Mobile\/7B334b)/i;
 
 // Extend 'isbot' with more matches
-extend([
+isbot.extend([
 	"bitdiscovery",
 	"Dalvik/",
 	"placid.app/v1",
