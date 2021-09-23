@@ -1,3 +1,5 @@
+## [1.0.62](https://github.com/wessberg/browserslist-generator/compare/v1.0.61...v1.0.62) (2021-09-21)
+
 ## [1.0.61](https://github.com/wessberg/browserslist-generator/compare/v1.0.60...v1.0.61) (2021-09-15)
 
 ### Bug Fixes
@@ -16,11 +18,11 @@
 
 ### Features
 
-- **ua:** add support for Samsung Internet through its CrossApp feature ([3018c9b](https://github.com/wessberg/browserslist-generator/commit/3018c9be3e260b339d2d028963e93d9b8986ef8e))
 - **ua:** catch iPad on iPhone OS 3 ([cd628fe](https://github.com/wessberg/browserslist-generator/commit/cd628fe5bb8f24e6c7e07569542fca4db0ec4dd3))
 - **ua:** catch more bots ([7ec729c](https://github.com/wessberg/browserslist-generator/commit/7ec729c994c9593439bcf3f67874d49caf486899))
 - **ua:** detect Instagram browser on iOS as ios_saf ([45c9918](https://github.com/wessberg/browserslist-generator/commit/45c9918fd6b63c10390230df62e8050a546e578b))
 - **ua:** treat Nokia WAP browsers as IE 8 as that there are no equivalent browsers in Caniuse ([4aa42be](https://github.com/wessberg/browserslist-generator/commit/4aa42be132418446733aa317bc25d533b3a42706))
+- **ua:** add support for Samsung Internet through its CrossApp feature ([3018c9b](https://github.com/wessberg/browserslist-generator/commit/3018c9be3e260b339d2d028963e93d9b8986ef8e))
 
 ## [1.0.57](https://github.com/wessberg/browserslist-generator/compare/v1.0.56...v1.0.57) (2021-05-20)
 
@@ -32,15 +34,15 @@
 
 ### Bug Fixes
 
-- **ua:** add handling for WebKit-based browsers that do not support a Safari version and attempt to map back into an equivalent Safari version ([1700ca4](https://github.com/wessberg/browserslist-generator/commit/1700ca4244d68743422a46133e94d3d86b3ab4e8))
 - **ua:** detect even more bots ([1bb27f4](https://github.com/wessberg/browserslist-generator/commit/1bb27f4a4ba8dbfa779f582acf7e0bd6fda25320))
 - **ua:** detect more bots ([9cd9f80](https://github.com/wessberg/browserslist-generator/commit/9cd9f8097f843fdc18528f0061a51b0132373d07))
+- **ua:** add handling for WebKit-based browsers that do not support a Safari version and attempt to map back into an equivalent Safari version ([1700ca4](https://github.com/wessberg/browserslist-generator/commit/1700ca4244d68743422a46133e94d3d86b3ab4e8))
 
 ### Features
 
+- **ua:** detect the Facebook browser on iOS more often ([a1dd77a](https://github.com/wessberg/browserslist-generator/commit/a1dd77ab1cb2c8214d90c8f8b188cf0d67ee676b))
 - **ua:** add handling with fallbacks for unparseable user agents ([33ff06a](https://github.com/wessberg/browserslist-generator/commit/33ff06a28c92173bfb5bdbecc5641e6335245169))
 - **ua:** add handling with more bots ([75e891a](https://github.com/wessberg/browserslist-generator/commit/75e891a82504efe8dfa2766d3c0811739aca866c))
-- **ua:** detect the Facebook browser on iOS more often ([a1dd77a](https://github.com/wessberg/browserslist-generator/commit/a1dd77ab1cb2c8214d90c8f8b188cf0d67ee676b))
 
 ## [1.0.55](https://github.com/wessberg/browserslist-generator/compare/v1.0.54...v1.0.55) (2021-05-19)
 
@@ -80,8 +82,8 @@
 
 ### Bug Fixes
 
-- **ua:** add detection for more bots ([bbffdbb](https://github.com/wessberg/browserslist-generator/commit/bbffdbb16251c8ff4e0f3c45c1e5bfb5768db543))
 - **ua:** handle special case with the old stock Android browser ([2f2847e](https://github.com/wessberg/browserslist-generator/commit/2f2847e0f4dfbca095fe169e286250b277d48728))
+- **ua:** add detection for more bots ([bbffdbb](https://github.com/wessberg/browserslist-generator/commit/bbffdbb16251c8ff4e0f3c45c1e5bfb5768db543))
 
 ## [1.0.49](https://github.com/wessberg/browserslist-generator/compare/v1.0.48...v1.0.49) (2021-05-19)
 
