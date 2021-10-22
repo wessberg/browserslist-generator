@@ -89,7 +89,7 @@
 		"caniuse-lite": "^1.0.30001260",
 		"object-path": "^0.11.8",
 		"semver": "^7.3.5",
-		"ua-parser-js": "^0.7.28"
+		"ua-parser-js": "0.7.28"
 	},
 	"main": "./dist/cjs/index.js",
 	"module": "./dist/esm/index.js",
