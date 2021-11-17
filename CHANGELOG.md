@@ -1,3 +1,17 @@
+## [1.0.65](https://github.com/wessberg/browserslist-generator/compare/v1.0.64...v1.0.65) (2021-11-17)
+
+
+### Bug Fixes
+
+* use TypeScript 4.4.3 for now ([73c529c](https://github.com/wessberg/browserslist-generator/commit/73c529c24000faeb8cda322ae4ecfd9f24255553))
+
+
+### Features
+
+* add support for ES2021 and ES2022 Ecma versions ([81eecb8](https://github.com/wessberg/browserslist-generator/commit/81eecb8d8ac6de77ded2eea1f7aa8b4cf64a90e5))
+
+
+
 ## [1.0.64](https://github.com/wessberg/browserslist-generator/compare/v1.0.63...v1.0.64) (2021-09-24)
 
 

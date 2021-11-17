@@ -1,6 +1,6 @@
 {
 	"name": "browserslist-generator",
-	"version": "1.0.64",
+	"version": "1.0.65",
 	"description": "A library that makes generating and validating Browserslists a breeze!",
 	"files": [
 		"dist/**/*.*"
