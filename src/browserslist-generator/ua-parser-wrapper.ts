@@ -12,53 +12,21 @@ const IOS_14_5_UA_1 = /(CFNetwork\/1237\s+Darwin\/20.4)/i;
 const IOS_3_2_UA_1 = /(^Mobile\/7B334b)/i;
 
 // Extend 'isbot' with more matches
-isbot.extend([
-	"bitdiscovery",
-	"Dalvik/",
-	"placid.app/v1",
-	"WebsiteMetadataRetriever",
-	"(compatible; aa/1.0)"
-]);
+isbot.extend(["bitdiscovery", "Dalvik/", "placid.app/v1", "WebsiteMetadataRetriever", "(compatible; aa/1.0)"]);
 
 // These extension provide ua-parser-js with support for additional browsers
 // such as Sogou Explorer
 const PARSER_EXTENSIONS = {
-	engine: [
-		[
-			/(Chrome)\/([\d.]+)/i
-		],
-		[
-			"blink",
-			"version"
-		]
-	],
+	engine: [[/(Chrome)\/([\d.]+)/i], ["blink", "version"]],
 	browser: [
-		[
-			/(MetaSr)\s*([\d.]+)/i
-		],
-		[
-			"Sogou Explorer",
-			"version"
-		],
-		[
-			/(HeyTapBrowser)\/([\d.]+)/i
-		],
-		[
-			"HeyTapBrowser",
-			"version"
-		],
-		[
-			/(SamsungBrowser)\/CrossApp/i
-		],
-		[
-			"Samsung Browser"
-		],
-		[
-			/(Nokia\d+\/[\d.]+.*Profile\/MIDP)/i
-		],
-		[
-			"WAP"
-		]
+		[/(MetaSr)\s*([\d.]+)/i],
+		["Sogou Explorer", "version"],
+		[/(HeyTapBrowser)\/([\d.]+)/i],
+		["HeyTapBrowser", "version"],
+		[/(SamsungBrowser)\/CrossApp/i],
+		["Samsung Browser"],
+		[/(Nokia\d+\/[\d.]+.*Profile\/MIDP)/i],
+		["WAP"]
 	]
 };
 
@@ -120,10 +88,7 @@ export class UaParserWrapper {
 		// Check if it is a bot and match it if so
 		// Also treat Dalvik/ as a bot
 		if (result.name !== "Chrome Headless" && isbot(this.userAgent)) {
-			if (
-				this.userAgent.includes("http://www.google.com/bot.htm") ||
-				this.userAgent.includes("http://www.google.com/adsbot.htm")
-			) {
+			if (this.userAgent.includes("http://www.google.com/bot.htm") || this.userAgent.includes("http://www.google.com/adsbot.htm")) {
 				// As far as we know, the last reported update to Googlebot was the intent
 				// to keep it evergreen, but so far it seems 74 is the latest official version
 				result.name = "Chrome";
@@ -144,19 +109,13 @@ export class UaParserWrapper {
 		if (result["Sogou Explorer"] != null) {
 			result.name = "Sogou Explorer";
 			delete result["Sogou Explorer"];
-		}
-
-		else if (result.HeyTapBrowser != null) {
+		} else if (result.HeyTapBrowser != null) {
 			result.name = "HeyTapBrowser";
 			delete result.HeyTapBrowser;
-		}
-
-		else if (result["Samsung Browser"] != null) {
+		} else if (result["Samsung Browser"] != null) {
 			result.name = "Samsung Browser";
 			delete result["Samsung Browser"];
-		}
-
-		else if (result.WAP != null) {
+		} else if (result.WAP != null) {
 			result.name = "IE";
 			result.version = "8";
 			delete result.WAP;
@@ -203,9 +162,7 @@ export class UaParserWrapper {
 				const fbsvMatch = this.userAgent.match(FBSV_IOS_VERSION_REGEX);
 				if (fbsvMatch != null) {
 					result.version = fbsvMatch[1].replace(/_/g, ".");
-				}
-
-				else {
+				} else {
 					const iosRegex2Match = this.userAgent.match(IOS_REGEX_2);
 					if (iosRegex2Match != null) {
 						result.version = iosRegex2Match[2].replace(/_/g, ".");

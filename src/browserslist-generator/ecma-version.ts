@@ -1,4 +1,4 @@
-export type EcmaVersion = "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019" | "es2020";
+export type EcmaVersion = "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019" | "es2020" | "es2021" | "es2022";
 
 export const ES5_FEATURES: string[] = [
 	"javascript.builtins.Object.create",
@@ -76,3 +76,24 @@ export const ES2019_FEATURES: string[] = [
 ];
 
 export const ES2020_FEATURES: string[] = [...ES2019_FEATURES, "javascript.builtins.String.matchAll"];
+
+export const ES2021_FEATURES: string[] = [
+	...ES2020_FEATURES,
+	"javascript.operators.logical_or_assignment",
+	"javascript.operators.logical_nullish_assignment",
+	"javascript.operators.logical_and_assignment",
+	"javascript.builtins.String.replaceAll",
+	"javascript.grammar.numeric_separators",
+	"javascript.builtins.Promise.any"
+];
+
+export const ES2022_FEATURES: string[] = [
+	...ES2021_FEATURES,
+	"javascript.classes.public_class_fields",
+	"javascript.classes.private_class_fields",
+	"javascript.classes.private_class_fields_in",
+	"javascript.classes.static_class_fields",
+	"javascript.operators.await.top_level",
+	"javascript.builtins.RegExp.hasIndices",
+	
+];

@@ -21,9 +21,9 @@ export interface UseragentBrowser {
 
 	// Workarounds that allows for extending ua-parser-js with custom browser names
 	"Sogou Explorer"?: string;
-	"HeyTapBrowser"?: string;
+	HeyTapBrowser?: string;
 	"Samsung Browser"?: string;
-	"WAP"?: string;
+	WAP?: string;
 }
 
 export interface UseragentDevice {

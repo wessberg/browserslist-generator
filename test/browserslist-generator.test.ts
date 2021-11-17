@@ -538,8 +538,16 @@ test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that th
 	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es2020")), "es2020");
 });
 
-test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for the last 1 versions of Chrome is ES2020 #1", t => {
-	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(["last 1 and_chr versions"]), "es2020");
+test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for a Browserslist targeting browsers only compatible with ES2021 is indeed ES2021 #1", t => {
+	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es2021")), "es2021");
+});
+
+test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for a Browserslist targeting browsers only compatible with ES2022 is indeed ES2022 #1", t => {
+	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es2022")), "es2022");
+});
+
+test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for the last 1 versions of Chrome is ES2022 #1", t => {
+	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(["last 1 and_chr versions"]), "es2022");
 });
 
 // test.only("playground", t => {

@@ -15,7 +15,18 @@ import {UNKNOWN_CANIUSE_BROWSER} from "./constant";
 import {ensureSemver, coerceToString} from "./ensure-semver";
 import {compareVersions} from "./compare-versions";
 import {ComparisonOperator} from "./comparison-operator";
-import {EcmaVersion, ES2015_FEATURES, ES2016_FEATURES, ES2017_FEATURES, ES2018_FEATURES, ES2019_FEATURES, ES2020_FEATURES, ES5_FEATURES} from "./ecma-version";
+import {
+	EcmaVersion,
+	ES2015_FEATURES,
+	ES2016_FEATURES,
+	ES2017_FEATURES,
+	ES2018_FEATURES,
+	ES2019_FEATURES,
+	ES2020_FEATURES,
+	ES2021_FEATURES,
+	ES2022_FEATURES,
+	ES5_FEATURES
+} from "./ecma-version";
 import {rangeCorrection} from "./range-correction";
 import {BrowserSupportForFeaturesCommonResult} from "./browser-support-for-features-common-result";
 import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, CaniuseBrowserCorrection, CaniuseFeature, VersionedCaniuseBrowser} from "./i-caniuse";
@@ -484,16 +495,19 @@ export function browserslistSupportsEcmaVersion(browserslist: string[], version:
 
 		case "es2020":
 			return browserslistSupportsFeatures(browserslist, ...ES2020_FEATURES);
+		case "es2021":
+			return browserslistSupportsFeatures(browserslist, ...ES2021_FEATURES);
+		case "es2022":
+			return browserslistSupportsFeatures(browserslist, ...ES2022_FEATURES);
 	}
 }
 
 /**
  * Returns the appropriate Ecma version for the given Browserslist
- *
- * @param browserslist
- * @returns
  */
 export function getAppropriateEcmaVersionForBrowserslist(browserslist: string[]): EcmaVersion {
+	if (browserslistSupportsEcmaVersion(browserslist, "es2022")) return "es2022";
+	if (browserslistSupportsEcmaVersion(browserslist, "es2021")) return "es2021";
 	if (browserslistSupportsEcmaVersion(browserslist, "es2020")) return "es2020";
 	if (browserslistSupportsEcmaVersion(browserslist, "es2019")) return "es2019";
 	if (browserslistSupportsEcmaVersion(browserslist, "es2018")) return "es2018";
@@ -506,9 +520,6 @@ export function getAppropriateEcmaVersionForBrowserslist(browserslist: string[])
 
 /**
  * Generates a Browserslist based on browser support for the given ECMA version
- *
- * @param version
- * @returns
  */
 export function browsersWithSupportForEcmaVersion(version: EcmaVersion): string[] {
 	switch (version) {
@@ -528,6 +539,10 @@ export function browsersWithSupportForEcmaVersion(version: EcmaVersion): string[
 			return browsersWithSupportForFeatures(...ES2019_FEATURES);
 		case "es2020":
 			return browsersWithSupportForFeatures(...ES2020_FEATURES);
+		case "es2021":
+			return browsersWithSupportForFeatures(...ES2021_FEATURES);
+		case "es2022":
+			return browsersWithSupportForFeatures(...ES2022_FEATURES);
 	}
 }
 
@@ -1011,7 +1026,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 		return {
 			browser: "chrome",
 			version: "70"
-		}
+		};
 	}
 
 	// Unfortunately, since Caniuse doesn't support PaleMoon,
@@ -1026,7 +1041,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 			return {
 				browser: "firefox",
 				version: "2"
-			}
+			};
 		}
 
 		// Between these two versions, the version numbers followed Firefox/Gecko
@@ -1034,7 +1049,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 			return {
 				browser: "firefox",
 				version: browser.version
-			}
+			};
 		}
 
 		// It kept staying at Firefox 24 for all we know
@@ -1042,18 +1057,18 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 			return {
 				browser: "firefox",
 				version: "24.0.0"
-			}
+			};
 		}
 
-			// Then, from v27, it was based on a re-fork of Firefox 38.
-			// Unfortunately, we don't have fresh data as for the versions
-			// in between 27 and 29, so we'll have to stay at version 38 in
-			// this range
+		// Then, from v27, it was based on a re-fork of Firefox 38.
+		// Unfortunately, we don't have fresh data as for the versions
+		// in between 27 and 29, so we'll have to stay at version 38 in
+		// this range
 		else if (lt(semver, "29.0.0")) {
 			return {
 				browser: "firefox",
 				version: "38"
-			}
+			};
 		}
 
 		// We know that v29 points to Firefox 68 in some of its user agents
@@ -1061,7 +1076,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 			return {
 				browser: "firefox",
 				version: "68"
-			}
+			};
 		}
 	}
 
@@ -1086,14 +1101,12 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 					browser: "samsung",
 					version: browser.version
 				};
-			}
-			else if (engine.name === "Blink" && engine.version != null) {
+			} else if (engine.name === "Blink" && engine.version != null) {
 				return {
 					browser: "chrome",
 					version: engine.version
 				};
-			}
-			else {
+			} else {
 				break;
 			}
 
@@ -1246,91 +1259,91 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 					return {
 						browser: "safari",
 						version: "1.0"
-					}
+					};
 				}
 
 				if (lt(semver, "522.0.0")) {
 					return {
 						browser: "safari",
 						version: "2.0"
-					}
+					};
 				}
 
 				if (lt(semver, "526.0.0")) {
 					return {
 						browser: "safari",
 						version: "3.0"
-					}
+					};
 				}
 
 				if (lt(semver, "533.0.0")) {
 					return {
 						browser: "safari",
 						version: "4.0"
-					}
+					};
 				}
 
 				if (lt(semver, "536.0.0")) {
 					return {
 						browser: "safari",
 						version: "5.0"
-					}
+					};
 				}
 
 				if (lt(semver, "537.71.0")) {
 					return {
 						browser: "safari",
 						version: "6.0"
-					}
+					};
 				}
 
 				if (lt(semver, "600.0.0")) {
 					return {
 						browser: "safari",
 						version: "7.0"
-					}
+					};
 				}
 
 				if (lt(semver, "601.0.0")) {
 					return {
 						browser: "safari",
 						version: "8.0"
-					}
+					};
 				}
 
 				if (lt(semver, "602.0.0")) {
 					return {
 						browser: "safari",
 						version: "9.0"
-					}
+					};
 				}
 
 				if (lt(semver, "604.0.0")) {
 					return {
 						browser: "safari",
 						version: "10.0"
-					}
+					};
 				}
 
 				if (lt(semver, "606.0.0")) {
 					return {
 						browser: "safari",
 						version: "11.0"
-					}
+					};
 				}
 
 				if (lt(semver, "608.0.0")) {
 					return {
 						browser: "safari",
 						version: "12.0"
-					}
+					};
 				}
 
 				if (lt(semver, "610.0.0")) {
 					return {
 						browser: "safari",
 						version: "13.0"
-					}
+					};
 				}
 
 				// Else it is the current Safari version.
@@ -1417,12 +1430,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 
 	// Fall back to the unknown Caniuse browser when all
 	// we received was the name of the OS
-	if (
-		browser.name == null &&
-		engine.name == null &&
-		device.type == null &&
-		os.name != null
-	) {
+	if (browser.name == null && engine.name == null && device.type == null && os.name != null) {
 		return UNKNOWN_CANIUSE_BROWSER;
 	}
 
