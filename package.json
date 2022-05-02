@@ -80,12 +80,12 @@
 		"useragent-generator": "^1.1.1-amkt-22079-finish.0"
 	},
 	"dependencies": {
-		"isbot": "3.4.5",
+		"isbot": "^3.4.5",
 		"@mdn/browser-compat-data": "^4.1.16",
 		"@types/object-path": "^0.11.1",
 		"@types/semver": "^7.3.9",
 		"@types/ua-parser-js": "^0.7.36",
-		"browserslist": "4.20.2",
+		"browserslist": "^4.20.2",
 		"caniuse-lite": "^1.0.30001328",
 		"object-path": "^0.11.8",
 		"semver": "^7.3.7",
