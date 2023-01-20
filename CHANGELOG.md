@@ -1,3 +1,19 @@
+## [2.0.1](https://github.com/wessberg/browserslist-generator/compare/v1.0.66...v2.0.1) (2023-01-20)
+
+
+### Bug Fixes
+
+* fix sandhog confiog ([17513f0](https://github.com/wessberg/browserslist-generator/commit/17513f0f7f00f1b50ae2a487a3b752a0c54cad2a))
+* update workflow config ([aa274fc](https://github.com/wessberg/browserslist-generator/commit/aa274fc2f81c1fac187710c0f3407447bc3c5271))
+
+
+### Features
+
+* improve Android feature detection ([b687a2d](https://github.com/wessberg/browserslist-generator/commit/b687a2dfd0f457f147721448ed0d0a0422c620b7))
+* migrate to ESM ([3d5c8f0](https://github.com/wessberg/browserslist-generator/commit/3d5c8f054a79efa4ec79101a75269ac6feea4d81))
+
+
+
 ## [1.0.66](https://github.com/wessberg/browserslist-generator/compare/v1.0.65...v1.0.66) (2022-04-12)
 
 

@@ -14,7 +14,7 @@
 
 <a href="https://npmcharts.com/compare/browserslist-generator?minimal=true"><img alt="Downloads per month" src="https://img.shields.io/npm/dm/browserslist-generator.svg"    /></a>
 <a href="https://www.npmjs.com/package/browserslist-generator"><img alt="NPM version" src="https://badge.fury.io/js/browserslist-generator.svg"    /></a>
-<a href="https://david-dm.org/wessberg/browserslist-generator"><img alt="Dependencies" src="https://img.shields.io/david/wessberg%2Fbrowserslist-generator.svg"    /></a>
+<img alt="Dependencies" src="https://img.shields.io/librariesio/github/wessberg%2Fbrowserslist-generator.svg"    />
 <a href="https://github.com/wessberg/browserslist-generator/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/wessberg%2Fbrowserslist-generator.svg"    /></a>
 <a href="https://github.com/prettier/prettier"><img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg"    /></a>
 <a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"    /></a>
@@ -57,9 +57,9 @@ A _Feature_ is anything that can be found on [caniuse](https://caniuse.com/) or 
 
 [Become a sponsor/backer](https://github.com/wessberg/browserslist-generator?sponsor=1) and get your logo listed here.
 
-| <a href="https://usebubbles.com"><img alt="Bubbles" src="https://uploads-ssl.webflow.com/5d682047c28b217055606673/5e5360be16879c1d0dca6514_icon-thin-128x128%402x.png" height="70"   /></a> | <a href="https://github.com/cblanc"><img alt="Christopher Blanchard" src="https://avatars0.githubusercontent.com/u/2160685?s=400&v=4" height="70"   /></a> | <a href="https://github.com/ideal-postcodes"><img alt="Ideal Postcodes" src="https://avatars.githubusercontent.com/u/4996310?s=200&v=4" height="70"   /></a> | <a href="https://www.xerox.com"><img alt="Xerox" src="https://avatars.githubusercontent.com/u/9158512?s=200&v=4" height="70"   /></a> | <a href="https://changelog.me"><img alt="Trent Raymond" src="https://avatars.githubusercontent.com/u/1509616?v=4" height="70"   /></a> |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| [Bubbles](https://usebubbles.com)<br><strong>Twitter</strong>: [@usebubbles](https://twitter.com/usebubbles)                                                                                | [Christopher Blanchard](https://github.com/cblanc)                                                                                                         | [Ideal Postcodes](https://github.com/ideal-postcodes)                                                                                                        | [Xerox](https://www.xerox.com)                                                                                                        | [Trent Raymond](https://changelog.me)                                                                                                  |
+| <a href="https://usebubbles.com"><img alt="Bubbles" src="https://uploads-ssl.webflow.com/5d682047c28b217055606673/5e5360be16879c1d0dca6514_icon-thin-128x128%402x.png" height="70"   /></a> | <a href="https://www.xerox.com"><img alt="Xerox" src="https://avatars.githubusercontent.com/u/9158512?s=200&v=4" height="70"   /></a> | <a href="https://changelog.me"><img alt="Trent Raymond" src="https://avatars.githubusercontent.com/u/1509616?v=4" height="70"   /></a> | <a href="https://scrubtheweb.com"><img alt="scrubtheweb" src="https://avatars.githubusercontent.com/u/41668218?v=4" height="70"   /></a> | <a href="https://github.com/hjoelh"><img alt="Joel" src="https://avatars.githubusercontent.com/u/68335961?v=4" height="70"   /></a> |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [Bubbles](https://usebubbles.com)<br><strong>Twitter</strong>: [@usebubbles](https://twitter.com/usebubbles)                                                                                | [Xerox](https://www.xerox.com)                                                                                                        | [Trent Raymond](https://changelog.me)                                                                                                  | [scrubtheweb](https://scrubtheweb.com)                                                                                                   | [Joel](https://github.com/hjoelh)                                                                                                   |
 
 ### Patreon
 
@@ -136,7 +136,11 @@ Instead, simply declare the features that should be available:
 ```typescript
 import {browsersWithSupportForFeatures} from "browserslist-generator";
 // Generate a browserslist for browsers that support all of the given features
-const browserslist = browsersWithSupportForFeatures("es6-module", "shadowdomv1", "custom-elementsv1");
+const browserslist = browsersWithSupportForFeatures(
+  "es6-module",
+  "shadowdomv1",
+  "custom-elementsv1"
+);
 ```
 
 ### Checking if a User Agent supports a specific feature
@@ -147,9 +151,9 @@ This could be useful, among other things, for conditional bundle serving:
 ```typescript
 import {userAgentSupportsFeatures} from "browserslist-generator";
 if (userAgentSupportsFeatures(userAgentString, "javascript.builtins.Promise.finally")) {
-	doA();
+  doA();
 } else {
-	doB();
+  doB();
 }
 ```
 
@@ -161,9 +165,9 @@ This could be useful, among other things, for conditional bundle serving:
 ```typescript
 import {browserslistSupportsFeatures} from "browserslist-generator";
 if (browserslistSupportsFeatures(browserslist, "es6-module")) {
-	useModernBundle();
+  useModernBundle();
 } else {
-	useLegacyBundle();
+  useLegacyBundle();
 }
 ```
 
@@ -187,9 +191,9 @@ This could be useful, among other things, for conditional bundle serving:
 ```typescript
 import {browserslistSupportsEcmaVersion} from "browserslist-generator";
 if (browserslistSupportsEcmaVersion(browserslist, "es2015")) {
-	useModernBundle();
+  useModernBundle();
 } else {
-	useLegacyBundle();
+  useLegacyBundle();
 }
 ```
 
@@ -202,8 +206,8 @@ This could be useful, for example, when using the Typescript compiler based on a
 import {getAppropriateEcmaVersionForBrowserslist} from "browserslist-generator";
 
 const typescriptOptions = {
-	// ...
-	target: getAppropriateEcmaVersionForBrowserslist(browserslist)
+  // ...
+  target: getAppropriateEcmaVersionForBrowserslist(browserslist)
 };
 ```
 
