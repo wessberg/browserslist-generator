@@ -1,7 +1,7 @@
 import {gte, lte} from "semver";
-import {getSortedBrowserVersions} from "./browser-version";
-import {coerceToString} from "./ensure-semver";
-import {CaniuseBrowser, CaniuseSupportKind, CaniuseDataCorrection} from "./i-caniuse";
+import {getSortedBrowserVersions} from "./browser-version.js";
+import {coerceToString} from "./ensure-semver.js";
+import {CaniuseBrowser, CaniuseSupportKind, CaniuseDataCorrection} from "./i-caniuse.js";
 
 /**
  * Applies the given correction within the given version range

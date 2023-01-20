@@ -1,7 +1,7 @@
-import {UseragentBrowserKind} from "./useragent-browser-kind";
-import {UseragentEngineKind} from "./useragent-engine-kind";
-import {UseragentOsKind} from "./useragent-os-kind";
-import {UseragentVendorKind} from "./useragent-vendor-kind";
+import {UseragentBrowserKind} from "./useragent-browser-kind.js";
+import {UseragentEngineKind} from "./useragent-engine-kind.js";
+import {UseragentOsKind} from "./useragent-os-kind.js";
+import {UseragentVendorKind} from "./useragent-vendor-kind.js";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 

@@ -1,1 +1,1 @@
-export * from "./browserslist-generator/browserslist-generator";
+export * from "./browserslist-generator/browserslist-generator.js";

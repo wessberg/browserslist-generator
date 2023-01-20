@@ -1,4 +1,4 @@
-export declare type MdnBrowserName =
+export type MdnBrowserName =
 	| "webview_android"
 	| "chrome"
 	| "chrome_android"
@@ -20,7 +20,7 @@ export interface MdnSupportDict {
 	/* eslint-enable @typescript-eslint/naming-convention */
 }
 
-export declare type MdnSupportMapper = {[Key in MdnBrowserName]: MdnSupportDict};
+export type MdnSupportMapper = {[Key in MdnBrowserName]: MdnSupportDict};
 
 export interface Mdn {
 	/* eslint-disable @typescript-eslint/naming-convention */

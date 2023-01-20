@@ -1,6 +1,6 @@
 import {coerce as _coerce, SemVer} from "semver";
-import {SAFARI_TP_MAJOR_VERSION} from "./browser-version";
-import {CaniuseBrowser} from "./i-caniuse";
+import {SAFARI_TP_MAJOR_VERSION} from "./browser-version.js";
+import {CaniuseBrowser} from "./i-caniuse.js";
 
 /**
  * Coerces the given version

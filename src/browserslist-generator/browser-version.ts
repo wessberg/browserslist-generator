@@ -1,9 +1,9 @@
 import Browserslist from "browserslist";
 import {coerce as _coerce, gt, gte, lt} from "semver";
-import {ensureSemver} from "./ensure-semver";
-import {compareVersions} from "./compare-versions";
-import {CaniuseBrowser} from "./i-caniuse";
-import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
+import {ensureSemver} from "./ensure-semver.js";
+import {compareVersions} from "./compare-versions.js";
+import {CaniuseBrowser} from "./i-caniuse.js";
+import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp.js";
 
 export const SAFARI_TP_MAJOR_VERSION = (() => {
 	const versions = getSortedBrowserVersions("safari");

@@ -1,7 +1,7 @@
 import Browserslist from "browserslist";
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
-import compatData from "@mdn/browser-compat-data";
-import {get} from "object-path";
+import compatData from "@mdn/browser-compat-data" assert {type: "json"};
+import objectPath from "object-path";
 import {gt, gte, lt, lte} from "semver";
 import {
 	getClosestMatchingBrowserVersion,
@@ -11,11 +11,11 @@ import {
 	getSortedBrowserVersions,
 	getSortedBrowserVersionsWithLeadingVersion,
 	normalizeBrowserVersion
-} from "./browser-version";
-import {UNKNOWN_CANIUSE_BROWSER} from "./constant";
-import {ensureSemver, coerceToString} from "./ensure-semver";
-import {compareVersions} from "./compare-versions";
-import {ComparisonOperator} from "./comparison-operator";
+} from "./browser-version.js";
+import {UNKNOWN_CANIUSE_BROWSER} from "./constant.js";
+import {ensureSemver, coerceToString} from "./ensure-semver.js";
+import {compareVersions} from "./compare-versions.js";
+import {ComparisonOperator} from "./comparison-operator.js";
 import {
 	EcmaVersion,
 	ES2015_FEATURES,
@@ -27,14 +27,14 @@ import {
 	ES2021_FEATURES,
 	ES2022_FEATURES,
 	ES5_FEATURES
-} from "./ecma-version";
-import {rangeCorrection} from "./range-correction";
-import {BrowserSupportForFeaturesCommonResult} from "./browser-support-for-features-common-result";
-import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, CaniuseBrowserCorrection, CaniuseFeature, VersionedCaniuseBrowser} from "./i-caniuse";
-import {Mdn, MdnBrowserName} from "./mdn";
-import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp";
-import {UaParserWrapper} from "./ua-parser-wrapper";
-import {UseragentBrowser, UseragentEngine, UseragentOs} from "./useragent/useragent-typed";
+} from "./ecma-version.js";
+import {rangeCorrection} from "./range-correction.js";
+import {BrowserSupportForFeaturesCommonResult} from "./browser-support-for-features-common-result.js";
+import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, CaniuseBrowserCorrection, CaniuseFeature, VersionedCaniuseBrowser} from "./i-caniuse.js";
+import {Mdn, MdnBrowserName} from "./mdn.js";
+import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp.js";
+import {UaParserWrapper} from "./ua-parser-wrapper.js";
+import {UseragentBrowser, UseragentEngine, UseragentOs} from "./useragent/useragent-typed.js";
 
 /**
  * A Cache between user agent names and generated Browserslists
@@ -712,7 +712,7 @@ function isCaniuseFeature(feature: string): boolean {
  * Returns true if the given feature is a MDN feature
  */
 function isMdnFeature(feature: string): boolean {
-	return get(compatData, feature) != null;
+	return objectPath.get(compatData, feature) != null;
 }
 
 /**
@@ -755,7 +755,7 @@ function getFeatureSupport(feature: string): CaniuseStatsNormalized {
  * Gets the support from caniuse for the given feature
  */
 function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
-	const match: Mdn = get(compatData, feature);
+	const match: Mdn = objectPath.get(compatData, feature);
 	const supportMap = match.__compat.support;
 
 	const formatBrowser = (mdnBrowser: MdnBrowserName, caniuseBrowser: CaniuseBrowser): {[key: string]: CaniuseSupportKind} => {

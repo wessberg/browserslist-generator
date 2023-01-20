@@ -1,1 +1,1 @@
-export declare type ComparisonOperator = "<" | "<=" | ">" | ">=";
+export type ComparisonOperator = "<" | "<=" | ">" | ">=";

@@ -13,7 +13,7 @@ import {
 	getFirstVersionsWithFullSupport,
 	matchBrowserslistOnUserAgent,
 	userAgentSupportsFeatures
-} from "../src";
+} from "../src/index.js";
 
 const FBAN_SAFARI_13_3_USER_AGENT =
 	"Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 LightSpeed [FBAN/MessengerLiteForiOS;FBAV/253.1.0.43.116;FBBV/200174216;FBDV/iPhone11,6;FBMD/iPhone;FBSN/iOS;FBSV/13.3.1;FBSS/3;FBCR/;FBID/phone;FBLC/en_US;FBOP/0]";

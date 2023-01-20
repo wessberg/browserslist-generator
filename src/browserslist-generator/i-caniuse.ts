@@ -1,4 +1,4 @@
-export declare type CaniuseBrowser =
+export type CaniuseBrowser =
 	| "and_chr"
 	| "and_ff"
 	| "and_qq"
@@ -30,9 +30,9 @@ export const enum CaniuseSupportKind {
 	PREFIXED = "PREFIXED"
 }
 
-export declare type CaniuseStats = {[Key in CaniuseBrowser]: {[key: string]: string}};
+export type CaniuseStats = {[Key in CaniuseBrowser]: {[key: string]: string}};
 
-export declare type CaniuseStatsNormalized = {[Key in CaniuseBrowser]: {[key: string]: CaniuseSupportKind}};
+export type CaniuseStatsNormalized = {[Key in CaniuseBrowser]: {[key: string]: CaniuseSupportKind}};
 
 export interface CaniuseFeature {
 	title: string;
@@ -45,4 +45,4 @@ export interface CaniuseDataCorrection {
 	version: string;
 }
 
-export declare type CaniuseBrowserCorrection = {[Key in CaniuseBrowser]?: CaniuseDataCorrection[]};
+export type CaniuseBrowserCorrection = {[Key in CaniuseBrowser]?: CaniuseDataCorrection[]};

@@ -1,4 +1,4 @@
-export declare type UseragentVendorKind =
+export type UseragentVendorKind =
 	| "Acer"
 	| "Alcatel"
 	| "Amazon"
