@@ -49,6 +49,10 @@ test("userAgentSupportsFeatures() => Will correctly determine that iOS 14.4.2 su
 	);
 });
 
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 109 on Android 13 supports Shadow DOM", t => {
+	t.true(userAgentSupportsFeatures(`Mozilla/5.0 (Android 13; Mobile; rv:109.0) Gecko/109/0 Firefox/109.0`, "shadowdomv1"));
+});
+
 test("userAgentSupportsFeatures() => Will correctly determine that Edge Mobile 45 on Android supports web-animation", t => {
 	t.true(
 		userAgentSupportsFeatures(
@@ -72,6 +76,10 @@ test("userAgentSupportsFeatures() => Will correctly determine that Firefox v63 s
 
 test("userAgentSupportsFeatures() => Will correctly determine that Firefox on Android v68 doesn't support `pointer`. #1", t => {
 	t.false(userAgentSupportsFeatures(`Mozilla/5.0 (Android 8.0.0; Mobile; rv:68.0) Gecko/68.0 Firefox/68.0`, "pointer"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox on Android v79 *does*  support `pointer`. #1", t => {
+	t.true(userAgentSupportsFeatures(`Mozilla/5.0 (Android 8.0.0; Mobile; rv:79.0) Gecko/79.0 Firefox/79.0`, "pointer"));
 });
 
 test("userAgentSupportsFeatures() => Will correctly determine that Firefox v63 supports custom-elementsv1. #1", t => {

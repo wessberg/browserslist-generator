@@ -1,5 +1,5 @@
 import Browserslist from "browserslist";
-import {coerce as _coerce, gt, gte} from "semver";
+import {coerce as _coerce, gt, gte, lt} from "semver";
 import {ensureSemver} from "./ensure-semver";
 import {compareVersions} from "./compare-versions";
 import {CaniuseBrowser} from "./i-caniuse";
@@ -19,7 +19,7 @@ export const SAFARI_TP_MAJOR_VERSION = (() => {
 /**
  * Ensures that for any given version of a browser, if it is newer than the latest known version, the last known version will be used as a fallback
  */
-export function normalizeBrowserVersion(browser: CaniuseBrowser, givenVersion: string, versions: string[] = getSortedBrowserVersions(browser)): string {
+export function normalizeBrowserVersion(browser: CaniuseBrowser, givenVersion: string, versions: string[] = getSortedBrowserVersions(browser), allowSmaller = false): string {
 	const givenVersionCoerced = ensureSemver(browser, givenVersion);
 	const latestVersion = getLatestVersionOfBrowser(browser);
 	const latestVersionCoerced = ensureSemver(browser, latestVersion);
@@ -36,7 +36,14 @@ export function normalizeBrowserVersion(browser: CaniuseBrowser, givenVersion: s
 		return latestVersion;
 	}
 
-	return getClosestMatchingBrowserVersion(browser, givenVersion, versions);
+	const closestMatch = getClosestMatchingBrowserVersion(browser, givenVersion, versions);
+
+	// Allow smaller, but not larger browser versions than the known ones
+	if (allowSmaller && lt(givenVersionCoerced, ensureSemver(browser, closestMatch), {loose: true})) {
+		return givenVersion;
+	}
+
+	return closestMatch;
 }
 
 /**
