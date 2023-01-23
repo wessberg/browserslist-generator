@@ -1,3 +1,20 @@
+## [2.0.2](https://github.com/wessberg/browserslist-generator/compare/v2.0.1...v2.0.2) (2023-01-23)
+
+
+### Bug Fixes
+
+* add type modifiers to relevant exports ([909050a](https://github.com/wessberg/browserslist-generator/commit/909050a7cea9501ad7b12ba7372bb218cd604c61))
+* run tests on Node v16.14.0 and up ([75ebb7e](https://github.com/wessberg/browserslist-generator/commit/75ebb7efd5f2c24e5decdb363179a5ad1f1b0a67))
+* run tests on Node v16.14.0 and up ([f65d487](https://github.com/wessberg/browserslist-generator/commit/f65d4872acc0fd8bc524abcd122ff64a7d380f25))
+* run tests on v16.15.1 instead ([ba406d5](https://github.com/wessberg/browserslist-generator/commit/ba406d5242b1c9ca90b9e4986a8233b8e418115b))
+
+
+### Features
+
+* handle Android browsers even better ([f28918f](https://github.com/wessberg/browserslist-generator/commit/f28918fcdaf1d29dee31448d5e93b64ad3df5a85))
+
+
+
 ## [2.0.1](https://github.com/wessberg/browserslist-generator/compare/v1.0.66...v2.0.1) (2023-01-20)
 
 

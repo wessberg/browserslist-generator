@@ -136,11 +136,7 @@ Instead, simply declare the features that should be available:
 ```typescript
 import {browsersWithSupportForFeatures} from "browserslist-generator";
 // Generate a browserslist for browsers that support all of the given features
-const browserslist = browsersWithSupportForFeatures(
-  "es6-module",
-  "shadowdomv1",
-  "custom-elementsv1"
-);
+const browserslist = browsersWithSupportForFeatures("es6-module", "shadowdomv1", "custom-elementsv1");
 ```
 
 ### Checking if a User Agent supports a specific feature
@@ -151,9 +147,9 @@ This could be useful, among other things, for conditional bundle serving:
 ```typescript
 import {userAgentSupportsFeatures} from "browserslist-generator";
 if (userAgentSupportsFeatures(userAgentString, "javascript.builtins.Promise.finally")) {
-  doA();
+	doA();
 } else {
-  doB();
+	doB();
 }
 ```
 
@@ -165,9 +161,9 @@ This could be useful, among other things, for conditional bundle serving:
 ```typescript
 import {browserslistSupportsFeatures} from "browserslist-generator";
 if (browserslistSupportsFeatures(browserslist, "es6-module")) {
-  useModernBundle();
+	useModernBundle();
 } else {
-  useLegacyBundle();
+	useLegacyBundle();
 }
 ```
 
@@ -191,9 +187,9 @@ This could be useful, among other things, for conditional bundle serving:
 ```typescript
 import {browserslistSupportsEcmaVersion} from "browserslist-generator";
 if (browserslistSupportsEcmaVersion(browserslist, "es2015")) {
-  useModernBundle();
+	useModernBundle();
 } else {
-  useLegacyBundle();
+	useLegacyBundle();
 }
 ```
 
@@ -206,8 +202,8 @@ This could be useful, for example, when using the Typescript compiler based on a
 import {getAppropriateEcmaVersionForBrowserslist} from "browserslist-generator";
 
 const typescriptOptions = {
-  // ...
-  target: getAppropriateEcmaVersionForBrowserslist(browserslist)
+	// ...
+	target: getAppropriateEcmaVersionForBrowserslist(browserslist)
 };
 ```
 
