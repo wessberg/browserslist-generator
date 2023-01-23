@@ -117,6 +117,7 @@
 			"test/**.test.ts"
 		],
 		"verbose": true,
+		"timeout": "300s",
 		"extensions": {
 			"ts": "module"
 		},
