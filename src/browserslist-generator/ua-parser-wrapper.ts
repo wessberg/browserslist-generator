@@ -1,7 +1,7 @@
 import {coerce} from "semver";
 import {UAParser} from "ua-parser-js";
 import isbot from "isbot";
-import {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from "./useragent/useragent-typed.js";
+import type {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from "./useragent/useragent-typed.js";
 
 const FIREFOX_MATCH = /Firefox\/([\d.]+)/i;
 const IOS_REGEX_1 = /(iPhone)|(iPad)/i;

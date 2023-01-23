@@ -9,10 +9,11 @@ specifiers:
   '@types/ua-parser-js': ^0.7.36
   '@typescript-eslint/eslint-plugin': ^5.48.2
   '@typescript-eslint/parser': ^5.48.2
-  '@wessberg/ts-config': ^2.0.4
+  '@wessberg/prettier-config': 1.0.0
+  '@wessberg/ts-config': ^3.1.0
   ava: ^5.1.1
   browserslist: 4.21.4
-  caniuse-lite: ^1.0.30001446
+  caniuse-lite: ^1.0.30001447
   eslint: ^8.32.0
   eslint-config-prettier: ^8.6.0
   eslint-plugin-import: ^2.27.5
@@ -27,14 +28,14 @@ specifiers:
   pretty-quick: ^3.1.3
   rimraf: ^4.1.1
   rollup: ^3.10.1
-  rollup-plugin-ts: 3.1.1
+  rollup-plugin-ts: 3.2.0
   sandhog: ^2.0.2
   semver: ^7.3.8
   standard-changelog: ^2.0.27
   ts-node: ^10.9.1
   tslib: ^2.4.1
   typescript: 4.9.4
-  ua-parser-js: ^1.0.32
+  ua-parser-js: ^1.0.33
   useragent-generator: 1.1.1-amkt-22079-finish.0
 
 dependencies:
@@ -43,18 +44,19 @@ dependencies:
   '@types/semver': 7.3.13
   '@types/ua-parser-js': 0.7.36
   browserslist: 4.21.4
-  caniuse-lite: 1.0.30001446
+  caniuse-lite: 1.0.30001447
   isbot: 3.6.5
   object-path: 0.11.8
   semver: 7.3.8
-  ua-parser-js: 1.0.32
+  ua-parser-js: 1.0.33
 
 devDependencies:
   '@types/caniuse-lite': 1.0.1
   '@types/node': 18.11.18
   '@typescript-eslint/eslint-plugin': 5.48.2_caon6io6stgpr7lz2rtbhekxqy
   '@typescript-eslint/parser': 5.48.2_7uibuqfxkfaozanbtbziikiqje
-  '@wessberg/ts-config': 2.0.4
+  '@wessberg/prettier-config': 1.0.0
+  '@wessberg/ts-config': 3.1.0
   ava: 5.1.1
   eslint: 8.32.0
   eslint-config-prettier: 8.6.0_eslint@8.32.0
@@ -68,7 +70,7 @@ devDependencies:
   pretty-quick: 3.1.3_prettier@2.8.3
   rimraf: 4.1.1
   rollup: 3.10.1
-  rollup-plugin-ts: 3.1.1_p3yyytxbmytz5gvmi4zzszibjy
+  rollup-plugin-ts: 3.2.0_p3yyytxbmytz5gvmi4zzszibjy
   sandhog: 2.0.2
   standard-changelog: 2.0.27
   ts-node: 10.9.1_awa2wsr5thmg3i7jqycphctjfq
@@ -177,13 +179,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@mdn/browser-compat-data/4.2.1:
-    resolution: {integrity: sha512-EWUguj2kd7ldmrF9F+vI5hUOralPd+sdsUnYbRy33vZTuZkduC1shE9TtEMEjAQwyfyMb4ole5KtjF8MsnQOlA==}
-    dev: true
-
   /@mdn/browser-compat-data/5.2.30:
     resolution: {integrity: sha512-j48TKjgXHuUXzdk5MuPI7BBjryHQeI2TFWhcULBjiCkqXmW2hBoKGwQNEXTSzCVQmYvEat15cDDPU3NIQmY50w==}
-    dev: false
 
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -599,13 +596,17 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
+  /@wessberg/prettier-config/1.0.0:
+    resolution: {integrity: sha512-iavB1OppqxDIIWqgakHC7gLVAZTBFckq/32CWJf+EOQYJ4cLdsNe4TF/QIcO4sqWgtzR8SDj8mSGhgKwZGqLBA==}
+    dev: true
+
   /@wessberg/stringutil/1.0.19:
     resolution: {integrity: sha512-9AZHVXWlpN8Cn9k5BC/O0Dzb9E9xfEMXzYrNunwvkUTvuK7xgQPVRZpLo+jWCOZ5r8oBa8NIrHuPEu1hzbb6bg==}
     engines: {node: '>=8.0.0'}
     dev: true
 
-  /@wessberg/ts-config/2.0.4:
-    resolution: {integrity: sha512-Zi1mE/S9F1dJB1VX0o7YIt3TecM5j88vV+0AUlyGv6eWiqM+hSjHC5CbFMQ//aftIve6LJkMkqliii+3FlT94Q==}
+  /@wessberg/ts-config/3.1.0:
+    resolution: {integrity: sha512-/TqKHx3zgdDQKoqAemh4tBYQE873aN37BuaTeE5AFC3ZG/9oSVgkbuu32WErFsSHAnpdblpBuYJwhugUm0r7Xg==}
     dev: true
 
   /JSONStream/1.3.5:
@@ -1031,7 +1032,7 @@ packages:
       string-width: 5.1.2
       type-fest: 2.19.0
       widest-line: 4.0.1
-      wrap-ansi: 8.0.1
+      wrap-ansi: 8.1.0
     dev: true
 
   /brace-expansion/1.1.11:
@@ -1054,32 +1055,20 @@ packages:
       fill-range: 7.0.1
     dev: true
 
-  /browserslist-generator/1.0.66:
-    resolution: {integrity: sha512-aFDax4Qzh29DdyhHQBD2Yu2L5OvaDnvYFMbmpLrLwwaNK4H6dHEhC/Nxv93/+mfAA+a/t94ln0P2JZvHO6LZDA==}
-    engines: {node: '>=8.0.0'}
+  /browserslist-generator/2.0.1:
+    resolution: {integrity: sha512-j1qOeu8E8BDdsuzQ3XEdncgLUEke+m4XaT5DHdJ1lG9+ZBaVHYOzja3kTTHv29xeg9vX1y8e2fMrUcglInMCaw==}
+    engines: {node: '>=14.9.0', npm: '>=7.0.0', pnpm: '>=3.2.0', yarn: '>=1.13'}
     dependencies:
-      '@mdn/browser-compat-data': 4.2.1
+      '@mdn/browser-compat-data': 5.2.30
       '@types/object-path': 0.11.1
       '@types/semver': 7.3.13
       '@types/ua-parser-js': 0.7.36
-      browserslist: 4.20.2
-      caniuse-lite: 1.0.30001446
-      isbot: 3.4.5
+      browserslist: 4.21.4
+      caniuse-lite: 1.0.30001447
+      isbot: 3.6.5
       object-path: 0.11.8
       semver: 7.3.8
-      ua-parser-js: 1.0.32
-    dev: true
-
-  /browserslist/4.20.2:
-    resolution: {integrity: sha512-CQOBCqp/9pDvDbx3xfMi+86pr4KXIf2FDkTTdeuYw8OxS9t898LA1Khq57gtufFILXpfgsSx5woNgsBgvGjpsA==}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
-    dependencies:
-      caniuse-lite: 1.0.30001446
-      electron-to-chromium: 1.4.284
-      escalade: 3.1.1
-      node-releases: 2.0.8
-      picocolors: 1.0.0
+      ua-parser-js: 1.0.33
     dev: true
 
   /browserslist/4.21.4:
@@ -1087,7 +1076,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001446
+      caniuse-lite: 1.0.30001447
       electron-to-chromium: 1.4.284
       node-releases: 2.0.8
       update-browserslist-db: 1.0.10_browserslist@4.21.4
@@ -1253,8 +1242,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /caniuse-lite/1.0.30001446:
-    resolution: {integrity: sha512-fEoga4PrImGcwUUGEol/PoFCSBnSkA9drgdkxXkJLsUBOnJ8rs3zDv6ApqYXGQFOyMPsjh79naWhF4DAxbF8rw==}
+  /caniuse-lite/1.0.30001447:
+    resolution: {integrity: sha512-bdKU1BQDPeEXe9A39xJnGtY0uRq/z5osrnXUw0TcK+EYno45Y+U7QU9HhHEyzvMDffpYadFXi3idnSNkcwLkTw==}
 
   /cbor/8.1.0:
     resolution: {integrity: sha512-DwGjNW9omn6EwP70aXsn7FQJx5kO12tX0bZkaTjzdVFM6/7nhA4t0EENocKGx6D2Bch9PE2KzCUf5SceBdeijg==}
@@ -1657,8 +1646,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      is-text-path: 1.0.1
       JSONStream: 1.3.5
+      is-text-path: 1.0.1
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
@@ -3596,15 +3585,9 @@ packages:
     resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
     dev: true
 
-  /isbot/3.4.5:
-    resolution: {integrity: sha512-+KD6q1BBtw0iK9aGBGSfxJ31/ZgizKRjhm8ebgJUBMx0aeeQuIJ1I72beCoIrltIZGrSm4vmrxRxrG5n1aUTtw==}
-    engines: {node: '>=12'}
-    dev: true
-
   /isbot/3.6.5:
     resolution: {integrity: sha512-BchONELXt6yMad++BwGpa0oQxo/uD0keL7N15cYVf0A1oMIoNQ79OqeYdPMFWDrNhCqCbRuw9Y9F3QBjvAxZ5g==}
     engines: {node: '>=12'}
-    dev: false
 
   /isexe/2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
@@ -5542,8 +5525,8 @@ packages:
     hasBin: true
     dev: true
 
-  /rollup-plugin-ts/3.1.1_p3yyytxbmytz5gvmi4zzszibjy:
-    resolution: {integrity: sha512-Zm+cq11QVV6thgGdvrhz1tUQGN7pzK/jt2+6ttqfUaX1bk6QB4rFIHm/bW5O057eAXd1H8gBi47QFE0+tqMopw==}
+  /rollup-plugin-ts/3.2.0_p3yyytxbmytz5gvmi4zzszibjy:
+    resolution: {integrity: sha512-KkTLVifkUexEiAXS9VtSjDrjKr0TyusmNJpb2ZTAzI9VuPumSu4AktIaVNnwv70iUEitHwZtET7OAM+5n1u1tg==}
     engines: {node: '>=14.9.0', npm: '>=7.0.0', pnpm: '>=3.2.0', yarn: '>=1.13'}
     peerDependencies:
       '@babel/core': '>=6.x || >=7.x'
@@ -5575,7 +5558,7 @@ packages:
       '@wessberg/stringutil': 1.0.19
       ansi-colors: 4.1.3
       browserslist: 4.21.4
-      browserslist-generator: 1.0.66
+      browserslist-generator: 2.0.1
       compatfactory: 2.0.9_typescript@4.9.4
       crosspath: 2.0.0
       magic-string: 0.27.0
@@ -6336,8 +6319,8 @@ packages:
     hasBin: true
     dev: true
 
-  /ua-parser-js/1.0.32:
-    resolution: {integrity: sha512-dXVsz3M4j+5tTiovFVyVqssXBu5HM47//YSOeZ9fQkdDKkfzv2v3PP1jmH6FUyPW+yCSn7aBVK1fGGKNhowdDA==}
+  /ua-parser-js/1.0.33:
+    resolution: {integrity: sha512-RqshF7TPTE0XLYAqmjlu5cLLuGdKrNu9O1KLA/qp39QtbZwuzwv1dT46DZSopoUMsYgXpB3Cv8a03FI8b74oFQ==}
 
   /uglify-js/3.17.4:
     resolution: {integrity: sha512-T9q82TJI9e/C1TAxYvfb16xO120tMVFZrGA3f9/P4424DNu6ypK103y0GPFVa17yotwSyZW5iYXgjYHkGrJW/g==}
@@ -6608,8 +6591,8 @@ packages:
       strip-ansi: 6.0.1
     dev: true
 
-  /wrap-ansi/8.0.1:
-    resolution: {integrity: sha512-QFF+ufAqhoYHvoHdajT/Po7KoXVBPXS2bgjIam5isfWJPfIOnQZ50JtUiVvCv/sjgacf3yRrt2ZKUZ/V4itN4g==}
+  /wrap-ansi/8.1.0:
+    resolution: {integrity: sha512-si7QWI6zUMq56bESFvagtmzMdGOtoxfR+Sez11Mobfc7tm+VkUckk9bW2UeffTGVUbOksxmSw0AA2gs8g71NCQ==}
     engines: {node: '>=12'}
     dependencies:
       ansi-styles: 6.2.1

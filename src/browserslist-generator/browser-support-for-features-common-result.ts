@@ -1,4 +1,4 @@
-import {CaniuseBrowser} from "./i-caniuse.js";
+import type {CaniuseBrowser} from "./i-caniuse.js";
 
 export interface BrowserSupportForFeaturesCommonResult {
 	query: string[];

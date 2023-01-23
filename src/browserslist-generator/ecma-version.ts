@@ -94,6 +94,5 @@ export const ES2022_FEATURES: string[] = [
 	"javascript.classes.private_class_fields_in",
 	"javascript.classes.static_class_fields",
 	"javascript.operators.await.top_level",
-	"javascript.builtins.RegExp.hasIndices",
-	
+	"javascript.builtins.RegExp.hasIndices"
 ];

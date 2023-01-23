@@ -15,9 +15,10 @@ import {
 import {UNKNOWN_CANIUSE_BROWSER} from "./constant.js";
 import {ensureSemver, coerceToString} from "./ensure-semver.js";
 import {compareVersions} from "./compare-versions.js";
-import {ComparisonOperator} from "./comparison-operator.js";
+import type {ComparisonOperator} from "./comparison-operator.js";
+import type {
+	EcmaVersion} from "./ecma-version.js";
 import {
-	EcmaVersion,
 	ES2015_FEATURES,
 	ES2016_FEATURES,
 	ES2017_FEATURES,
@@ -29,12 +30,13 @@ import {
 	ES5_FEATURES
 } from "./ecma-version.js";
 import {rangeCorrection} from "./range-correction.js";
-import {BrowserSupportForFeaturesCommonResult} from "./browser-support-for-features-common-result.js";
-import {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseSupportKind, CaniuseBrowserCorrection, CaniuseFeature, VersionedCaniuseBrowser} from "./i-caniuse.js";
-import {Mdn, MdnBrowserName} from "./mdn.js";
+import type {BrowserSupportForFeaturesCommonResult} from "./browser-support-for-features-common-result.js";
+import type {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseBrowserCorrection, CaniuseFeature, VersionedCaniuseBrowser} from "./i-caniuse.js";
+import { CaniuseSupportKind} from "./i-caniuse.js";
+import type {Mdn, MdnBrowserName} from "./mdn.js";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp.js";
 import {UaParserWrapper} from "./ua-parser-wrapper.js";
-import {UseragentBrowser, UseragentEngine, UseragentOs} from "./useragent/useragent-typed.js";
+import type {UseragentBrowser, UseragentEngine, UseragentOs} from "./useragent/useragent-typed.js";
 
 /**
  * A Cache between user agent names and generated Browserslists
