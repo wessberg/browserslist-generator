@@ -16,8 +16,7 @@ import {UNKNOWN_CANIUSE_BROWSER} from "./constant.js";
 import {ensureSemver, coerceToString} from "./ensure-semver.js";
 import {compareVersions} from "./compare-versions.js";
 import type {ComparisonOperator} from "./comparison-operator.js";
-import type {
-	EcmaVersion} from "./ecma-version.js";
+import type {EcmaVersion} from "./ecma-version.js";
 import {
 	ES2015_FEATURES,
 	ES2016_FEATURES,
@@ -32,7 +31,7 @@ import {
 import {rangeCorrection} from "./range-correction.js";
 import type {BrowserSupportForFeaturesCommonResult} from "./browser-support-for-features-common-result.js";
 import type {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseBrowserCorrection, CaniuseFeature, VersionedCaniuseBrowser} from "./i-caniuse.js";
-import { CaniuseSupportKind} from "./i-caniuse.js";
+import {CaniuseSupportKind} from "./i-caniuse.js";
 import type {Mdn, MdnBrowserName} from "./mdn.js";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp.js";
 import {UaParserWrapper} from "./ua-parser-wrapper.js";
@@ -45,19 +44,16 @@ const userAgentToBrowserslistCache: Map<string, string[]> = new Map();
 
 /**
  * A Cache for retrieving browser support for some features
- * @type {Map<string, BrowserSupportForFeaturesCommonResult>}
  */
 const browserSupportForFeaturesCache: Map<string, BrowserSupportForFeaturesCommonResult> = new Map();
 
 /**
  * A Cache between feature names and their CaniuseStats
- * @type {Map<string, CaniuseStatsNormalized>}
  */
 const featureToCaniuseStatsCache: Map<string, CaniuseStatsNormalized> = new Map();
 
 /**
  * A Cache between user agents with any amount of features and whether or not they are supported by the user agent
- * @type {Map<string, boolean>}
  */
 const userAgentWithFeaturesToSupportCache: Map<string, boolean> = new Map();
 
@@ -68,7 +64,26 @@ const userAgentWithFeaturesToSupportCache: Map<string, boolean> = new Map();
  */
 const CANIUSE_TO_MDN_FEATURE_MAP = {
 	pointer: "api.PointerEvent.PointerEvent",
-	shadowdomv1: "api.ShadowRoot"
+	shadowdomv1: "api.ShadowRoot",
+	"custom-elementsv1": "api.CustomElementRegistry",
+	template: "html.elements.template",
+	fetch: "api.fetch",
+	promises: "javascript.builtins.Promise",
+	"object-values": "javascript.builtins.Object.values",
+	mutationobserver: "api.MutationObserver",
+	"focusin-focusout-events": "api.Element.focusin_event",
+	"high-resolution-time": "api.Performance.now",
+	"url": "api.URL",
+	urlsearchparams: "api.URLSearchParams",
+	"object-fit": "css.properties.object-fit",
+	"console-basic": "api.console.info",
+	"console-time": "api.console.time",
+	"atob-btoa": "api.atob",
+	blobbuilder: "api.Blob.Blob",
+	bloburls: "api.URL.createObjectURL",
+	requestidlecallback: "api.Window.requestIdleCallback",
+	requestanimationframe: "api.Window.requestAnimationFrame",
+	proxy: "javascript.builtins.Proxy"
 } as const;
 
 /**
@@ -80,14 +95,6 @@ const PARTIAL_SUPPORT_ALLOWANCES = new Map([
 	["custom-elementsv1", "*"],
 	["web-animation", "*"]
 ]) as Map<string, CaniuseBrowser[] | "*">;
-
-/**
- * These browsers will be ignored all-together since they only report the latest
- * version from Caniuse and is considered unreliable because of it
- * @type {Set<string>}
- */
-const IGNORED_BROWSERS_INPUT: CaniuseBrowser[] = ["and_chr", "and_ff", "and_uc", "and_qq", "baidu", "op_mini"];
-const IGNORED_BROWSERS: Set<CaniuseBrowser> = new Set(IGNORED_BROWSERS_INPUT);
 
 const TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT: CaniuseBrowserCorrection = {
 	/* eslint-disable @typescript-eslint/naming-convention */
@@ -454,7 +461,7 @@ export function normalizeBrowserslist(browserslist: string | string[]): string[]
 	// to make sure comparsions won't fail
 	const inputBrowserslist = Array.isArray(browserslist) ? browserslist : [browserslist];
 
-	for (const browser of ["and_ff", "and_chr", "and_uc", "and_qq"] as const) {
+	for (const browser of ["and_ff", "and_chr", "and_uc", "and_qq",  "baidu", "op_mini"] as const) {
 		const versions = getSortedBrowserVersions(browser);
 		for (const entry of inputBrowserslist) {
 			if (!entry.startsWith(browser)) continue;
@@ -612,16 +619,11 @@ export function browsersWithoutSupportForFeatures(...features: string[]): string
  * Returns true if the given browser should be ignored. The data reported from Caniuse is a bit lacking.
  * For example, only the latest version of and_ff, and_qq, and_uc and baidu is reported, and since
  * android went to use Chromium for the WebView, it has only reported the latest Chromium version
- *
- * @param browser
- * @param version
- * @returns
  */
 function shouldIgnoreBrowser(browser: CaniuseBrowser, version: string): boolean {
 	return (
 		(browser === "android" && gt(coerceToString(browser, version), coerceToString(browser, "4.4.4"))) ||
-		(browser === "op_mob" && gt(coerceToString(browser, version), coerceToString(browser, "12.1"))) ||
-		IGNORED_BROWSERS.has(browser)
+		(browser === "op_mob" && gt(coerceToString(browser, version), coerceToString(browser, "12.1")))
 	);
 }
 
@@ -692,8 +694,7 @@ function getCaniuseFeatureSupport(feature: string): CaniuseStatsNormalized {
 	for (const browser of Object.keys(rawStats)) {
 		const browserDict = rawStats[browser as keyof CaniuseStatsNormalized];
 		for (const version of Object.keys(browserDict)) {
-			// If browser is Android and version is greater than "4.4.4", or if the browser is Chrome, Firefox, UC, QQ for Android, or Baidu,
-			// strip it entirely from the data, since Caniuse only reports the latest versions of those browsers
+			
 			if (shouldIgnoreBrowser(browser as keyof CaniuseStatsNormalized, version)) {
 				delete browserDict[version];
 			}
@@ -817,10 +818,6 @@ function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
 
 /**
  * Gets the first version that matches the given CaniuseSupportKind
- *
- * @param kind
- * @param stats
- * @returns
  */
 function getFirstVersionWithSupportKind(kind: CaniuseSupportKind, stats: {[key: string]: CaniuseSupportKind}): string | undefined {
 	// Sort all keys of the object
@@ -837,10 +834,6 @@ function getFirstVersionWithSupportKind(kind: CaniuseSupportKind, stats: {[key: 
 
 /**
  * Sorts the given browserslist. Ensures that 'not' expressions come last
- *
- * @param a
- * @param b
- * @returns
  */
 function sortBrowserslist(a: string, b: string): number {
 	if (a.startsWith("not") && !b.startsWith("not")) return 1;
@@ -1197,6 +1190,8 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 						};
 					}
 				}
+
+				// Treat Android Chrome as Desktop Chrome, as these are functionally equivalent and always match each other from a feature support point of view
 				return {
 					browser: "chrome",
 					version: browser.version

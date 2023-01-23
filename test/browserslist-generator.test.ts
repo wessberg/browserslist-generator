@@ -49,8 +49,140 @@ test("userAgentSupportsFeatures() => Will correctly determine that iOS 14.4.2 su
 	);
 });
 
-test("userAgentSupportsFeatures() => Will correctly determine that Firefox 109 on Android 13 supports Shadow DOM", t => {
-	t.true(userAgentSupportsFeatures(`Mozilla/5.0 (Android 13; Mobile; rv:109.0) Gecko/109/0 Firefox/109.0`, "shadowdomv1"));
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 109 on Android supports Shadow DOM", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(109), "shadowdomv1"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 109 on Android supports the fetch API", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(109), "fetch"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 50 on Android supports the fetch API", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(50), "fetch"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 38 on Android *doesn't* support the fetch API", t => {
+	t.false(userAgentSupportsFeatures(firefox.androidPhone(38), "fetch"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 29 on Android supports Promises", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(29), "promises"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 109 on Android supports Promises", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(109), "promises"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 25 on Android *doesn't* supports Promises", t => {
+	t.false(userAgentSupportsFeatures(firefox.androidPhone(25), "promises"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 32 on Android supports Promises", t => {
+	t.true(userAgentSupportsFeatures(chrome.androidPhone("32"), "promises"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 100 on Android supports Promises", t => {
+	t.true(userAgentSupportsFeatures(chrome.androidPhone("100"), "promises"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 30 on Android *doesn't* support Promises", t => {
+	t.false(userAgentSupportsFeatures(chrome.androidPhone("30"), "promises"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 47 on Android supports Object.values", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(47), "object-values"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 109 on Android supports Object.values", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(109), "object-values"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 30 on Android *doesn't* support Object.values", t => {
+	t.false(userAgentSupportsFeatures(firefox.androidPhone(30), "object-values"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 54 on Android supports Object.values", t => {
+	t.true(userAgentSupportsFeatures(chrome.androidPhone("54"), "object-values"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 100 on Android supports Object.values", t => {
+	t.true(userAgentSupportsFeatures(chrome.androidPhone("100"), "object-values"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 50 on Android *doesn't* support Object.values", t => {
+	t.false(userAgentSupportsFeatures(chrome.androidPhone("50"), "object-values"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 14 on Android supports MutationObserver", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(14), "mutationobserver"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 109 on Android supports MutationObserver", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(109), "mutationobserver"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 10 on Android *doesn't* support MutationObserver", t => {
+	t.false(userAgentSupportsFeatures(firefox.androidPhone(10), "mutationobserver"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 26 on Android supports MutationObserver", t => {
+	t.true(userAgentSupportsFeatures(chrome.androidPhone("26"), "mutationobserver"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 100 on Android supports MutationObserver", t => {
+	t.true(userAgentSupportsFeatures(chrome.androidPhone("100"), "mutationobserver"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 20 on Android *doesn't* support MutationObserver", t => {
+	t.false(userAgentSupportsFeatures(chrome.androidPhone("20"), "mutationobserver"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 63 on Android supports Custom Elements", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(63), "custom-elementsv1"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 109 on Android supports Custom Elements", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(109), "custom-elementsv1"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 62 on Android *doesn't* support Custom Elements", t => {
+	t.false(userAgentSupportsFeatures(firefox.androidPhone(62), "custom-elementsv1"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 54 on Android supports Custom Elements", t => {
+	t.true(userAgentSupportsFeatures(chrome.androidPhone("54"), "custom-elementsv1"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 100 on Android supports Custom Elements", t => {
+	t.true(userAgentSupportsFeatures(chrome.androidPhone("100"), "custom-elementsv1"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 45 on Android *doesn't* support Custom Elements", t => {
+	t.false(userAgentSupportsFeatures(chrome.androidPhone("45"), "custom-elementsv1"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 22 on Android supports HTMLTemplateElement", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(22), "html.elements.template"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 109 on Android supports HTMLTemplateElement", t => {
+	t.true(userAgentSupportsFeatures(firefox.androidPhone(109), "html.elements.template"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Firefox 20 on Android *doesn't* support HTMLTemplateElement", t => {
+	t.false(userAgentSupportsFeatures(firefox.androidPhone(20), "html.elements.template"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 26 on Android supports HTMLTemplateElement", t => {
+	t.true(userAgentSupportsFeatures(chrome.androidPhone("26"), "html.elements.template"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 100 on Android supports HTMLTemplateElement", t => {
+	t.true(userAgentSupportsFeatures(chrome.androidPhone("100"), "html.elements.template"));
+});
+
+test("userAgentSupportsFeatures() => Will correctly determine that Chrome 20 on Android *doesn't* support HTMLTemplateElement", t => {
+	t.false(userAgentSupportsFeatures(chrome.androidPhone("20"), "html.elements.template"));
 });
 
 test("userAgentSupportsFeatures() => Will correctly determine that Edge Mobile 45 on Android supports web-animation", t => {
@@ -557,7 +689,3 @@ test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that th
 test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for the last 1 versions of Chrome is ES2022 #1", t => {
 	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(["last 1 and_chr versions"]), "es2022");
 });
-
-// test.only("playground", t => {
-//   t.true(true);
-// });
