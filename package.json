@@ -89,9 +89,9 @@
 		"@types/object-path": "^0.11.1",
 		"@types/semver": "^7.3.13",
 		"@types/ua-parser-js": "^0.7.36",
-		"browserslist": "4.21.4",
+		"browserslist": "^4.21.4",
 		"caniuse-lite": "^1.0.30001447",
-		"isbot": "3.6.5",
+		"isbot": "^3.6.5",
 		"object-path": "^0.11.8",
 		"semver": "^7.3.8",
 		"ua-parser-js": "^1.0.33"

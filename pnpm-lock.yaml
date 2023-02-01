@@ -12,14 +12,14 @@ specifiers:
   '@wessberg/prettier-config': 1.0.0
   '@wessberg/ts-config': ^3.1.0
   ava: ^5.1.1
-  browserslist: 4.21.4
+  browserslist: ^4.21.4
   caniuse-lite: ^1.0.30001447
   eslint: ^8.32.0
   eslint-config-prettier: ^8.6.0
   eslint-plugin-import: ^2.27.5
   eslint-plugin-jsdoc: ^39.6.7
   husky: ^8.0.3
-  isbot: 3.6.5
+  isbot: ^3.6.5
   np: 7.6.3
   npm-check-updates: ^16.6.2
   object-path: ^0.11.8
