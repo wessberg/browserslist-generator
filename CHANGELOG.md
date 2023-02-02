@@ -1,3 +1,12 @@
+## [2.0.3](https://github.com/wessberg/browserslist-generator/compare/v2.0.2...v2.0.3) (2023-02-02)
+
+
+### Bug Fixes
+
+* point to new feature name for nullish coalescing assignments in mdn compat data ([af2b4ca](https://github.com/wessberg/browserslist-generator/commit/af2b4ca7cf98d0c360424daae4d8f6f94c268e3a))
+
+
+
 ## [2.0.2](https://github.com/wessberg/browserslist-generator/compare/v2.0.1...v2.0.2) (2023-01-23)
 
 
