@@ -80,7 +80,7 @@ export const ES2020_FEATURES: string[] = [...ES2019_FEATURES, "javascript.builti
 export const ES2021_FEATURES: string[] = [
 	...ES2020_FEATURES,
 	"javascript.operators.logical_or_assignment",
-	"javascript.operators.logical_nullish_assignment",
+	"javascript.operators.nullish_coalescing_assignment",
 	"javascript.operators.logical_and_assignment",
 	"javascript.builtins.String.replaceAll",
 	"javascript.grammar.numeric_separators",
