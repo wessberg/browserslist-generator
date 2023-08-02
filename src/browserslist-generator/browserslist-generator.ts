@@ -1,6 +1,6 @@
 import Browserslist from "browserslist";
 import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
-import compatData from "@mdn/browser-compat-data" assert {type: "json"};
+import * as compatData from "@mdn/browser-compat-data" assert {type: "json"};
 import objectPath from "object-path";
 import {gt, gte, lt, lte} from "semver";
 import {
@@ -26,6 +26,7 @@ import {
 	ES2020_FEATURES,
 	ES2021_FEATURES,
 	ES2022_FEATURES,
+	ES2023_FEATURES,
 	ES5_FEATURES
 } from "./ecma-version.js";
 import {rangeCorrection} from "./range-correction.js";
@@ -73,7 +74,7 @@ const CANIUSE_TO_MDN_FEATURE_MAP = {
 	mutationobserver: "api.MutationObserver",
 	"focusin-focusout-events": "api.Element.focusin_event",
 	"high-resolution-time": "api.Performance.now",
-	"url": "api.URL",
+	url: "api.URL",
 	urlsearchparams: "api.URLSearchParams",
 	"object-fit": "css.properties.object-fit",
 	"console-basic": "api.console.info",
@@ -461,7 +462,7 @@ export function normalizeBrowserslist(browserslist: string | string[]): string[]
 	// to make sure comparsions won't fail
 	const inputBrowserslist = Array.isArray(browserslist) ? browserslist : [browserslist];
 
-	for (const browser of ["and_ff", "and_chr", "and_uc", "and_qq",  "baidu", "op_mini"] as const) {
+	for (const browser of ["and_ff", "and_chr", "and_uc", "and_qq", "baidu", "op_mini"] as const) {
 		const versions = getSortedBrowserVersions(browser);
 		for (const entry of inputBrowserslist) {
 			if (!entry.startsWith(browser)) continue;
@@ -546,6 +547,8 @@ export function browserslistSupportsEcmaVersion(browserslist: string[], version:
 			return browserslistSupportsFeatures(browserslist, ...ES2021_FEATURES);
 		case "es2022":
 			return browserslistSupportsFeatures(browserslist, ...ES2022_FEATURES);
+		case "es2023":
+			return browserslistSupportsFeatures(browserslist, ...ES2023_FEATURES);
 	}
 }
 
@@ -553,6 +556,7 @@ export function browserslistSupportsEcmaVersion(browserslist: string[], version:
  * Returns the appropriate Ecma version for the given Browserslist
  */
 export function getAppropriateEcmaVersionForBrowserslist(browserslist: string[]): EcmaVersion {
+	if (browserslistSupportsEcmaVersion(browserslist, "es2023")) return "es2023";
 	if (browserslistSupportsEcmaVersion(browserslist, "es2022")) return "es2022";
 	if (browserslistSupportsEcmaVersion(browserslist, "es2021")) return "es2021";
 	if (browserslistSupportsEcmaVersion(browserslist, "es2020")) return "es2020";
@@ -590,6 +594,8 @@ export function browsersWithSupportForEcmaVersion(version: EcmaVersion): string[
 			return browsersWithSupportForFeatures(...ES2021_FEATURES);
 		case "es2022":
 			return browsersWithSupportForFeatures(...ES2022_FEATURES);
+		case "es2023":
+			return browsersWithSupportForFeatures(...ES2023_FEATURES);
 	}
 }
 
@@ -694,7 +700,6 @@ function getCaniuseFeatureSupport(feature: string): CaniuseStatsNormalized {
 	for (const browser of Object.keys(rawStats)) {
 		const browserDict = rawStats[browser as keyof CaniuseStatsNormalized];
 		for (const version of Object.keys(browserDict)) {
-			
 			if (shouldIgnoreBrowser(browser as keyof CaniuseStatsNormalized, version)) {
 				delete browserDict[version];
 			}

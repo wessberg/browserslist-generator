@@ -1,4 +1,4 @@
-export type EcmaVersion = "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019" | "es2020" | "es2021" | "es2022";
+export type EcmaVersion = "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019" | "es2020" | "es2021" | "es2022" | "es2023";
 
 export const ES5_FEATURES: string[] = [
 	"javascript.builtins.Object.create",
@@ -99,4 +99,14 @@ export const ES2022_FEATURES: string[] = [
 	"javascript.builtins.RegExp.hasIndices"
 ];
 
-export const ES2023_FEATURES: string[] = [...ES2022_FEATURES, "javascript.builtins.Array.findLast", "javascript.builtins.Array.findLastIndex"];
+export const ES2023_FEATURES: string[] = [
+	...ES2022_FEATURES,
+	"javascript.builtins.Array.findLast",
+	"javascript.builtins.Array.findLastIndex",
+	"javascript.grammar.hashbang_comments",
+	"javascript.builtins.WeakMap.symbol_as_keys",
+	"javascript.builtins.Array.toReversed",
+	"javascript.builtins.Array.toSorted",
+	"javascript.builtins.Array.toSpliced",
+	"javascript.builtins.Array.with"
+];

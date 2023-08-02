@@ -3,7 +3,6 @@
 	"include": ["src/**/*.*", "test/**/*.*", "rollup.config.ts"],
 	"compilerOptions": {
 		"target": "es2019",
-		"allowJs": true,
-		"moduleResolution": "node"
+		"allowJs": true
 	}
 }
