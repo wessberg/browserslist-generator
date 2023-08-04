@@ -1,4 +1,4 @@
-import type { SemVer} from "semver";
+import type {SemVer} from "semver";
 import {coerce as _coerce} from "semver";
 import {SAFARI_TP_MAJOR_VERSION} from "./browser-version.js";
 import type {CaniuseBrowser} from "./i-caniuse.js";
