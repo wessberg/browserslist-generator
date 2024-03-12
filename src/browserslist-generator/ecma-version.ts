@@ -90,7 +90,6 @@ export const ES2021_FEATURES: string[] = [
 export const ES2022_FEATURES: string[] = [
 	...ES2021_FEATURES,
 	"javascript.builtins.Array.at",
-	"javascript.builtins.String.matchAll",
 	"javascript.classes.public_class_fields",
 	"javascript.classes.private_class_fields",
 	"javascript.classes.private_class_fields_in",
