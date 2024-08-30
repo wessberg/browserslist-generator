@@ -1,4 +1,4 @@
-export type EcmaVersion = "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019" | "es2020" | "es2021" | "es2022" | "es2023";
+export type EcmaVersion = "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019" | "es2020" | "es2021" | "es2022" | "es2023" | "es2024";
 
 export const ES5_FEATURES: string[] = [
 	"javascript.builtins.Object.create",
@@ -109,4 +109,16 @@ export const ES2023_FEATURES: string[] = [
 	"javascript.builtins.Array.toSorted",
 	"javascript.builtins.Array.toSpliced",
 	"javascript.builtins.Array.with"
+];
+
+export const ES2024_FEATURES: string[] = [
+	...ES2023_FEATURES,
+	"javascript.builtins.String.isWellFormed",
+	"javascript.builtins.String.toWellFormed",
+	"javascript.builtins.Atomics.waitAsync",
+	"javascript.builtins.ArrayBuffer.resize",
+	"javascript.builtins.Object.groupBy",
+	"javascript.builtins.Map.groupBy",
+	"javascript.builtins.Promise.withResolvers",
+	"javascript.builtins.ArrayBuffer.transfer"
 ];

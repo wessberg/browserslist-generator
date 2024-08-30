@@ -290,11 +290,11 @@ test("matchBrowserslistOnUserAgent() => Will match the Facebook browser on iOS a
 });
 
 test("matchBrowserslistOnUserAgent() => Will match the Instagram browser on iOS and detect it as iOS Safari. #1", t => {
-	t.true(matchBrowserslistOnUserAgent(`Instagram 187.0.0.32.120 (iPhone7,2; iOS 12_4_9; sv_SE; sv-SE; scale=2.00; 750x1334; 289678855) AppleWebKit/420+`, ["ios_saf >= 12"]));
+	t.true(matchBrowserslistOnUserAgent(`Instagram 187.0.0.32.120 (iPhone7,2; iOS 12_4_9; sv_SE; sv-SE; scale=2.00; 750x1334; 289678855) AppleWebKit/420+`, ["ios_saf 11.3-11.4"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match the Instagram browser on iOS and detect it as iOS Safari. #2", t => {
-	t.true(matchBrowserslistOnUserAgent(`Instagram 187.0.0.32.120 (iPhone9,4; iOS 13_7; es_CO; es-ES; scale=2.61; 1080x1920; 289678855) AppleWebKit/420+`, ["ios_saf >= 13"]));
+	t.true(matchBrowserslistOnUserAgent(`Instagram 187.0.0.32.120 (iPhone9,4; iOS 13_7; es_CO; es-ES; scale=2.61; 1080x1920; 289678855) AppleWebKit/420+`, ["ios_saf 12.2-12.5"]));
 });
 
 test("matchBrowserslistOnUserAgent() => Will match Safari on iPad as iOS Safari. #1", t => {
@@ -686,6 +686,6 @@ test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that th
 	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(browsersWithSupportForEcmaVersion("es2022")), "es2022");
 });
 
-test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for the last 1 versions of Chrome is ES2023 #1", t => {
-	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(["last 1 and_chr versions"]), "es2023");
+test("getAppropriateEcmaVersionForBrowserslist() => Correctly determines that the most appropriate Ecma version for the last 1 versions of Chrome is ES2024 #1", t => {
+	t.deepEqual(getAppropriateEcmaVersionForBrowserslist(["last 1 and_chr versions"]), "es2024");
 });

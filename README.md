@@ -222,6 +222,7 @@ All of the possible ECMAScript versions are:
 - `es2021`,
 - `es2022`,
 - `es2023`
+- `es2024`
 
 <!-- SHADOW_SECTION_CONTRIBUTING_START -->
 

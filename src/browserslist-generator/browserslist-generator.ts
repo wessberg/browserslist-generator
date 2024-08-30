@@ -27,6 +27,7 @@ import {
 	ES2021_FEATURES,
 	ES2022_FEATURES,
 	ES2023_FEATURES,
+	ES2024_FEATURES,
 	ES5_FEATURES
 } from "./ecma-version.js";
 import {rangeCorrection} from "./range-correction.js";
@@ -506,10 +507,23 @@ function extendQueryWithUnreleasedVersions(query: string[], browsers: Iterable<C
 	);
 }
 
+interface EcmaFeatureFilteringOptions {
+	syntaxOnly: boolean;
+}
+
+interface BrowsersWithSupportOptions {
+	features: string[];
+}
+
 /**
  * Generates a Browserslist based on browser support for the given features
  */
-export function browsersWithSupportForFeatures(...features: string[]): string[] {
+export function browsersWithSupportForFeatures(...features: string[]): string[];
+export function browsersWithSupportForFeatures(options: BrowsersWithSupportOptions): string[];
+export function browsersWithSupportForFeatures(...args: [BrowsersWithSupportOptions] | string[]): string[] {
+	const [firstArg] = args;
+	const {features} = firstArg != null && typeof firstArg === "object" ? firstArg : {features: args as string[]};
+
 	const {query, browsers} = browserSupportForFeaturesCommon(">=", ...features);
 	return extendQueryWithUnreleasedVersions(query, browsers);
 }
@@ -517,85 +531,86 @@ export function browsersWithSupportForFeatures(...features: string[]): string[] 
 /**
  * Returns true if the given Browserslist supports the given EcmaVersion
  */
-export function browserslistSupportsEcmaVersion(browserslist: string[], version: EcmaVersion): boolean {
+export function browserslistSupportsEcmaVersion(browserslist: string[], version: EcmaVersion, options?: Partial<EcmaFeatureFilteringOptions>): boolean {
+	const features = getFeaturesForEcmaVersion(version, options);
+	if (features.length === 0) return true;
+
+	return browserslistSupportsFeatures(browserslist, ...features);
+}
+
+export function getFeaturesForEcmaVersion(version: EcmaVersion, options?: Partial<EcmaFeatureFilteringOptions>): string[] {
+	const features = getFeaturesForEcmaVersionInner(version);
+	return Boolean(options?.syntaxOnly) ? features.filter(feature => !feature.startsWith("javascript.builtins.")) : features;
+}
+
+function getFeaturesForEcmaVersionInner(version: EcmaVersion): string[] {
 	switch (version) {
 		case "es3":
 			// ES3 is the lowest possible target and will always be treated as supported
-			return true;
+			return [];
 
 		case "es5":
-			return browserslistSupportsFeatures(browserslist, ...ES5_FEATURES);
+			return ES5_FEATURES;
 
 		case "es2015":
-			return browserslistSupportsFeatures(browserslist, ...ES2015_FEATURES);
+			return ES2015_FEATURES;
 
 		case "es2016":
-			return browserslistSupportsFeatures(browserslist, ...ES2016_FEATURES);
+			return ES2016_FEATURES;
 
 		case "es2017":
-			return browserslistSupportsFeatures(browserslist, ...ES2017_FEATURES);
+			return ES2017_FEATURES;
 
 		case "es2018":
-			return browserslistSupportsFeatures(browserslist, ...ES2018_FEATURES);
+			return ES2018_FEATURES;
 
 		case "es2019":
-			return browserslistSupportsFeatures(browserslist, ...ES2019_FEATURES);
+			return ES2019_FEATURES;
 
 		case "es2020":
-			return browserslistSupportsFeatures(browserslist, ...ES2020_FEATURES);
+			return ES2020_FEATURES;
+
 		case "es2021":
-			return browserslistSupportsFeatures(browserslist, ...ES2021_FEATURES);
+			return ES2021_FEATURES;
+
 		case "es2022":
-			return browserslistSupportsFeatures(browserslist, ...ES2022_FEATURES);
+			return ES2022_FEATURES;
+
 		case "es2023":
-			return browserslistSupportsFeatures(browserslist, ...ES2023_FEATURES);
+			return ES2023_FEATURES;
+
+		case "es2024":
+			return ES2024_FEATURES;
 	}
 }
 
 /**
  * Returns the appropriate Ecma version for the given Browserslist
  */
-export function getAppropriateEcmaVersionForBrowserslist(browserslist: string[]): EcmaVersion {
-	if (browserslistSupportsEcmaVersion(browserslist, "es2023")) return "es2023";
-	if (browserslistSupportsEcmaVersion(browserslist, "es2022")) return "es2022";
-	if (browserslistSupportsEcmaVersion(browserslist, "es2021")) return "es2021";
-	if (browserslistSupportsEcmaVersion(browserslist, "es2020")) return "es2020";
-	if (browserslistSupportsEcmaVersion(browserslist, "es2019")) return "es2019";
-	if (browserslistSupportsEcmaVersion(browserslist, "es2018")) return "es2018";
-	else if (browserslistSupportsEcmaVersion(browserslist, "es2017")) return "es2017";
-	else if (browserslistSupportsEcmaVersion(browserslist, "es2016")) return "es2016";
-	else if (browserslistSupportsEcmaVersion(browserslist, "es2015")) return "es2015";
-	else if (browserslistSupportsEcmaVersion(browserslist, "es5")) return "es5";
+export function getAppropriateEcmaVersionForBrowserslist(browserslist: string[], options?: Partial<EcmaFeatureFilteringOptions>): EcmaVersion {
+	if (browserslistSupportsEcmaVersion(browserslist, "es2024", options)) return "es2024";
+	if (browserslistSupportsEcmaVersion(browserslist, "es2023", options)) return "es2023";
+	if (browserslistSupportsEcmaVersion(browserslist, "es2022", options)) return "es2022";
+	if (browserslistSupportsEcmaVersion(browserslist, "es2021", options)) return "es2021";
+	if (browserslistSupportsEcmaVersion(browserslist, "es2020", options)) return "es2020";
+	if (browserslistSupportsEcmaVersion(browserslist, "es2019", options)) return "es2019";
+	if (browserslistSupportsEcmaVersion(browserslist, "es2018", options)) return "es2018";
+	else if (browserslistSupportsEcmaVersion(browserslist, "es2017", options)) return "es2017";
+	else if (browserslistSupportsEcmaVersion(browserslist, "es2016", options)) return "es2016";
+	else if (browserslistSupportsEcmaVersion(browserslist, "es2015", options)) return "es2015";
+	else if (browserslistSupportsEcmaVersion(browserslist, "es5", options)) return "es5";
 	else return "es3";
 }
 
 /**
  * Generates a Browserslist based on browser support for the given ECMA version
  */
-export function browsersWithSupportForEcmaVersion(version: EcmaVersion): string[] {
+export function browsersWithSupportForEcmaVersion(version: EcmaVersion, options?: Partial<EcmaFeatureFilteringOptions>): string[] {
 	switch (version) {
 		case "es3":
-			return browsersWithoutSupportForFeatures(...ES5_FEATURES);
-		case "es5":
-			return browsersWithSupportForFeatures(...ES5_FEATURES);
-		case "es2015":
-			return browsersWithSupportForFeatures(...ES2015_FEATURES);
-		case "es2016":
-			return browsersWithSupportForFeatures(...ES2016_FEATURES);
-		case "es2017":
-			return browsersWithSupportForFeatures(...ES2017_FEATURES);
-		case "es2018":
-			return browsersWithSupportForFeatures(...ES2018_FEATURES);
-		case "es2019":
-			return browsersWithSupportForFeatures(...ES2019_FEATURES);
-		case "es2020":
-			return browsersWithSupportForFeatures(...ES2020_FEATURES);
-		case "es2021":
-			return browsersWithSupportForFeatures(...ES2021_FEATURES);
-		case "es2022":
-			return browsersWithSupportForFeatures(...ES2022_FEATURES);
-		case "es2023":
-			return browsersWithSupportForFeatures(...ES2023_FEATURES);
+			return browsersWithoutSupportForFeatures(...getFeaturesForEcmaVersion("es5", options));
+		default:
+			return browsersWithSupportForFeatures(...getFeaturesForEcmaVersion(version, options));
 	}
 }
 
@@ -617,7 +632,12 @@ export function browserslistSupportsFeatures(browserslist: string[], ...features
 /**
  * Generates a Browserslist based on browsers that *doesn't* support the given features
  */
-export function browsersWithoutSupportForFeatures(...features: string[]): string[] {
+export function browsersWithoutSupportForFeatures(...features: string[]): string[];
+export function browsersWithoutSupportForFeatures(options: BrowsersWithSupportOptions): string[];
+export function browsersWithoutSupportForFeatures(...args: [BrowsersWithSupportOptions] | string[]): string[] {
+	const [firstArg] = args;
+	const {features} = firstArg != null && typeof firstArg === "object" ? firstArg : {features: args as string[]};
+
 	return browserSupportForFeaturesCommon("<", ...features).query;
 }
 
@@ -1115,6 +1135,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 
 	switch (browser.name) {
 		case "Samsung Browser":
+		case "Samsung Internet":
 			if (browser.version != null) {
 				return {
 					browser: "samsung",
@@ -1584,8 +1605,6 @@ export function generateBrowserslistFromUseragent(useragent: string): string[] {
 
 	// Prepare a CaniuseBrowser name from the useragent string
 	const {browser: caniuseBrowserName, version: caniuseBrowserVersion} = getCaniuseBrowserForUseragentBrowser(parser);
-
-	// console.log({browser, os, engine, caniuseBrowserName, caniuseBrowserVersion});
 
 	// If the browser name or version couldn't be determined, return false immediately
 	if (caniuseBrowserName == null || caniuseBrowserVersion == null) {

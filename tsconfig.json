@@ -3,6 +3,7 @@
 	"include": ["src/**/*.*", "test/**/*.*", "rollup.config.ts"],
 	"compilerOptions": {
 		"target": "es2019",
-		"allowJs": true
+		"allowJs": true,
+		"module": "NodeNext"
 	}
 }

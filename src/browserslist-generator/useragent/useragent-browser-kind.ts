@@ -52,6 +52,7 @@ export type UseragentBrowserKind =
 	| "MIUI Browser"
 	| "Safari"
 	| "Samsung Browser"
+	| "Samsung Internet"
 	| "Mobile Safari"
 	| "MobileSafari"
 	| "SafariMobile"

@@ -87,7 +87,7 @@ export class UaParserWrapper {
 
 		// Check if it is a bot and match it if so
 		// Also treat Dalvik/ as a bot
-		if (result.name !== "Chrome Headless" && isbot(this.userAgent)) {
+		if (result.name !== "Chrome Headless" && Boolean(isbot(this.userAgent))) {
 			if (this.userAgent.includes("http://www.google.com/bot.htm") || this.userAgent.includes("http://www.google.com/adsbot.htm")) {
 				// As far as we know, the last reported update to Googlebot was the intent
 				// to keep it evergreen, but so far it seems 74 is the latest official version
