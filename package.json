@@ -77,7 +77,7 @@
 		"lint-staged": "^13.2.3",
 		"rimraf": "^5.0.1",
 		"rollup": "^3.27.0",
-		"rollup-plugin-ts": "3.2.0",
+		"rollup-plugin-ts": "3.4.5",
 		"sandhog": "^2.0.2",
 		"standard-changelog": "^3.0.0",
 		"tsx": "3.12.7",
