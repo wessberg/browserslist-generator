@@ -509,6 +509,7 @@ function extendQueryWithUnreleasedVersions(query: string[], browsers: Iterable<C
 
 interface EcmaFeatureFilteringOptions {
 	syntaxOnly: boolean;
+	featureFilter?(feature: string): boolean;
 }
 
 interface BrowsersWithSupportOptions {
@@ -540,7 +541,8 @@ export function browserslistSupportsEcmaVersion(browserslist: string[], version:
 
 export function getFeaturesForEcmaVersion(version: EcmaVersion, options?: Partial<EcmaFeatureFilteringOptions>): string[] {
 	const features = getFeaturesForEcmaVersionInner(version);
-	return Boolean(options?.syntaxOnly) ? features.filter(feature => !feature.startsWith("javascript.builtins.")) : features;
+	const filteredFirstPass = Boolean(options?.syntaxOnly) ? features.filter(feature => !feature.startsWith("javascript.builtins.")) : features;
+	return typeof options?.featureFilter === "function" ? filteredFirstPass.filter(options.featureFilter) : filteredFirstPass;
 }
 
 function getFeaturesForEcmaVersionInner(version: EcmaVersion): string[] {
