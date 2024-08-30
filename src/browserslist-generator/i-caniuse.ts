@@ -5,6 +5,7 @@ export type CaniuseBrowser =
 	| "and_uc"
 	| "android"
 	| "baidu"
+	| "kaios"
 	| "bb"
 	| "chrome"
 	| "edge"

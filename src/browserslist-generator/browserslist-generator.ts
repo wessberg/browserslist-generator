@@ -113,10 +113,7 @@ const TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT: CaniuseBrowserCorrection = {
 	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `5`),
 	ie: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`),
 	op_mini: rangeCorrection("op_mini", CaniuseSupportKind.AVAILABLE, `all`),
-	bb: rangeCorrection("bb", CaniuseSupportKind.AVAILABLE, `10`),
-	and_uc: rangeCorrection("and_uc", CaniuseSupportKind.AVAILABLE, `11.8`),
-	and_qq: rangeCorrection("and_qq", CaniuseSupportKind.AVAILABLE, `1.2`),
-	baidu: rangeCorrection("baidu", CaniuseSupportKind.AVAILABLE, `7.12`)
+	bb: rangeCorrection("bb", CaniuseSupportKind.AVAILABLE, `10`)
 	/* eslint-enable @typescript-eslint/naming-convention */
 };
 
@@ -463,7 +460,7 @@ export function normalizeBrowserslist(browserslist: string | string[]): string[]
 	// to make sure comparsions won't fail
 	const inputBrowserslist = Array.isArray(browserslist) ? browserslist : [browserslist];
 
-	for (const browser of ["and_ff", "and_chr", "and_uc", "and_qq", "baidu", "op_mini"] as const) {
+	for (const browser of ["and_ff", "and_chr", "op_mini"] as const) {
 		const versions = getSortedBrowserVersions(browser);
 		for (const entry of inputBrowserslist) {
 			if (!entry.startsWith(browser)) continue;
@@ -645,11 +642,19 @@ export function browsersWithoutSupportForFeatures(...args: [BrowsersWithSupportO
 
 /**
  * Returns true if the given browser should be ignored. The data reported from Caniuse is a bit lacking.
- * For example, only the latest version of and_ff, and_qq, and_uc and baidu is reported, and since
+ * For example, only the latest version of and_ff is reported, and since
  * android went to use Chromium for the WebView, it has only reported the latest Chromium version
  */
 function shouldIgnoreBrowser(browser: CaniuseBrowser, version: string): boolean {
 	return (
+		// The data for the QQ browser is severely lacking and unreliable
+		browser === "and_qq" ||
+		// The data for the UC browser is severely lacking and unreliable
+		browser === "and_uc" ||
+		// The data for the Baidu browser is severely lacking and unreliable
+		browser === "baidu" ||
+		// The data for the KaiOS browser is severely lacking and unreliable
+		browser === "kaios" ||
 		(browser === "android" && gt(coerceToString(browser, version), coerceToString(browser, "4.4.4"))) ||
 		(browser === "op_mob" && gt(coerceToString(browser, version), coerceToString(browser, "12.1")))
 	);
@@ -823,11 +828,12 @@ function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
 		and_chr: formatBrowser("chrome_android", "and_chr"),
 		chrome: formatBrowser("chrome", "chrome"),
 		and_ff: formatBrowser("firefox_android", "and_ff"),
+		android: formatBrowser("webview_android", "android"),
+		bb: {},
 		and_qq: {},
 		and_uc: {},
-		android: formatBrowser("webview_android", "android"),
+		kaios: {},
 		baidu: {},
-		bb: {},
 		edge: formatBrowser("edge", "edge"),
 		samsung: formatBrowser("samsunginternet_android", "samsung"),
 		ie: formatBrowser("ie", "ie"),
@@ -1582,6 +1588,7 @@ function getCaniuseVersionForUseragentVersion(
 		case "samsung":
 		case "and_qq":
 		case "baidu":
+		case "kaios":
 			// These may always contain minor versions
 			return buildSemverVersion(major, minor);
 
