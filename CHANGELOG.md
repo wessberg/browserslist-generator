@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/wessberg/browserslist-generator/compare/v2.2.0...v2.3.0) (2024-08-30)
+
+### Features
+
+- allow more precise filtering ([553c111](https://github.com/wessberg/browserslist-generator/commit/553c11158210f9c6541935e6625dcb3673d99172))
+- remove and_qq, and_uc, baidu, and kaios from generated browserslists, as the data for these browsers are lacking and harms feature detection otherwise ([ac24451](https://github.com/wessberg/browserslist-generator/commit/ac24451f1f021ba51ac33a9a4f3382339d8fec50))
+
 # [2.2.0](https://github.com/wessberg/browserslist-generator/compare/v2.1.0...v2.2.0) (2024-08-30)
 
 ### Features
