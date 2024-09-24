@@ -25,9 +25,6 @@ importers:
       caniuse-lite:
         specifier: ^1.0.30001663
         version: 1.0.30001663
-      helpertypes:
-        specifier: ^0.0.19
-        version: 0.0.19
       isbot:
         specifier: ^5.1.17
         version: 5.1.17
@@ -68,6 +65,9 @@ importers:
       eslint-plugin-prettier:
         specifier: ^5.2.1
         version: 5.2.1(eslint-config-prettier@9.1.0(eslint@9.11.1))(eslint@9.11.1)(prettier@3.3.3)
+      helpertypes:
+        specifier: ^0.0.19
+        version: 0.0.19
       husky:
         specifier: ^9.1.6
         version: 9.1.6
@@ -99,13 +99,13 @@ importers:
         specifier: ^2.7.0
         version: 2.7.0
       tsup:
-        specifier: 8.3.0
+        specifier: ^8.3.0
         version: 8.3.0(tsx@4.19.1)(typescript@5.6.2)(yaml@2.5.1)
       tsx:
         specifier: ^4.19.1
         version: 4.19.1
       typescript:
-        specifier: 5.6.2
+        specifier: ^5.6.2
         version: 5.6.2
       typescript-eslint:
         specifier: ^8.7.0
