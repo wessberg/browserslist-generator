@@ -4,6 +4,7 @@ import {ensureSemver} from "./ensure-semver.js";
 import {compareVersions} from "./compare-versions.js";
 import type {CaniuseBrowser} from "./i-caniuse.js";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp.js";
+import {assertNonEmptyArray} from "./util.js";
 
 export const SAFARI_TP_MAJOR_VERSION = (() => {
 	const versions = getSortedBrowserVersions("safari");
@@ -37,9 +38,10 @@ export function normalizeBrowserVersion(browser: CaniuseBrowser, givenVersion: s
 	}
 
 	const closestMatch = getClosestMatchingBrowserVersion(browser, givenVersion, versions);
+	const semverClosestMatch = ensureSemver(browser, closestMatch);
 
 	// Allow smaller, but not larger browser versions than the known ones
-	if (allowSmaller && lt(givenVersionCoerced, ensureSemver(browser, closestMatch), {loose: true})) {
+	if (allowSmaller && semverClosestMatch != null && lt(givenVersionCoerced, semverClosestMatch, {loose: true})) {
 		return givenVersion;
 	}
 
@@ -50,20 +52,29 @@ export function normalizeBrowserVersion(browser: CaniuseBrowser, givenVersion: s
  * Gets the known version of the given browser that is closest to the given version
  */
 export function getClosestMatchingBrowserVersion(browser: CaniuseBrowser, version: string, versions: string[] = getSortedBrowserVersions(browser)): string {
+	assertNonEmptyArray(versions, `Could not find any versions for browser: ${browser}`);
+
 	const coerced = ensureSemver(browser, version);
 
 	if (browser === "op_mini" && version === "all") return "all";
 	if (browser === "safari") {
-		if (version === "TP") return "TP";
+		const browserMajorMinorSemver = coerced == null ? undefined : ensureSemver(browser, `${coerced.major}.${coerced.minor}`);
+		const browserLatestNonTpSemver = coerced == null ? undefined : ensureSemver(browser, versions.slice(-2)[0]!);
+
+		if (version === "TP") {
+			return "TP";
+		}
 		// If the given version is greater than or equal to the latest non-technical preview version of Safari, the closest match IS TP.
-		else if (gt(ensureSemver(browser, `${coerced.major}.${coerced.minor}`), ensureSemver(browser, versions.slice(-2)[0]))) return "TP";
+		else if (browserMajorMinorSemver != null && browserLatestNonTpSemver != null && gt(browserMajorMinorSemver, browserLatestNonTpSemver)) {
+			return "TP";
+		}
 	}
 
-	let candidate = versions[0];
+	let [candidate] = versions;
 
 	versions.forEach(currentVersion => {
 		const currentCoerced = ensureSemver(browser, currentVersion);
-		if (gte(coerced, currentCoerced)) {
+		if (currentCoerced != null && coerced != null && gte(coerced, currentCoerced)) {
 			candidate = currentVersion;
 		}
 	});
@@ -72,7 +83,7 @@ export function getClosestMatchingBrowserVersion(browser: CaniuseBrowser, versio
 }
 
 export function getSortedBrowserVersionsWithLeadingVersion(browser: CaniuseBrowser, inputVersion?: string): string[] {
-	const versions: string[] = getSortedBrowserVersions(browser);
+	const versions = getSortedBrowserVersions(browser);
 	const [firstVersion] = versions;
 
 	if (firstVersion != null && inputVersion != null) {
@@ -80,7 +91,7 @@ export function getSortedBrowserVersionsWithLeadingVersion(browser: CaniuseBrows
 		let nextInputVersion = inputVersion;
 		while (true) {
 			const nextInputSemver = ensureSemver(browser, nextInputVersion);
-			if (gt(firstVersionSemver, nextInputSemver)) {
+			if (firstVersionSemver != null && nextInputSemver != null && gt(firstVersionSemver, nextInputSemver)) {
 				versions.unshift(nextInputVersion);
 				nextInputVersion = String(nextInputSemver.major + 1);
 			} else {
@@ -107,7 +118,9 @@ export function getSortedBrowserVersions(browser: CaniuseBrowser): string[] {
 		const versionMatch = version.match(NORMALIZE_BROWSER_VERSION_REGEXP);
 		const normalizedVersion = versionMatch == null ? version : versionMatch[1];
 
-		versions.push(normalizedVersion);
+		if (normalizedVersion != null) {
+			versions.push(normalizedVersion);
+		}
 	});
 
 	return versions.sort(compareVersions);
@@ -118,7 +131,8 @@ export function getSortedBrowserVersions(browser: CaniuseBrowser): string[] {
  */
 export function getLatestVersionOfBrowser(browser: CaniuseBrowser): string {
 	const versions = getSortedBrowserVersions(browser);
-	return versions[versions.length - 1];
+	assertNonEmptyArray(versions);
+	return versions[versions.length - 1]!;
 }
 
 /**
@@ -126,6 +140,8 @@ export function getLatestVersionOfBrowser(browser: CaniuseBrowser): string {
  */
 export function getOldestVersionOfBrowser(browser: CaniuseBrowser): string {
 	const versions = getSortedBrowserVersions(browser);
+	assertNonEmptyArray(versions);
+
 	return versions[0];
 }
 

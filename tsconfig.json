@@ -1,9 +1,8 @@
 {
-	"extends": "@wessberg/ts-config",
-	"include": ["src/**/*.*", "test/**/*.*", "rollup.config.ts"],
+	"extends": "./node_modules/@wessberg/ts-config/tsconfig.json",
+	"include": ["src/**/*.*", "test/**/*.*", "sandhog.config.js", "eslint.config.js"],
 	"compilerOptions": {
-		"target": "es2019",
 		"allowJs": true,
-		"module": "NodeNext"
+		"noEmit": true
 	}
 }

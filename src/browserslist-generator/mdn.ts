@@ -17,6 +17,7 @@ export type MdnBrowserName =
 export interface MdnSupportDict {
 	/* eslint-disable @typescript-eslint/naming-convention */
 	version_added: string | boolean;
+	version_removed?: string | boolean;
 	/* eslint-enable @typescript-eslint/naming-convention */
 }
 

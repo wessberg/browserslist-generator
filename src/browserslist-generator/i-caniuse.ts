@@ -1,3 +1,5 @@
+import type {StatsByAgentID} from "caniuse-lite";
+
 export type CaniuseBrowser =
 	| "and_chr"
 	| "and_ff"
@@ -24,21 +26,15 @@ export interface VersionedCaniuseBrowser {
 	version: string;
 }
 
-export const enum CaniuseSupportKind {
-	AVAILABLE = "AVAILABLE",
-	UNAVAILABLE = "UNAVAILABLE",
-	PARTIAL_SUPPORT = "PARTIAL_SUPPORT",
-	PREFIXED = "PREFIXED"
-}
+export const CAN_I_USE_SUPPORT_KIND = ["available", "unavailable", "partial_support", "prefixed"] as const;
+export type CaniuseSupportKind = (typeof CAN_I_USE_SUPPORT_KIND)[number];
 
-export type CaniuseStats = {[Key in CaniuseBrowser]: {[key: string]: string}};
-
-export type CaniuseStatsNormalized = {[Key in CaniuseBrowser]: {[key: string]: CaniuseSupportKind}};
+export type CaniuseStatsNormalized = {[Key in CaniuseBrowser]: Record<string, CaniuseSupportKind>};
 
 export interface CaniuseFeature {
 	title: string;
 	status: string;
-	stats: CaniuseStats;
+	stats: StatsByAgentID;
 }
 
 export interface CaniuseDataCorrection {

@@ -1,6 +1,6 @@
 import {coerce} from "semver";
 import {UAParser} from "ua-parser-js";
-import isbot from "isbot";
+import {createIsbotFromList, list} from "isbot";
 import type {UseragentBrowser, UseragentDevice, UseragentEngine, UseragentOs} from "./useragent/useragent-typed.js";
 
 const FIREFOX_MATCH = /Firefox\/([\d.]+)/i;
@@ -12,7 +12,7 @@ const IOS_14_5_UA_1 = /(CFNetwork\/1237\s+Darwin\/20.4)/i;
 const IOS_3_2_UA_1 = /(^Mobile\/7B334b)/i;
 
 // Extend 'isbot' with more matches
-isbot.extend(["bitdiscovery", "Dalvik/", "placid.app/v1", "WebsiteMetadataRetriever", "(compatible; aa/1.0)"]);
+const isbot = createIsbotFromList([...list, "bitdiscovery", "Dalvik/", "placid.app/v1", "WebsiteMetadataRetriever", "(compatible; aa/1.0)"]);
 
 // These extension provide ua-parser-js with support for additional browsers
 // such as Sogou Explorer
@@ -80,7 +80,8 @@ export class UaParserWrapper {
 			const engine = this.parser.getEngine() as UseragentEngine;
 			if (engine.name === "EdgeHTML") {
 				result.version = engine.version;
-				// noinspection JSDeprecatedSymbols
+
+				// eslint-disable-next-line @typescript-eslint/no-deprecated
 				result.major = String(coerce(engine.version)?.major ?? result.version);
 			}
 		}
@@ -93,7 +94,8 @@ export class UaParserWrapper {
 				// to keep it evergreen, but so far it seems 74 is the latest official version
 				result.name = "Chrome";
 				result.version = "74";
-				// noinspection JSDeprecatedSymbols
+
+				// eslint-disable-next-line @typescript-eslint/no-deprecated
 				result.major = "74";
 			}
 
@@ -101,7 +103,8 @@ export class UaParserWrapper {
 			else {
 				result.name = "IE";
 				result.version = "11";
-				// noinspection JSDeprecatedSymbols
+
+				// eslint-disable-next-line @typescript-eslint/no-deprecated
 				result.major = "11";
 			}
 		}
@@ -161,11 +164,11 @@ export class UaParserWrapper {
 				// through its FBSV/{version} part
 				const fbsvMatch = this.userAgent.match(FBSV_IOS_VERSION_REGEX);
 				if (fbsvMatch != null) {
-					result.version = fbsvMatch[1].replace(/_/g, ".");
+					result.version = fbsvMatch[1]?.replace(/_/g, ".");
 				} else {
 					const iosRegex2Match = this.userAgent.match(IOS_REGEX_2);
 					if (iosRegex2Match != null) {
-						result.version = iosRegex2Match[2].replace(/_/g, ".");
+						result.version = iosRegex2Match[2]?.replace(/_/g, ".");
 					}
 				}
 			}

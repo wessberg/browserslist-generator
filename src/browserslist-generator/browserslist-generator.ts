@@ -1,6 +1,6 @@
 import Browserslist from "browserslist";
-import {feature as caniuseFeature, features as caniuseFeatures} from "caniuse-lite";
-import * as compatData from "@mdn/browser-compat-data" assert {type: "json"};
+import {feature as caniuseFeature, features as caniuseFeatures, type StatsByAgentID} from "caniuse-lite";
+import * as compatData from "@mdn/browser-compat-data" with {type: "json"};
 import objectPath from "object-path";
 import {gt, gte, lt, lte} from "semver";
 import {
@@ -32,32 +32,32 @@ import {
 } from "./ecma-version.js";
 import {rangeCorrection} from "./range-correction.js";
 import type {BrowserSupportForFeaturesCommonResult} from "./browser-support-for-features-common-result.js";
-import type {CaniuseBrowser, CaniuseStats, CaniuseStatsNormalized, CaniuseBrowserCorrection, CaniuseFeature, VersionedCaniuseBrowser} from "./i-caniuse.js";
-import {CaniuseSupportKind} from "./i-caniuse.js";
-import type {Mdn, MdnBrowserName} from "./mdn.js";
+import type {CaniuseBrowser, CaniuseStatsNormalized, CaniuseBrowserCorrection, VersionedCaniuseBrowser, CaniuseSupportKind} from "./i-caniuse.js";
+import type {Mdn, MdnBrowserName, MdnSupportDict} from "./mdn.js";
 import {NORMALIZE_BROWSER_VERSION_REGEXP} from "./normalize-browser-version-regexp.js";
 import {UaParserWrapper} from "./ua-parser-wrapper.js";
 import type {UseragentBrowser, UseragentEngine, UseragentOs} from "./useragent/useragent-typed.js";
+import type {MaybeArray, Mutable} from "helpertypes";
 
 /**
  * A Cache between user agent names and generated Browserslists
  */
-const userAgentToBrowserslistCache: Map<string, string[]> = new Map();
+const userAgentToBrowserslistCache = new Map<string, string[]>();
 
 /**
  * A Cache for retrieving browser support for some features
  */
-const browserSupportForFeaturesCache: Map<string, BrowserSupportForFeaturesCommonResult> = new Map();
+const browserSupportForFeaturesCache = new Map<string, BrowserSupportForFeaturesCommonResult>();
 
 /**
  * A Cache between feature names and their CaniuseStats
  */
-const featureToCaniuseStatsCache: Map<string, CaniuseStatsNormalized> = new Map();
+const featureToCaniuseStatsCache = new Map<string, CaniuseStatsNormalized>();
 
 /**
  * A Cache between user agents with any amount of features and whether or not they are supported by the user agent
  */
-const userAgentWithFeaturesToSupportCache: Map<string, boolean> = new Map();
+const userAgentWithFeaturesToSupportCache = new Map<string, boolean>();
 
 /**
  * By and large, MDN has the best compat data, especially when looking into at which point older version of Android-based browsers
@@ -100,86 +100,86 @@ const PARTIAL_SUPPORT_ALLOWANCES = new Map([
 
 const TYPED_ARRAY_BASE_DATA_CORRECTIONS_INPUT: CaniuseBrowserCorrection = {
 	/* eslint-disable @typescript-eslint/naming-convention */
-	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `4`),
-	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `7`),
-	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `7`),
-	edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, "12"),
-	samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `4`),
-	opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `12`),
-	op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `12`),
-	firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `4`),
-	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `4`),
-	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `6`),
-	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `5`),
-	ie: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`),
-	op_mini: rangeCorrection("op_mini", CaniuseSupportKind.AVAILABLE, `all`),
-	bb: rangeCorrection("bb", CaniuseSupportKind.AVAILABLE, `10`)
+	android: rangeCorrection("android", "available", `4`),
+	chrome: rangeCorrection("and_chr", "available", `7`),
+	and_chr: rangeCorrection("and_chr", "available", `7`),
+	edge: rangeCorrection("edge", "available", "12"),
+	samsung: rangeCorrection("samsung", "available", `4`),
+	opera: rangeCorrection("opera", "available", `12`),
+	op_mob: rangeCorrection("op_mob", "available", `12`),
+	firefox: rangeCorrection("firefox", "available", `4`),
+	and_ff: rangeCorrection("and_ff", "available", `4`),
+	safari: rangeCorrection("safari", "available", `6`),
+	ios_saf: rangeCorrection("safari", "available", `5`),
+	ie: rangeCorrection("ie", "available", `11`),
+	op_mini: rangeCorrection("op_mini", "available", `all`),
+	bb: rangeCorrection("bb", "available", `10`)
 	/* eslint-enable @typescript-eslint/naming-convention */
 };
 
 const TYPED_ARRAY_ES2015_DATA_CORRECTIONS_INPUT: CaniuseBrowserCorrection = {
 	/* eslint-disable @typescript-eslint/naming-convention */
-	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `45`),
-	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `45`),
-	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `45`),
-	edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, "12"),
-	samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `5`),
-	opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `32`),
-	op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `32`),
-	firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `38`),
-	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `38`),
-	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
-	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
-	ie: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`),
-	ie_mob: rangeCorrection("ie", CaniuseSupportKind.AVAILABLE, `11`)
+	android: rangeCorrection("android", "available", `45`),
+	chrome: rangeCorrection("and_chr", "available", `45`),
+	and_chr: rangeCorrection("and_chr", "available", `45`),
+	edge: rangeCorrection("edge", "available", "12"),
+	samsung: rangeCorrection("samsung", "available", `5`),
+	opera: rangeCorrection("opera", "available", `32`),
+	op_mob: rangeCorrection("op_mob", "available", `32`),
+	firefox: rangeCorrection("firefox", "available", `38`),
+	and_ff: rangeCorrection("and_ff", "available", `38`),
+	safari: rangeCorrection("safari", "available", `10`),
+	ios_saf: rangeCorrection("safari", "available", `10`),
+	ie: rangeCorrection("ie", "available", `11`),
+	ie_mob: rangeCorrection("ie", "available", `11`)
 	/* eslint-enable @typescript-eslint/naming-convention */
 };
 
 const TYPED_ARRAY_ES2016_DATA_CORRECTIONS_INPUT: CaniuseBrowserCorrection = {
 	/* eslint-disable @typescript-eslint/naming-convention */
-	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `47`),
-	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `47`),
-	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `47`),
-	edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, "14"),
-	samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `5`),
-	opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `34`),
-	op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `34`),
-	firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `43`),
-	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `43`),
-	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
-	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`)
+	android: rangeCorrection("android", "available", `47`),
+	chrome: rangeCorrection("and_chr", "available", `47`),
+	and_chr: rangeCorrection("and_chr", "available", `47`),
+	edge: rangeCorrection("edge", "available", "14"),
+	samsung: rangeCorrection("samsung", "available", `5`),
+	opera: rangeCorrection("opera", "available", `34`),
+	op_mob: rangeCorrection("op_mob", "available", `34`),
+	firefox: rangeCorrection("firefox", "available", `43`),
+	and_ff: rangeCorrection("and_ff", "available", `43`),
+	safari: rangeCorrection("safari", "available", `10`),
+	ios_saf: rangeCorrection("safari", "available", `10`)
 	/* eslint-enable @typescript-eslint/naming-convention */
 };
 
 const TYPED_ARRAY_KEYS_VALUES_ENTRIES_ITERATOR_DATA_CORRECTIONS_INPUT: CaniuseBrowserCorrection = {
 	/* eslint-disable @typescript-eslint/naming-convention */
-	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `38`),
-	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `38`),
-	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `38`),
-	edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, "12"),
-	samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `5`),
-	opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `26`),
-	op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `26`),
-	firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `37`),
-	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `37`),
-	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
-	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`)
+	android: rangeCorrection("android", "available", `38`),
+	chrome: rangeCorrection("and_chr", "available", `38`),
+	and_chr: rangeCorrection("and_chr", "available", `38`),
+	edge: rangeCorrection("edge", "available", "12"),
+	samsung: rangeCorrection("samsung", "available", `5`),
+	opera: rangeCorrection("opera", "available", `26`),
+	op_mob: rangeCorrection("op_mob", "available", `26`),
+	firefox: rangeCorrection("firefox", "available", `37`),
+	and_ff: rangeCorrection("and_ff", "available", `37`),
+	safari: rangeCorrection("safari", "available", `10`),
+	ios_saf: rangeCorrection("safari", "available", `10`)
 	/* eslint-enable @typescript-eslint/naming-convention */
 };
 
 const TYPED_ARRAY_SPECIES_DATA_CORRECTIONS_INPUT: CaniuseBrowserCorrection = {
 	/* eslint-disable @typescript-eslint/naming-convention */
-	android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `51`),
-	chrome: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `51`),
-	and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `51`),
-	edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, "13"),
-	samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `5`),
-	opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `38`),
-	op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `38`),
-	firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `48`),
-	and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `48`),
-	safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
-	ios_saf: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`)
+	android: rangeCorrection("android", "available", `51`),
+	chrome: rangeCorrection("and_chr", "available", `51`),
+	and_chr: rangeCorrection("and_chr", "available", `51`),
+	edge: rangeCorrection("edge", "available", "13"),
+	samsung: rangeCorrection("samsung", "available", `5`),
+	opera: rangeCorrection("opera", "available", `38`),
+	op_mob: rangeCorrection("op_mob", "available", `38`),
+	firefox: rangeCorrection("firefox", "available", `48`),
+	and_ff: rangeCorrection("and_ff", "available", `48`),
+	safari: rangeCorrection("safari", "available", `10`),
+	ios_saf: rangeCorrection("safari", "available", `10`)
 	/* eslint-enable @typescript-eslint/naming-convention */
 };
 
@@ -198,7 +198,7 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, CaniuseBrowserCorrecti
 			ie: [
 				{
 					// Caniuse reports that XMLHttpRequest support is partial in Internet Explorer 11, but it is in fact properly supported
-					kind: CaniuseSupportKind.AVAILABLE,
+					kind: "available",
 					version: "11"
 				}
 			]
@@ -209,8 +209,8 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, CaniuseBrowserCorrecti
 		// but they do not - They require enabling it as an experimental feature
 		"web-animation",
 		{
-			safari: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `0`, "13.4"),
-			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.UNAVAILABLE, `0`, "13.4")
+			safari: rangeCorrection("safari", "unavailable", `0`, "13.4"),
+			ios_saf: rangeCorrection("ios_saf", "unavailable", `0`, "13.4")
 		}
 	],
 	[
@@ -219,36 +219,36 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, CaniuseBrowserCorrecti
 			edge: [
 				{
 					// Caniuse reports that Microsoft Edge has been supporting classes since v12, but it was prefixed until v13
-					kind: CaniuseSupportKind.PREFIXED,
+					kind: "prefixed",
 					version: "12"
 				}
 			],
 			ios_saf: [
 				{
 					// Caniuse reports that iOS Safari has been supporting classes since v9, but the implementation was only partial
-					kind: CaniuseSupportKind.PARTIAL_SUPPORT,
+					kind: "partial_support",
 					version: "9"
 				},
 				{
 					// Caniuse reports that iOS Safari has been supporting classes since v9, but the implementation was only partial
-					kind: CaniuseSupportKind.PARTIAL_SUPPORT,
+					kind: "partial_support",
 					version: "9.2"
 				},
 				{
 					// Caniuse reports that iOS Safari has been supporting classes since v9, but the implementation was only partial
-					kind: CaniuseSupportKind.PARTIAL_SUPPORT,
+					kind: "partial_support",
 					version: "9.3"
 				}
 			],
 			safari: [
 				{
 					// Caniuse reports that Safari has been supporting classes since v9, but the implementation was only partial
-					kind: CaniuseSupportKind.PARTIAL_SUPPORT,
+					kind: "partial_support",
 					version: "9"
 				},
 				{
 					// Caniuse reports that Safari has been supporting classes since v9, but the implementation was only partial
-					kind: CaniuseSupportKind.PARTIAL_SUPPORT,
+					kind: "partial_support",
 					version: "9.1"
 				}
 			]
@@ -261,7 +261,7 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, CaniuseBrowserCorrecti
 				{
 					// Caniuse reports that Microsoft Edge v15 has only partial support for class-list since it doesn't support SVG elements,
 					// but we don't want feature detections to return false for that browser
-					kind: CaniuseSupportKind.AVAILABLE,
+					kind: "available",
 					version: "15"
 				}
 			],
@@ -269,13 +269,13 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, CaniuseBrowserCorrecti
 				{
 					// Caniuse reports that IE 10 has only partial support for class-list since it doesn't support SVG elements,
 					// but we don't want feature detections to return false for that browser
-					kind: CaniuseSupportKind.AVAILABLE,
+					kind: "available",
 					version: "10"
 				},
 				{
 					// Caniuse reports that IE 11 has only partial support for class-list since it doesn't support SVG elements,
 					// but we don't want feature detections to return false for that browser
-					kind: CaniuseSupportKind.AVAILABLE,
+					kind: "available",
 					version: "11"
 				}
 			]
@@ -322,81 +322,81 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, CaniuseBrowserCorrecti
 	[
 		"javascript.builtins.String.@@iterator",
 		{
-			android: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `38`),
-			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `38`),
-			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `38`),
-			edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, `12`),
-			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `25`),
-			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `25`),
-			firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `36`),
-			and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `36`),
-			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `9`),
-			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `9`),
-			samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE, `3`)
+			android: rangeCorrection("chrome", "available", `38`),
+			chrome: rangeCorrection("chrome", "available", `38`),
+			and_chr: rangeCorrection("and_chr", "available", `38`),
+			edge: rangeCorrection("edge", "available", `12`),
+			opera: rangeCorrection("opera", "available", `25`),
+			op_mob: rangeCorrection("op_mob", "available", `25`),
+			firefox: rangeCorrection("firefox", "available", `36`),
+			and_ff: rangeCorrection("and_ff", "available", `36`),
+			safari: rangeCorrection("safari", "available", `9`),
+			ios_saf: rangeCorrection("ios_saf", "available", `9`),
+			samsung: rangeCorrection("samsung", "available", `3`)
 		}
 	],
 	[
 		"javascript.builtins.Symbol.asyncIterator",
 		{
-			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `63`),
-			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `63`),
-			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `63`),
-			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `50`),
-			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `50`),
-			firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `57`),
-			and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `57`),
-			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `11.1`),
-			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `11.1`)
+			android: rangeCorrection("android", "available", `63`),
+			chrome: rangeCorrection("chrome", "available", `63`),
+			and_chr: rangeCorrection("and_chr", "available", `63`),
+			opera: rangeCorrection("opera", "available", `50`),
+			op_mob: rangeCorrection("op_mob", "available", `50`),
+			firefox: rangeCorrection("firefox", "available", `57`),
+			and_ff: rangeCorrection("and_ff", "available", `57`),
+			safari: rangeCorrection("safari", "available", `11.1`),
+			ios_saf: rangeCorrection("ios_saf", "available", `11.1`)
 		}
 	],
 	[
 		"javascript.builtins.Array.@@species",
 		{
-			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `51`),
+			android: rangeCorrection("android", "available", `51`),
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Chrome v51
-			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `51`),
+			chrome: rangeCorrection("chrome", "available", `51`),
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Chrome for Android v51
-			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `51`),
+			and_chr: rangeCorrection("and_chr", "available", `51`),
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Edge v14
-			edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE, `14`),
+			edge: rangeCorrection("edge", "available", `14`),
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Firefox v41
-			firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `41`),
+			firefox: rangeCorrection("firefox", "available", `41`),
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Firefox for Android v41
-			and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `41`),
+			and_ff: rangeCorrection("and_ff", "available", `41`),
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Opera v38
-			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `38`),
+			opera: rangeCorrection("opera", "available", `38`),
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Opera for Android v38
-			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `38`),
+			op_mob: rangeCorrection("op_mob", "available", `38`),
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Safari v10
-			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
+			safari: rangeCorrection("safari", "available", `10`),
 			// MDN reports that it doesn't support Array.@@species, but it does and has done since Safari for iOS v10
-			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `10`)
+			ios_saf: rangeCorrection("ios_saf", "available", `10`)
 		}
 	],
 	[
 		"javascript.builtins.Date.@@toPrimitive",
 		{
-			android: rangeCorrection("android", CaniuseSupportKind.AVAILABLE, `48`),
+			android: rangeCorrection("android", "available", `48`),
 			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Chrome v48
-			chrome: rangeCorrection("chrome", CaniuseSupportKind.AVAILABLE, `48`),
+			chrome: rangeCorrection("chrome", "available", `48`),
 			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Chrome for Android v48
-			and_chr: rangeCorrection("and_chr", CaniuseSupportKind.AVAILABLE, `48`),
+			and_chr: rangeCorrection("and_chr", "available", `48`),
 			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done in all Edge versions
-			edge: rangeCorrection("edge", CaniuseSupportKind.AVAILABLE),
+			edge: rangeCorrection("edge", "available"),
 			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Firefox v44
-			firefox: rangeCorrection("firefox", CaniuseSupportKind.AVAILABLE, `44`),
+			firefox: rangeCorrection("firefox", "available", `44`),
 			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Firefox for Android v44
-			and_ff: rangeCorrection("and_ff", CaniuseSupportKind.AVAILABLE, `44`),
+			and_ff: rangeCorrection("and_ff", "available", `44`),
 			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Opera v35
-			opera: rangeCorrection("opera", CaniuseSupportKind.AVAILABLE, `35`),
+			opera: rangeCorrection("opera", "available", `35`),
 			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Opera for Android v35
-			op_mob: rangeCorrection("op_mob", CaniuseSupportKind.AVAILABLE, `35`),
+			op_mob: rangeCorrection("op_mob", "available", `35`),
 			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Safari v10
-			safari: rangeCorrection("safari", CaniuseSupportKind.AVAILABLE, `10`),
+			safari: rangeCorrection("safari", "available", `10`),
 			// MDN reports that it doesn't support Date.@@toPrimitive, but it does and has done since Safari for iOS v10
-			ios_saf: rangeCorrection("ios_saf", CaniuseSupportKind.AVAILABLE, `10`),
+			ios_saf: rangeCorrection("ios_saf", "available", `10`),
 			// MDN reports that it doesn't support the Date.@@toPrimitive method, but it does and has done for all Samsung Internet versions
-			samsung: rangeCorrection("samsung", CaniuseSupportKind.AVAILABLE)
+			samsung: rangeCorrection("samsung", "available")
 		}
 	],
 	[
@@ -405,7 +405,7 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, CaniuseBrowserCorrecti
 			edge: [
 				{
 					// Caniuse reports that Microsoft Edge has been supporting fetch since v14, but the implementation was quite unstable until v15
-					kind: CaniuseSupportKind.UNAVAILABLE,
+					kind: "unavailable",
 					version: "14"
 				}
 			]
@@ -414,22 +414,22 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, CaniuseBrowserCorrecti
 	[
 		"api.Window",
 		{
-			chrome: rangeCorrection("chrome", CaniuseSupportKind.UNAVAILABLE, `0`, `18`),
-			safari: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `0`, `5.1`),
-			ie: rangeCorrection("ie", CaniuseSupportKind.UNAVAILABLE, `0`, `7`),
-			opera: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `0`, `11.1`)
+			chrome: rangeCorrection("chrome", "unavailable", `0`, `18`),
+			safari: rangeCorrection("safari", "unavailable", `0`, `5.1`),
+			ie: rangeCorrection("ie", "unavailable", `0`, `7`),
+			opera: rangeCorrection("safari", "unavailable", `0`, `11.1`)
 		}
 	],
 	[
 		"javascript.builtins.String.matchAll",
 		{
-			samsung: rangeCorrection("samsung", CaniuseSupportKind.UNAVAILABLE, `0`, `9.4`)
+			samsung: rangeCorrection("samsung", "unavailable", `0`, `9.4`)
 		}
 	],
 	[
 		"resizeobserver",
 		{
-			safari: rangeCorrection("safari", CaniuseSupportKind.UNAVAILABLE, `0`)
+			safari: rangeCorrection("safari", "unavailable", `0`)
 		}
 	]
 	/* eslint-enable @typescript-eslint/naming-convention */
@@ -437,9 +437,8 @@ const FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT: [string, CaniuseBrowserCorrecti
 
 /**
  * A Map between caniuse features and corrections to apply (see above)
- * @type {Map<string, CaniuseBrowserCorrection>}
  */
-const FEATURE_TO_BROWSER_DATA_CORRECTIONS_MAP: Map<string, CaniuseBrowserCorrection> = new Map(FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT);
+const FEATURE_TO_BROWSER_DATA_CORRECTIONS_MAP = new Map<string, CaniuseBrowserCorrection>(FEATURE_TO_BROWSER_DATA_CORRECTIONS_INPUT);
 
 /**
  * Returns the input query, but extended with the given options
@@ -520,6 +519,7 @@ export function browsersWithSupportForFeatures(...features: string[]): string[];
 export function browsersWithSupportForFeatures(options: BrowsersWithSupportOptions): string[];
 export function browsersWithSupportForFeatures(...args: [BrowsersWithSupportOptions] | string[]): string[] {
 	const [firstArg] = args;
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	const {features} = firstArg != null && typeof firstArg === "object" ? firstArg : {features: args as string[]};
 
 	const {query, browsers} = browserSupportForFeaturesCommon(">=", ...features);
@@ -635,6 +635,7 @@ export function browsersWithoutSupportForFeatures(...features: string[]): string
 export function browsersWithoutSupportForFeatures(options: BrowsersWithSupportOptions): string[];
 export function browsersWithoutSupportForFeatures(...args: [BrowsersWithSupportOptions] | string[]): string[] {
 	const [firstArg] = args;
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	const {features} = firstArg != null && typeof firstArg === "object" ? firstArg : {features: args as string[]};
 
 	return browserSupportForFeaturesCommon("<", ...features).query;
@@ -663,34 +664,31 @@ function shouldIgnoreBrowser(browser: CaniuseBrowser, version: string): boolean 
 /**
  * Normalizes the given ICaniuseLiteFeature
  */
-function getCaniuseLiteFeatureNormalized(stats: CaniuseStats, featureName: string): CaniuseStatsNormalized {
+function getCaniuseLiteFeatureNormalized(stats: StatsByAgentID, featureName: string): CaniuseStatsNormalized {
 	// Check if a correction exists for this browser
 	const featureCorrectionMatch = FEATURE_TO_BROWSER_DATA_CORRECTIONS_MAP.get(featureName);
 
-	const keys = Object.keys(stats) as (keyof CaniuseStats & string)[];
+	const keys = Object.keys(stats) as (keyof StatsByAgentID)[];
 	keys.forEach(browser => {
-		const browserDict = stats[browser];
+		const browserDict = stats[browser] as Mutable<(typeof stats)[typeof browser]> | undefined;
+		if (browserDict == null) return;
+
 		Object.entries(browserDict).forEach(([version, support]: [string, string]) => {
 			const versionMatch = version.match(NORMALIZE_BROWSER_VERSION_REGEXP);
-			const normalizedVersion = versionMatch == null ? version : versionMatch[1];
+			const normalizedVersion = versionMatch == null ? version : (versionMatch[1] ?? version);
 
 			let supportKind: CaniuseSupportKind;
 
-			if (
-				support === CaniuseSupportKind.AVAILABLE ||
-				support === CaniuseSupportKind.UNAVAILABLE ||
-				support === CaniuseSupportKind.PARTIAL_SUPPORT ||
-				support === CaniuseSupportKind.PREFIXED
-			) {
+			if (support === "available" || support === "unavailable" || support === "partial_support" || support === "prefixed") {
 				supportKind = support;
 			} else if (support.startsWith("y")) {
-				supportKind = CaniuseSupportKind.AVAILABLE;
+				supportKind = "available";
 			} else if (support.startsWith("n")) {
-				supportKind = CaniuseSupportKind.UNAVAILABLE;
+				supportKind = "unavailable";
 			} else if (support.startsWith("a")) {
-				supportKind = CaniuseSupportKind.PARTIAL_SUPPORT;
+				supportKind = "partial_support";
 			} else {
-				supportKind = CaniuseSupportKind.PREFIXED;
+				supportKind = "prefixed";
 			}
 
 			// Delete the rewritten version
@@ -704,7 +702,7 @@ function getCaniuseLiteFeatureNormalized(stats: CaniuseStats, featureName: strin
 			// If a feature correction exists for this feature, apply applicable corrections
 			if (featureCorrectionMatch != null) {
 				// Check if the browser has some corrections
-				const browserMatch = featureCorrectionMatch[browser];
+				const browserMatch = featureCorrectionMatch[browser as keyof CaniuseStatsNormalized];
 				if (browserMatch != null) {
 					// Apply all corrections
 					browserMatch.forEach(correction => {
@@ -722,10 +720,17 @@ function getCaniuseLiteFeatureNormalized(stats: CaniuseStats, featureName: strin
  * Gets the support from caniuse for the given feature
  */
 function getCaniuseFeatureSupport(feature: string): CaniuseStatsNormalized {
-	const rawStats = (caniuseFeature(caniuseFeatures[feature]) as CaniuseFeature).stats;
+	const packedFeature = caniuseFeatures[feature];
+	if (packedFeature == null) {
+		throw new TypeError(`The given feature: '${feature}' is unknown. It must be a valid Caniuse or MDN feature!`);
+	}
+
+	const rawStats = caniuseFeature(packedFeature).stats;
 
 	for (const browser of Object.keys(rawStats)) {
-		const browserDict = rawStats[browser as keyof CaniuseStatsNormalized];
+		const browserDict = rawStats[browser] as Mutable<(typeof rawStats)[typeof browser]> | undefined;
+		if (browserDict == null) continue;
+
 		for (const version of Object.keys(browserDict)) {
 			if (shouldIgnoreBrowser(browser as keyof CaniuseStatsNormalized, version)) {
 				delete browserDict[version];
@@ -790,34 +795,32 @@ function getFeatureSupport(feature: string): CaniuseStatsNormalized {
  * Gets the support from caniuse for the given feature
  */
 function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
-	const match: Mdn = objectPath.get(compatData, feature);
+	const match = objectPath.get(compatData, feature) as Mdn;
 	const supportMap = match.__compat.support;
 
-	const formatBrowser = (mdnBrowser: MdnBrowserName, caniuseBrowser: CaniuseBrowser): {[key: string]: CaniuseSupportKind} => {
-		const versionMap = supportMap[mdnBrowser];
+	const formatBrowser = (mdnBrowser: MdnBrowserName, caniuseBrowser: CaniuseBrowser): Record<string, CaniuseSupportKind> => {
+		const versionMap = supportMap[mdnBrowser] as MaybeArray<MdnSupportDict> | undefined;
 		const versionAdded =
 			versionMap == null
 				? false
 				: Array.isArray(versionMap)
-				? // If there are multiple entries, take the one that hasn't been removed yet, if any
-				  (() => {
-						const versionStillInBrowser = versionMap.filter(element => element.version_removed == null)[0];
-						return versionStillInBrowser == null || versionStillInBrowser.version_added == null ? false : (versionStillInBrowser.version_added as string | boolean);
-				  })()
-				: versionMap.version_added;
+					? // If there are multiple entries, take the one that hasn't been removed yet, if any
+						(() => {
+							const versionStillInBrowser = versionMap.find(element => element.version_removed == null);
+							return versionStillInBrowser?.version_added == null ? false : versionStillInBrowser.version_added;
+						})()
+					: versionMap.version_added;
 
-		const dict: {[key: string]: CaniuseSupportKind} = {};
+		const dict: Record<string, CaniuseSupportKind> = {};
 		const supportedSince: string | null = versionAdded === false ? null : versionAdded === true ? getOldestVersionOfBrowser(caniuseBrowser) : versionAdded;
 
 		getSortedBrowserVersionsWithLeadingVersion(caniuseBrowser, typeof versionAdded === "string" ? versionAdded : undefined).forEach(version => {
 			// If the features has never been supported, mark the feature as unavailable
 			if (supportedSince == null) {
-				dict[version] = CaniuseSupportKind.UNAVAILABLE;
+				dict[version] = "unavailable";
 			} else {
 				dict[version] =
-					version === "TP" || version === "all" || gte(coerceToString(caniuseBrowser, version), coerceToString(caniuseBrowser, supportedSince))
-						? CaniuseSupportKind.AVAILABLE
-						: CaniuseSupportKind.UNAVAILABLE;
+					version === "TP" || version === "all" || gte(coerceToString(caniuseBrowser, version), coerceToString(caniuseBrowser, supportedSince)) ? "available" : "unavailable";
 			}
 		});
 		return dict;
@@ -852,7 +855,7 @@ function getMdnFeatureSupport(feature: string): CaniuseStatsNormalized {
 /**
  * Gets the first version that matches the given CaniuseSupportKind
  */
-function getFirstVersionWithSupportKind(kind: CaniuseSupportKind, stats: {[key: string]: CaniuseSupportKind}): string | undefined {
+function getFirstVersionWithSupportKind(kind: CaniuseSupportKind, stats: Record<string, CaniuseSupportKind>): string | undefined {
 	// Sort all keys of the object
 	const sortedKeys = Object.keys(stats).sort(compareVersions);
 
@@ -881,10 +884,10 @@ export function getFirstVersionsWithFullSupport(feature: string): Map<CaniuseBro
 	const normalizedFeature = normalizeFeature(feature);
 	const support = getFeatureSupport(normalizedFeature);
 	// A map between browser names and their required versions
-	const browserMap: Map<CaniuseBrowser, string> = new Map();
+	const browserMap = new Map<CaniuseBrowser, string>();
 	const entries = Object.entries(support) as [CaniuseBrowser, Record<string, CaniuseSupportKind>][];
 	entries.forEach(([browser, stats]) => {
-		const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
+		const fullSupportVersion = getFirstVersionWithSupportKind("available", stats);
 		if (fullSupportVersion != null) {
 			browserMap.set(browser, fullSupportVersion);
 		}
@@ -919,11 +922,11 @@ function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator,
 		const support = getFeatureSupport(normalizedFeature);
 
 		// A map between browser names and their required versions
-		const browserMap: Map<CaniuseBrowser, string> = new Map();
+		const browserMap = new Map<CaniuseBrowser, string>();
 		const entries = Object.entries(support) as [CaniuseBrowser, Record<string, CaniuseSupportKind>][];
 		entries.forEach(([browser, stats]) => {
-			const fullSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.AVAILABLE, stats);
-			const partialSupportVersion = getFirstVersionWithSupportKind(CaniuseSupportKind.PARTIAL_SUPPORT, stats);
+			const fullSupportVersion = getFirstVersionWithSupportKind("available", stats);
+			const partialSupportVersion = getFirstVersionWithSupportKind("partial_support", stats);
 			let versionToSet: string | undefined;
 
 			if (fullSupportVersion != null) {
@@ -974,7 +977,7 @@ function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator,
 	}
 
 	// Now, prepare a combined browser map
-	const combinedBrowserMap: Map<CaniuseBrowser, string> = new Map();
+	const combinedBrowserMap = new Map<CaniuseBrowser, string>();
 
 	for (const browserMap of browserMaps) {
 		for (const [browser, version] of browserMap.entries()) {
@@ -1015,7 +1018,7 @@ function browserSupportForFeaturesCommon(comparisonOperator: ComparisonOperator,
 					? [
 							`${comparisonOperator === ">" || comparisonOperator === ">=" ? "not " : ""}${browser} ${browser === "op_mini" ? "all" : "> 0"}`,
 							`${comparisonOperator === ">" || comparisonOperator === ">=" ? "not " : ""}unreleased ${browser} versions`
-					  ]
+						]
 					: [`${browser} ${comparisonOperator} ${version}`];
 			})
 		)
@@ -1084,7 +1087,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 		const semver = ensureSemver(undefined, browser.version);
 
 		// The data comes from this table: https://en.wikipedia.org/wiki/Pale_Moon_(web_browser)#Releases
-		if (lte(semver, "5.0.0")) {
+		if (semver != null && lte(semver, "5.0.0")) {
 			return {
 				browser: "firefox",
 				version: "2"
@@ -1092,7 +1095,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 		}
 
 		// Between these two versions, the version numbers followed Firefox/Gecko
-		else if (lte(semver, "24.0.0")) {
+		else if (semver != null && lte(semver, "24.0.0")) {
 			return {
 				browser: "firefox",
 				version: browser.version
@@ -1100,7 +1103,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 		}
 
 		// It kept staying at Firefox 24 for all we know
-		else if (lt(semver, "27.0.0")) {
+		else if (semver != null && lt(semver, "27.0.0")) {
 			return {
 				browser: "firefox",
 				version: "24.0.0"
@@ -1111,7 +1114,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 		// Unfortunately, we don't have fresh data as for the versions
 		// in between 27 and 29, so we'll have to stay at version 38 in
 		// this range
-		else if (lt(semver, "29.0.0")) {
+		else if (semver != null && lt(semver, "29.0.0")) {
 			return {
 				browser: "firefox",
 				version: "38"
@@ -1133,7 +1136,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 	if (browser.name === "MIUI Browser" && browser.version != null && os.name === "Android" && engine.name == null) {
 		const semver = ensureSemver(undefined, browser.version);
 
-		if (semver.major === 8 || semver.major === 9) {
+		if (semver != null && (semver.major === 8 || semver.major === 9)) {
 			return {
 				browser: "chrome",
 				version: "53"
@@ -1217,7 +1220,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 				if (os.version != null && browser.version != null) {
 					const browserSemver = ensureSemver("chrome", browser.version);
 					const osSemver = ensureSemver(undefined, os.version);
-					if (lte(osSemver, "4.4.4") && gte(browserSemver, "400.0.0")) {
+					if (browserSemver != null && osSemver != null && lte(osSemver, "4.4.4") && gte(browserSemver, "400.0.0")) {
 						return {
 							browser: "android",
 							version: os.version
@@ -1254,7 +1257,7 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 
 				// If the Major version is in between 18 and 79, this will be Edge Mobile on Android,
 				// which is Chromium based but has no related Caniuse browser name. Treat it as Chrome
-				if (semverVersion.major > 18 && semverVersion.major < 79) {
+				if (semverVersion != null && semverVersion.major > 18 && semverVersion.major < 79) {
 					return {
 						browser: "chrome",
 						version: engine.version
@@ -1305,91 +1308,91 @@ function getCaniuseBrowserForUseragentBrowser(parser: UaParserWrapper): Partial<
 			if (browser.version == null && engine.name === "WebKit" && engine.version != null) {
 				const semver = ensureSemver(undefined, engine.version);
 
-				if (lt(semver, "412.0.0")) {
+				if (semver != null && lt(semver, "412.0.0")) {
 					return {
 						browser: "safari",
 						version: "1.0"
 					};
 				}
 
-				if (lt(semver, "522.0.0")) {
+				if (semver != null && lt(semver, "522.0.0")) {
 					return {
 						browser: "safari",
 						version: "2.0"
 					};
 				}
 
-				if (lt(semver, "526.0.0")) {
+				if (semver != null && lt(semver, "526.0.0")) {
 					return {
 						browser: "safari",
 						version: "3.0"
 					};
 				}
 
-				if (lt(semver, "533.0.0")) {
+				if (semver != null && lt(semver, "533.0.0")) {
 					return {
 						browser: "safari",
 						version: "4.0"
 					};
 				}
 
-				if (lt(semver, "536.0.0")) {
+				if (semver != null && lt(semver, "536.0.0")) {
 					return {
 						browser: "safari",
 						version: "5.0"
 					};
 				}
 
-				if (lt(semver, "537.71.0")) {
+				if (semver != null && lt(semver, "537.71.0")) {
 					return {
 						browser: "safari",
 						version: "6.0"
 					};
 				}
 
-				if (lt(semver, "600.0.0")) {
+				if (semver != null && lt(semver, "600.0.0")) {
 					return {
 						browser: "safari",
 						version: "7.0"
 					};
 				}
 
-				if (lt(semver, "601.0.0")) {
+				if (semver != null && lt(semver, "601.0.0")) {
 					return {
 						browser: "safari",
 						version: "8.0"
 					};
 				}
 
-				if (lt(semver, "602.0.0")) {
+				if (semver != null && lt(semver, "602.0.0")) {
 					return {
 						browser: "safari",
 						version: "9.0"
 					};
 				}
 
-				if (lt(semver, "604.0.0")) {
+				if (semver != null && lt(semver, "604.0.0")) {
 					return {
 						browser: "safari",
 						version: "10.0"
 					};
 				}
 
-				if (lt(semver, "606.0.0")) {
+				if (semver != null && lt(semver, "606.0.0")) {
 					return {
 						browser: "safari",
 						version: "11.0"
 					};
 				}
 
-				if (lt(semver, "608.0.0")) {
+				if (semver != null && lt(semver, "608.0.0")) {
 					return {
 						browser: "safari",
 						version: "12.0"
 					};
 				}
 
-				if (lt(semver, "610.0.0")) {
+				if (semver != null && lt(semver, "610.0.0")) {
 					return {
 						browser: "safari",
 						version: "13.0"
@@ -1524,7 +1527,8 @@ function getCaniuseVersionForUseragentVersion(
 	switch (browser) {
 		case "chrome":
 			if (useragentEngine.name === "Blink") {
-				return buildSemverVersion(ensureSemver(browser, getClosestMatchingBrowserVersion(browser, useragentEngine.version ?? version)).major);
+				const semver = ensureSemver(browser, getClosestMatchingBrowserVersion(browser, useragentEngine.version ?? version));
+				return semver == null ? buildSemverVersion(major) : buildSemverVersion(semver.major);
 			}
 			return buildSemverVersion(major);
 		case "ie":
@@ -1564,7 +1568,7 @@ function getCaniuseVersionForUseragentVersion(
 				const osSemver = ensureSemver(undefined, getClosestMatchingBrowserVersion(browser, useragentOs.version));
 
 				// iOS may have minor releases, but never patch releases, according to caniuse
-				return buildSemverVersion(osSemver.major, osSemver.minor);
+				return osSemver == null ? buildSemverVersion(major) : buildSemverVersion(osSemver.major, osSemver.minor);
 			}
 		}
 
@@ -1635,6 +1639,8 @@ export function generateBrowserslistFromUseragent(useragent: string): string[] {
 	const finalVersionCoerced = ensureSemver(caniuseBrowserName, finalVersion);
 	const closestMatchingCaniuseBrowserVersionCoerced = ensureSemver(caniuseBrowserName, closestMatchingCaniuseBrowserVersion);
 	if (
+		finalVersionCoerced != null &&
+		closestMatchingCaniuseBrowserVersionCoerced != null &&
 		lt(finalVersionCoerced, closestMatchingCaniuseBrowserVersionCoerced, {loose: true}) &&
 		normalizedBrowserslist[0] === `${caniuseBrowserName} ${closestMatchingCaniuseBrowserVersion}`
 	) {

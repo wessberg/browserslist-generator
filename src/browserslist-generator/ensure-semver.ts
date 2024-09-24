@@ -6,19 +6,19 @@ import type {CaniuseBrowser} from "./i-caniuse.js";
 /**
  * Coerces the given version
  */
-export function ensureSemver(browser: CaniuseBrowser | undefined, version: string): SemVer {
+export function ensureSemver(browser: CaniuseBrowser | undefined, version: string): SemVer | undefined {
 	if ((browser === "op_mini" || browser === "android") && version === "all") {
 		return _coerce("0.0.0")!;
 	} else if (browser === "safari" && version === "TP") {
 		return SAFARI_TP_MAJOR_VERSION;
 	}
 
-	return _coerce(version, {loose: true})!;
+	return _coerce(version, {loose: true}) ?? undefined;
 }
 
 /**
  * Coerces the given version
  */
 export function coerceToString(browser: CaniuseBrowser, version: string): string {
-	return ensureSemver(browser, version).toString();
+	return ensureSemver(browser, version)?.toString() ?? "";
 }
