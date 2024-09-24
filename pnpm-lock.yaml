@@ -51,8 +51,8 @@ importers:
         specifier: 1.0.0
         version: 1.0.0
       "@wessberg/ts-config":
-        specifier: ^5.0.1
-        version: 5.0.1(@eslint/js@9.11.1)(eslint-config-prettier@9.1.0(eslint@9.11.1))(eslint-plugin-jsdoc@50.2.4(eslint@9.11.1))(eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@9.11.1))(eslint@9.11.1)(prettier@3.3.3))(eslint@9.11.1)(typescript-eslint@8.7.0(eslint@9.11.1)(typescript@5.6.2))
+        specifier: ^5.0.2
+        version: 5.0.2(@eslint/js@9.11.1)(@wessberg/prettier-config@1.0.0)(eslint-config-prettier@9.1.0(eslint@9.11.1))(eslint-plugin-jsdoc@50.2.4(eslint@9.11.1))(eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@9.11.1))(eslint@9.11.1)(prettier@3.3.3))(eslint@9.11.1)(typescript-eslint@8.7.0(eslint@9.11.1)(typescript@5.6.2))
       eslint:
         specifier: ^9.11.1
         version: 9.11.1
@@ -599,10 +599,11 @@ packages:
   "@wessberg/prettier-config@1.0.0":
     resolution: {integrity: sha512-iavB1OppqxDIIWqgakHC7gLVAZTBFckq/32CWJf+EOQYJ4cLdsNe4TF/QIcO4sqWgtzR8SDj8mSGhgKwZGqLBA==}
 
-  "@wessberg/ts-config@5.0.1":
-    resolution: {integrity: sha512-I6xDdqhzOUkw7gT7o2bbP2ofzeRugMzLZuY/UvuWxPSK4F8vfCb9lGiMUqlUrbHWvZQxCZf+LziOnx+3BiSgOA==}
+  "@wessberg/ts-config@5.0.2":
+    resolution: {integrity: sha512-6gbbIn3KgyBBbMkOVFY6YNCI0vrNayOdkJGMa+O1pp0ZU6CKQU7W7kW4WhLT4DxWtAfvE4TMZ4ZH/bgzAgCTWg==}
     peerDependencies:
       "@eslint/js": ">=9.x"
+      "@wessberg/prettier-config": ^1.x
       eslint: ">=9.x"
       eslint-config-prettier: ">=9.x"
       eslint-plugin-jsdoc: ">=50.2.4"
@@ -3169,9 +3170,10 @@ snapshots:
 
   "@wessberg/prettier-config@1.0.0": {}
 
-  "@wessberg/ts-config@5.0.1(@eslint/js@9.11.1)(eslint-config-prettier@9.1.0(eslint@9.11.1))(eslint-plugin-jsdoc@50.2.4(eslint@9.11.1))(eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@9.11.1))(eslint@9.11.1)(prettier@3.3.3))(eslint@9.11.1)(typescript-eslint@8.7.0(eslint@9.11.1)(typescript@5.6.2))":
+  "@wessberg/ts-config@5.0.2(@eslint/js@9.11.1)(@wessberg/prettier-config@1.0.0)(eslint-config-prettier@9.1.0(eslint@9.11.1))(eslint-plugin-jsdoc@50.2.4(eslint@9.11.1))(eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0(eslint@9.11.1))(eslint@9.11.1)(prettier@3.3.3))(eslint@9.11.1)(typescript-eslint@8.7.0(eslint@9.11.1)(typescript@5.6.2))":
     dependencies:
       "@eslint/js": 9.11.1
+      "@wessberg/prettier-config": 1.0.0
       eslint: 9.11.1
       eslint-config-prettier: 9.1.0(eslint@9.11.1)
       eslint-plugin-jsdoc: 50.2.4(eslint@9.11.1)
