@@ -1,3 +1,9 @@
+# [3.0.0](https://github.com/wessberg/browserslist-generator/compare/v2.3.0...v3.0.0) (2024-09-24)
+
+### Features
+
+- bump dependencies and support Node 22 ([9bd472e](https://github.com/wessberg/browserslist-generator/commit/9bd472ee755ecebc86d7c4ebf8b6855c8ade7200))
+
 # [2.3.0](https://github.com/wessberg/browserslist-generator/compare/v2.2.0...v2.3.0) (2024-08-30)
 
 ### Features
