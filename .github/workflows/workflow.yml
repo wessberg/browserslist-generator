@@ -10,8 +10,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest]
-        node: [22]
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        node: [21, 22]
 
     steps:
       - name: Checkout code
