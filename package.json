@@ -25,7 +25,7 @@
 		"lint": "tsc --noEmit && eslint \"src/**/*.ts\" --color",
 		"lint:fix": "eslint \"src/**/*.ts\" --color --fix",
 		"prettier": "prettier --write \"{src,test,documentation}/**/*.{js,ts,json,html,xml,css,md}\"",
-		"test": "node --import tsx --test \"./test**/*.test.ts\"",
+		"test": "node --import tsx --test \"./test/**/*.test.ts\"",
 		"prebuild": "pnpm run clean:dist",
 		"build": "tsup \"src/index.ts\" --sourcemap --dts --format cjs,esm",
 		"preversion": "pnpm run lint && pnpm run build",
