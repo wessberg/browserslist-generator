@@ -1,6 +1,7 @@
 {
 	"extends": "./node_modules/@wessberg/ts-config/tsconfig.json",
 	"include": ["src/**/*.*", "test/**/*.*", "sandhog.config.js", "eslint.config.js"],
+	"exclude": ["dist/*.*"],
 	"compilerOptions": {
 		"allowJs": true,
 		"noEmit": true
